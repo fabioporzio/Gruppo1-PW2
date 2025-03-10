@@ -4,4 +4,3 @@
 - Fabio Porzio
 - Tommaso Brivio
 - Marco Corradini
-
