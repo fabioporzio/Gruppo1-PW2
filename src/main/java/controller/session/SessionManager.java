@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
-public class sessionManager {
+public class SessionManager {
 
     public static final String NAME_COOKIE_SESSION = "Session";
 
