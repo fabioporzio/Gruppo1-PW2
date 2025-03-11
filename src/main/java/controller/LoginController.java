@@ -39,11 +39,11 @@ public class LoginController {
         String errorMessage = null;
 
         if (!credentialsValidator.checkPassword(password)) {
-            errorMessage = "Username and/or password do not match";
+            errorMessage = "Username o Password non corretti";
         }
 
         if (!credentialsValidator.checkEmail(email)) {
-            errorMessage = "Username and/or password do not match";
+            errorMessage = "Username o Password non corretti";
         }
 
         if (errorMessage != null) {
@@ -63,7 +63,7 @@ public class LoginController {
                     .build();
         }
         else {
-            errorMessage = "Username and/or password do not match";
+            errorMessage = "Username o Password non corretti";
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(login.data("message", errorMessage))
                     .build();
