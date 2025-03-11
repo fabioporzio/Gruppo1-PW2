@@ -9,20 +9,25 @@
 </head>
 
 <body>
+    {#if message}
+        <h3 style="color: red">{message}</h3>
+    {/if}
     <div class="container">
         <div class="title-box">
-            <a href="#">TITLE</a>
+            LOGIN
         </div>
 
-        <form method="post" action="/login" class="login-form">
-            <input type="text" name="username" placeholder="USERNAME" required>
-            <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
-            <button type="submit">BTN LOGIN</button>
+        <form method="post" action="/" class="login-form">
+            <label for="email">
+                Email:
+            </label>
+            <input type="text" name="email" id="email" required>
+            <label for="password">
+                Password:
+            </label>
+            <input type="password" name="password" id="password" required>
+            <button type="submit">Login</button>
         </form>
-
-        <p class="register-text">
-            Non sei registrato? <a href="/register">Registrati</a>
-        </p>
     </div>
 </body>
 
