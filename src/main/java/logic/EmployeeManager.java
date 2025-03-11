@@ -15,7 +15,7 @@ import java.util.List;
 
 @ApplicationScoped
 public class EmployeeManager {
-    private final String filePath = "C:\\Progetti Java\\Gruppo1-PW2\\data\\employees.csv";
+    private final String filePath = "data/employees.csv";
 
     public List<Employee> getEmployeesFromFile() {
         List<Employee> employees = new ArrayList<Employee>();
