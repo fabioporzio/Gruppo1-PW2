@@ -163,9 +163,16 @@
             <h3 id="message">{message}</h3>
         {/if}
 
-        <form method="post" action="/login" class="login-form">
-            <input type="text" name="username" placeholder="USERNAME" required>
-            <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
+        <form method="post" action="/" class="login-form">
+            <label for="email">
+                <h2>Email:</h2>
+                <input type="email" name="email" placeholder="EMAIL" required>
+            </label>
+            <label for="password">
+                <h2>Password:</h2>
+                <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
+            </label>
+
             <button type="submit">BTN LOGIN</button>
         </form>
 
