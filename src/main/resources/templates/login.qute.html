@@ -6,6 +6,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Stili generali */
+        body {
+            /*cambiare font*/
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 100vw;
+            text-align: center;
+        }
+
+        /* Stili per il titolo */
+        .title-box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .title-box a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px 15px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            background-color: #fff;
+            transition: 0.3s;
+        }
+
+        .title-box a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Stili per la barra di navigazione */
+        .nav-bar {
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px 15px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            background-color: #fff;
+            transition: 0.3s;
+        }
+
+        .nav-bar a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Stili per il form di login */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 80px;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .login-form input[type="text"]:focus,
+        .login-form input[type="password"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .login-form button {
+            width: 85%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Stili per i link e il testo di registrazione */
+        .register-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .register-text a {
+            text-decoration: underline;
+            color: #007bff;
+            transition: 0.3s;
+        }
+
+        .register-text a:hover {
+            color: #0056b3;
+        }
+
+        /* Stili per il pulsante di ricerca */
+        form[action="/search"] {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        form[action="/search"] input {
+            width: 60%;
+            padding: 5px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        form[action="/search"] button {
+            padding: 5px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        form[action="/search"] button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
