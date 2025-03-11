@@ -1,3 +1,4 @@
 id,name,surname,date_of_birth,department,email,password,
 1,Fabio,Porzio,03/05/2000,IT,fabio.porzio@itsincom.it,1234,
 2,Mario,Rossi,01/01/2001,HR,mario.rossi@gmail.com,1234,
+3,Luca,Mimmo,23/03/2005,IT,luca@gmail.com,12345678,
