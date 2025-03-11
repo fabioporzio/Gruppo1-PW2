@@ -77,6 +77,19 @@
 </head>
 
 <body>
+<!-- Se l'utente è un dipendente / fare navbar scelta-->
+{#if employee}
+    <ul>
+        <li><a href="Anagrafa un nuovo ospite"></a></li><!--dentrohref="vuoti"-->
+        <li>Inserisci nuova visita</li>
+        <li>Annulla visita</li>
+        {#if employee.department == "portineria"}
+        <li>visualzza visite</li>
+        <li>assegna badge</li>
+        <li>segna fine visita</li>
+        {/if}
+    </ul>
+{/if}
     <div class="title-box">
         <h1>InfoDrive</h1>
         <p>"Il portale smart per la gestione intelligente"</p>
