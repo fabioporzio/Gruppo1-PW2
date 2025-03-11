@@ -8,6 +8,7 @@
 </head>
 
 <body>
+<<<<<<< HEAD
 
 <style>
     /* Stili per il form di login */
@@ -56,16 +57,27 @@
 
     <div class="container">
         <div class="title-box"></div>
+=======
+    {#if message}
+        <h3 style="color: red">{message}</h3>
+    {/if}
+    <div class="container">
+        <div class="title-box">
+            LOGIN
+        </div>
+>>>>>>> 3e6dbee1ac3fc6ea583db28ea44be7400e54ebff
 
-        <form method="post" action="/login" class="login-form">
-            <input type="text" name="username" placeholder="USERNAME" required>
-            <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
-            <button type="submit">BTN LOGIN</button>
+        <form method="post" action="/" class="login-form">
+            <label for="email">
+                Email:
+            </label>
+            <input type="text" name="email" id="email" required>
+            <label for="password">
+                Password:
+            </label>
+            <input type="password" name="password" id="password" required>
+            <button type="submit">Login</button>
         </form>
-
-        <p class="register-text">
-            Non sei registrato? <a href="/register">Registrati</a>
-        </p>
     </div>
 </body>
 
