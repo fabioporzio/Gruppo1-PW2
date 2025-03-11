@@ -44,7 +44,6 @@ public class SessionManager {
         }
     }
 
-    // NON SO
     public void removeSession (String sessionId) {
         sessions.remove(sessionId);
     }

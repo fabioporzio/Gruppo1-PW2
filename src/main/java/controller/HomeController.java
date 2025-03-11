@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import logic.SessionManager;
 import model.Employee;
 
+import java.net.URI;
+
 import static logic.SessionManager.NAME_COOKIE_SESSION;
 
 @Path("/home")
@@ -32,7 +34,7 @@ public class HomeController {
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
         if (employee == null) {
-            return Response.status(401).build();
+            return Response.seeOther(URI.create("/")).build();
         }
         else {
             return Response.ok(home.data("employee", employee)).build();
