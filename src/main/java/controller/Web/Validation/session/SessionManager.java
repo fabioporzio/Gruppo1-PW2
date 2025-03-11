@@ -1,14 +1,14 @@
-package controller.session;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.core.NewCookie;
+package controller.Web.Validation.session;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.NewCookie;
+
 @ApplicationScoped
-public class sessionManager {
+public class SessionManager {
 
     public static final String NAME_COOKIE_SESSION = "Session";
 

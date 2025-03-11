@@ -8,14 +8,14 @@ import jakarta.ws.rs.Path;
 @Path("/")
 public class HomeResource {
 
-    private final Template home;
+    private final Template index;
 
-    public HomeResource(Template home) {
-        this.home = home;
+    public HomeResource(Template index) {
+        this.index = index;
     }
     @GET
-    public TemplateInstance getHome() {
-        return home.instance();
+    public TemplateInstance getIndex() {
+        return index.instance();
     }
 
 }
