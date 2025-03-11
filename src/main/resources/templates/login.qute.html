@@ -154,6 +154,10 @@
             <a href="#">TITLE</a>
         </div>
 
+        {#if message}
+            <h3 style="color: red">{message}</h3>
+        {/if}
+
         <form method="post" action="/login" class="login-form">
             <input type="text" name="username" placeholder="USERNAME" required>
             <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
