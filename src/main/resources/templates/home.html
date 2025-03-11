@@ -80,13 +80,13 @@
 <!-- Se l'utente è un dipendente / fare navbar scelta-->
 {#if employee}
     <ul>
-        <li><a href="Anagrafa un nuovo ospite"></a></li><!--dentrohref="vuoti"-->
-        <li>Inserisci nuova visita</li>
-        <li>Annulla visita</li>
+        <li><a href="">Anagrafa un nuovo ospite</a></li>
+        <li><a href="">Inserisci nuova visita</a></li>
+        <li><a href="">Annulla visita</a></li>
         {#if employee.department == "portineria"}
-        <li>visualzza visite</li>
-        <li>assegna badge</li>
-        <li>segna fine visita</li>
+        <li><a href="">visualzza visite</a></li>
+        <li><a href="">assegna badge</a></li>
+        <li><a href="">segna fine visita</a></li>
         {/if}
     </ul>
 {/if}
