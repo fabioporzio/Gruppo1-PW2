@@ -4,171 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Login Page</title>
     <style>
         /* Stili generali */
         body {
-            /*cambiare font*/
             font-family: Arial, sans-serif;
+            background-color: #382673;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-
         .container {
             background-color: #fff;
-            width: 100vw;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 350px;
         }
 
         /* Stili per il titolo */
         .title-box {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 70px;
+            text-align: center;
         }
-
-        .title-box a {
-            text-decoration: none;
+        .title-box h1 {
+            margin: 0;
+            font-size: 60px;
             color: #333;
-            padding: 5px 15px;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            background-color: #fff;
-            transition: 0.3s;
         }
-
-        .title-box a:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Stili per la barra di navigazione */
-        .nav-bar {
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-
-        .nav-bar a {
-            text-decoration: none;
-            color: #333;
-            padding: 5px 15px;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            background-color: #fff;
-            transition: 0.3s;
-        }
-
-        .nav-bar a:hover {
-            background-color: #f0f0f0;
+        .title-box p {
+            font-size: 30px;
+            color: #666;
         }
 
         /* Stili per il form di login */
-        .login-form {
+        form {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            margin-top: 80px;
         }
-
-        .login-form input[type="text"],
-        .login-form input[type="password"] {
-            width: 80%;
+        input {
+            margin: 10px 0;
             padding: 10px;
-            margin-bottom: 15px;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            text-align: center;
-            transition: 0.3s;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-
-        .login-form input[type="text"]:focus,
-        .login-form input[type="password"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        .login-form button {
-            width: 85%;
+        button {
             padding: 10px;
+            font-size: 18px;
             background-color: #007bff;
-            color: #fff;
+            color: white;
             border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        .login-form button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Stili per i link e il testo di registrazione */
-        .register-text {
-            font-size: 14px;
-            color: #333;
-        }
-
-        .register-text a {
-            text-decoration: underline;
-            color: #007bff;
-            transition: 0.3s;
-        }
-
-        .register-text a:hover {
-            color: #0056b3;
-        }
-
-        #message {
-            color: red;
-            text-align: center;
-        }
-
-        /* Stili per il pulsante di ricerca */
-        form[action="/search"] {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        form[action="/search"] input {
-            width: 60%;
-            padding: 5px;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            transition: 0.3s;
-        }
-
-        form[action="/search"] button {
-            padding: 5px 15px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 15px;
+            border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
         }
-
-        form[action="/search"] button:hover {
+        button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 
 <body>
+    <div class="title-box">
+        <h1>InfoDrive</h1>
+        <p>"Il portale smart per la gestione intelligente"</p>
+    </div>
+
     <div class="container">
-        <div class="title-box">
-            <a href="#">TITLE</a>
-        </div>
-
-        {#if message}
-            <h3 id="message">{message}</h3>
-        {/if}
-
-        <form method="post" action="/login" class="login-form">
-            <input type="text" name="username" placeholder="USERNAME" required>
-            <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
-            <button type="submit">BTN LOGIN</button>
+        <h1>Login</h1>
+        <form action="/" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Entra</button>
         </form>
-
     </div>
 </body>
 
