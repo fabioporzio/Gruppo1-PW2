@@ -117,6 +117,11 @@
             color: #0056b3;
         }
 
+        #message {
+            color: red;
+            text-align: center;
+        }
+
         /* Stili per il pulsante di ricerca */
         form[action="/search"] {
             display: flex;
@@ -149,75 +154,21 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-
-<style>
-    /* Stili per il form di login */
-    .login-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 80px;
-    }
-
-    .login-form input[type="text"],
-    .login-form input[type="password"] {
-        width: 80%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 2px solid #ddd;
-        border-radius: 15px;
-        text-align: center;
-        transition: 0.3s;
-    }
-
-    .login-form input[type="text"]:focus,
-    .login-form input[type="password"]:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-
-    .login-form button {
-        width: 85%;
-        padding: 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-        margin-bottom: 20px;
-        transition: 0.3s;
-    }
-
-    .login-form button:hover {
-        background-color: #0056b3;
-    }
-
-</style>
-
-
-    <div class="container">
-        <div class="title-box"></div>
-=======
-    {#if message}
-        <h3 style="color: red">{message}</h3>
-    {/if}
     <div class="container">
         <div class="title-box">
             <a href="#">TITLE</a>
         </div>
 
-        <form method="post" action="/" class="login-form">
-            <label for="email">
-                Email:
-            </label>
-            <input type="text" name="email" id="email" required>
-            <label for="password">
-                Password:
-            </label>
-            <input type="password" name="password" id="password" required>
-            <button type="submit">Login</button>
+        {#if message}
+            <h3 id="message">{message}</h3>
+        {/if}
+
+        <form method="post" action="/login" class="login-form">
+            <input type="text" name="username" placeholder="USERNAME" required>
+            <input type="password" name="password" placeholder="PASSWORD" minlength="8" required>
+            <button type="submit">BTN LOGIN</button>
         </form>
+
     </div>
 </body>
 

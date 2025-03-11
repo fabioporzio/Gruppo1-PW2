@@ -1,4 +1,4 @@
-package controller.Web.Validation.session;
+package controller.session;
 
 import java.util.Map;
 import java.util.UUID;
