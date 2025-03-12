@@ -33,14 +33,15 @@ public class VisitManager {
             for (CSVRecord record : csvParser) {
                 String id = record.get("id");
                 LocalDate date = LocalDate.parse(record.get("date"), dateFormatter);
-                LocalTime startingHour = LocalTime.parse(record.get("starting_hour"), timeFormatter);
+                LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
+                LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
                 LocalDateTime actualEndingTime = LocalDateTime.parse(record.get("actual_ending_time"), dateTimeFormatter);
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
 
-                Visit visit = new Visit(id, date, startingHour, expectedEndingHour, actualEndingTime, guestId, employeeId, badgeCode);
+                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingTime, guestId, employeeId, badgeCode);
                 visits.add(visit);
             }
         }
@@ -57,12 +58,14 @@ public class VisitManager {
         String filePath = "data/visits.csv";
 
         try (Writer writer = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "starting_hour", "expected_ending_hour", "actual_ending_time", "guest_id", "employee_id", "badge_code")))
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "guest_id", "employee_id", "badge_code")))
         {
             csvPrinter.printRecord(
                     visit.getId(),
                     visit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+                    visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                    visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                     visit.getActualEndingTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     visit.getGuestId(),
                     visit.getEmployeeId(),
