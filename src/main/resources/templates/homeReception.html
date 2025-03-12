@@ -172,14 +172,17 @@
 
 <section class="main">
     <div class="buttons-container">
-        <div class="button" onclick="showContent('visite')">Visualizza visite</div>
+        <a href="/home-reception/show-visits"><div class="button">Visualizza visite</div></a>
         <div class="button" onclick="showContent('badge')">Assegna badge</div>
         <div class="button" onclick="showContent('fine')">Segna fine visita</div>
     </div>
     <section class="content" id="dynamic-content">
                 <table>
-                    <thead>
-                        <th>
+
+                    <tbody>
+                        {#if type == 'showVisits'}
+                            <thead>
+                            <th>
                             <td>id</td>
                             <td>data</td>
                             <td>previsto orario inizio</td>
@@ -189,10 +192,8 @@
                             <td>id ospite</td>
                             <td>id dipendente</td>
                             <td>badge</td>
-                        </th>
-                    </thead>
-                    <tbody>
-                        {#if type == 'showVisits'}
+                            </th>
+                            </thead>
                         {#for visit in visits}
                             <tr>
                                 <td>{visit.id}</td>
@@ -200,7 +201,7 @@
                                 <td>{visit.expectedStartingHour}</td>
                                 <td>{visit.actualStartingHour}</td>
                                 <td>{visit.expectedEndingHour}</td>
-                                <td>{visit.actualEndingTime}</td>
+                                <td>{visit.actualEndingHour}</td>
                                 <td>{visit.guestId}</td>
                                 <td>{visit.employeeId}</td>
                                 <td>{visit.badgeCode}</td>
@@ -243,7 +244,7 @@
         } else if (type === "badge") {
             let data = await fetchData('/home-reception/assign-badge');
             if (data && data.badge) {
-                content.innerHTML = `<h2>Assegnazione badge</h2><p>Badge assegnato: ${data.badge}</p>`;
+                content.innerHTML = `<h2>Assegnazione badge</h2><p>Badge assegnato: $</p>`;
             } else {
                 content.innerHTML = "<p>Errore nell'assegnazione del badge.</p>";
             }
@@ -263,7 +264,7 @@
         let list = document.createElement("ul");
         visits.forEach(visit => {
             let item = document.createElement("li");
-            item.textContent = `Visita ID: ${visit.id}, Ospite: ${visit.guestName}, Data: ${visit.date}`;
+
             list.appendChild(item);
         });
         content.appendChild(list);

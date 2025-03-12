@@ -34,7 +34,7 @@ public class HomeReceptionController {
             if (employee == null) {
                 return Response.seeOther(URI.create("/")).build();
             } else {
-                return Response.ok(homeReception.data("employee", employee)).build();
+                return Response.ok(homeReception.data("employee", employee, "type" , null, "visits" , null)).build();
             }
         }
         return Response.seeOther(URI.create("/")).build();
