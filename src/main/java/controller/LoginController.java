@@ -39,11 +39,11 @@ public class LoginController {
         String errorMessage = null;
 
         if (!credentialsValidator.checkPassword(password)) {
-            errorMessage = "Username o Password non corretti";
+            errorMessage = "Username or Password not valid";
         }
 
         if (!credentialsValidator.checkEmail(email)) {
-            errorMessage = "Username o Password non corretti";
+            errorMessage = "Username or Password not valid";
         }
 
         if (errorMessage != null) {
@@ -57,13 +57,20 @@ public class LoginController {
         if (employee != null) {
             NewCookie sessionCookie = sessionManager.createSession(email);
 
+            if(employee.getDepartment().equals("Reception")) {
+                return Response
+                        .seeOther(URI.create("/home-reception"))
+                        .cookie(sessionCookie)
+                        .build();
+            }
+
             return Response
-                    .seeOther(URI.create("/home"))
+                    .seeOther(URI.create("/home-employee"))
                     .cookie(sessionCookie)
                     .build();
         }
         else {
-            errorMessage = "Username o Password non corretti";
+            errorMessage = "Username or Password not valid";
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(login.data("message", errorMessage))
                     .build();
