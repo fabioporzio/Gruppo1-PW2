@@ -3,13 +3,13 @@ package model;
 import java.time.LocalDate;
 
 public class Employee {
-    String id;
-    String name;
-    String surname;
-    LocalDate dateOfBirth;
-    String department;
-    String email;
-    String password;
+    private String id;
+    private String name;
+    private String surname;
+    private LocalDate dateOfBirth;
+    private String department;
+    private String email;
+    private String password;
 
     public Employee(String id, String name, String surname, LocalDate dateOfBirth, String department, String email, String password) {
         this.id = id;

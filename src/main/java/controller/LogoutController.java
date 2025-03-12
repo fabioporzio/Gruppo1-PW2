@@ -1,6 +1,7 @@
 package controller;
 
 import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.NewCookie;
@@ -20,7 +21,7 @@ public class LogoutController {
         this.sessionManager = sessionManager;
     }
 
-    @POST
+    @GET
     public Response processLogout(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ) {

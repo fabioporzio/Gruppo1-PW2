@@ -31,14 +31,17 @@ public class HomeController {
     public Response getHome(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ) {
-        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        if (employee == null) {
-            return Response.seeOther(URI.create("/home")).build();
+            if (employee == null) {
+                return Response.seeOther(URI.create("/home")).build();
+            } else {
+                return Response.ok(home.data("employee", employee)).build();
+            }
         }
-        else {
-            return Response.ok(home.data("employee", employee)).build();
-        }
+        return Response.seeOther(URI.create("/")).build();
+
     }
 
 }
