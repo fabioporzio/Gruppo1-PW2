@@ -25,7 +25,6 @@ public class VisitManager {
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
         try (Reader reader = new FileReader(filePath);
              CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());)
@@ -36,12 +35,12 @@ public class VisitManager {
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
-                LocalDateTime actualEndingTime = LocalDateTime.parse(record.get("actual_ending_time"), dateTimeFormatter);
+                LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
 
-                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingTime, guestId, employeeId, badgeCode);
+                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, guestId, employeeId, badgeCode);
                 visits.add(visit);
             }
         }
@@ -66,7 +65,7 @@ public class VisitManager {
                     visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                     visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualEndingTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     visit.getGuestId(),
                     visit.getEmployeeId(),
                     visit.getBadgeCode()
@@ -95,6 +94,18 @@ public class VisitManager {
 
         for (Visit visit : visits) {
             if (visit.getEmployeeId().equals(employee.getId())) {
+                visits.add(visit);
+            }
+        }
+
+        return visits;
+    }
+
+    public List<Visit> getUnfinishedVisits() {
+        List<Visit> visits = getVisitsFromFile();
+
+        for (Visit visit : visits) {
+            if (visit.getActualStartingHour() != null && visit.getActualEndingHour() == null) {
                 visits.add(visit);
             }
         }
