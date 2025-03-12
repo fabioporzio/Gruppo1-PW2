@@ -55,8 +55,27 @@ public class HomeReceptionController {
         VisitManager filteredVisits = new VisitManager();
         List<Visit> visits = filteredVisits.getVisitsByDate(inputDate);
 
-        return Response.ok(homeReception.data("visits", visits)).build();
+        return Response.ok(homeReception.data("visits", visits,"type" , "showVisits")).build();
 
+    }
+
+    @Path("/assign-badge")
+    @GET
+    public TemplateInstance assignBadge() {
+
+        String badge = ""; // * Funzione per assegnare badge
+        return homeReception.data("badge", badge, "type","assignBadge");
+
+    }
+
+    @Path("/get-unfinished-visit")
+    @GET
+    public TemplateInstance getUnfinishedVisit() {
+
+        VisitManager visits = new VisitManager();
+        List<Visit> actualOpenVisits = visits.getUnfinishedVisits();
+
+        return homeReception.data("visits", actualOpenVisits, "type", "closeVisit");
     }
 
 
