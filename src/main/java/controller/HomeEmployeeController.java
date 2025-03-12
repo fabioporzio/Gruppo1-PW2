@@ -1,6 +1,7 @@
 package controller;
 
 import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,14 +15,14 @@ import java.net.URI;
 
 import static logic.SessionManager.NAME_COOKIE_SESSION;
 
-@Path("/home")
-public class HomeController {
+@Path("/home-employee")
+public class HomeEmployeeController {
 
-    private final Template home;
+    private final Template homeEmployee;
     private final SessionManager sessionManager;
 
-    public HomeController(Template home, SessionManager sessionManager) {
-        this.home = home;
+    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager) {
+        this.homeEmployee = homeEmployee;
         this.sessionManager = sessionManager;
     }
 
@@ -36,11 +37,16 @@ public class HomeController {
             if (employee == null) {
                 return Response.seeOther(URI.create("/home")).build();
             } else {
-                return Response.ok(home.data("employee", employee)).build();
+                return Response.ok(homeEmployee.data("employee", employee)).build();
             }
         }
         return Response.seeOther(URI.create("/")).build();
 
     }
 
+    @GET
+    @Path("/add-guest")
+    public TemplateInstance showFormAddGuest(){
+        return homeEmployee.data("type", "Add guest");
+    }
 }
