@@ -82,21 +82,23 @@ public class VisitManager {
     public List<Visit> getVisitsByDate(LocalDate date) {
         List<Visit> visits = getVisitsFromFile();
 
+        List<Visit> filteredVisits = new ArrayList<>();
+
         for (Visit visit : visits) {
             if (visit.getDate().equals(date)) {
-                visits.add(visit);
+                filteredVisits.add(visit);
             }
         }
 
-        return visits;
+        return filteredVisits;
     }
 
     public List<Visit> getVisitsByEmployeeId(Employee employee) {
         List<Visit> visits = getVisitsFromFile();
-
+        //FIX La lista viene sovrascritta quindi rinvia sempre tutte le visite nei file
         for (Visit visit : visits) {
             if (visit.getEmployeeId().equals(employee.getId())) {
-                visits.add(visit);
+                visits.add(visit); // viene utilizzata la stessa lista
             }
         }
 
