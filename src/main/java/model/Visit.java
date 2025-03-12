@@ -7,17 +7,21 @@ import java.time.LocalTime;
 public class Visit {
     private String id;
     private LocalDate date;
-    private LocalTime startingHour;
+    private LocalTime expectedStartingHour;
+    private LocalTime actualStartingHour;
     private LocalTime expectedEndingHour;
     private LocalDateTime actualEndingTime;
     private String guestId;
     private String employeeId;
     private String badgeCode;
 
-    public Visit(String id, LocalDate date, LocalTime startingHour, LocalTime expectedEndingHour, LocalDateTime actualEndingTime, String guestId, String employeeId, String badgeCode) {
+    public Visit(String id, LocalDate date, LocalTime expectedStartingHour, LocalTime actualStartingHour,
+                 LocalTime expectedEndingHour, LocalDateTime actualEndingTime, String guestId, String employeeId,
+                 String badgeCode) {
         this.id = id;
         this.date = date;
-        this.startingHour = startingHour;
+        this.expectedStartingHour = expectedStartingHour;
+        this.actualStartingHour = actualStartingHour;
         this.expectedEndingHour = expectedEndingHour;
         this.actualEndingTime = actualEndingTime;
         this.guestId = guestId;
@@ -41,12 +45,20 @@ public class Visit {
         this.date = date;
     }
 
-    public LocalTime getStartingHour() {
-        return startingHour;
+    public LocalTime getExpectedStartingHour() {
+        return expectedStartingHour;
     }
 
-    public void setStartingHour(LocalTime startingHour) {
-        this.startingHour = startingHour;
+    public void setExpectedStartingHour(LocalTime expectedStartingHour) {
+        this.expectedStartingHour = expectedStartingHour;
+    }
+
+    public LocalTime getActualStartingHour() {
+        return actualStartingHour;
+    }
+
+    public void setActualStartingHour(LocalTime actualStartingHour) {
+        this.actualStartingHour = actualStartingHour;
     }
 
     public LocalTime getExpectedEndingHour() {

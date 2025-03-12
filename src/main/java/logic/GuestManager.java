@@ -30,8 +30,10 @@ public class GuestManager {
                 String id = record.get("id");
                 String name = record.get("name");
                 String surname = record.get("surname");
+                String role = record.get("role");
+                String company = record.get("company");
 
-                Guest guest = new Guest(id, name, surname);
+                Guest guest = new Guest(id, name, surname, role, company);
                 guests.add(guest);
             }
         }
@@ -44,12 +46,14 @@ public class GuestManager {
 
     public void addGuest(Guest guest) {
         try (Writer writer = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "name", "surname")))
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "name", "surname", "role", "company")))
         {
             csvPrinter.printRecord(
                     guest.getId(),
                     guest.getName(),
-                    guest.getSurname()
+                    guest.getSurname(),
+                    guest.getRole(),
+                    guest.getCompany()
             );
         }
         catch (IOException e)
