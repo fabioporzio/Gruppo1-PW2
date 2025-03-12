@@ -44,7 +44,8 @@ public class GuestManager {
         return guests;
     }
 
-    public void addGuest(Guest guest) {
+    public void saveGuest(Guest guest) {
+
         try (Writer writer = new FileWriter(filePath, true);
              CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "name", "surname", "role", "company")))
         {
@@ -84,5 +85,11 @@ public class GuestManager {
         }
 
         return filteredGuests;
+    }
+
+    public int getNewId(){
+        List<Guest> guests = getGuestsFromFile();
+
+        return Integer.parseInt(guests.getLast().getId()) + 1;
     }
 }
