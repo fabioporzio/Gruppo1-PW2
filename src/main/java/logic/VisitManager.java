@@ -1,7 +1,6 @@
 package logic;
 
 import model.Employee;
-import model.Guest;
 import model.Visit;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class VisitManager {
 
-    public static List<Visit> getVisitsFromFile() {
+    public List<Visit> getVisitsFromFile() {
         String filePath = "data/visits.csv";
 
         List<Visit> visits = new ArrayList<>();

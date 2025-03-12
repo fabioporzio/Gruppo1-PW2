@@ -43,8 +43,8 @@ public class HomeReceptionController {
     @Path("/show-visits")
     @GET
     public TemplateInstance showVisits() {
-
-        List<Visit> visits = VisitManager.getVisitsFromFile();
+        VisitManager visitManager = new VisitManager();
+        List<Visit> visits = visitManager.getVisitsFromFile();
         return homeReception.data("visits",visits , "type","showVisits" );
     }
 
