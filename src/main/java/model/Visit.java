@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Visit {
@@ -8,12 +9,12 @@ public class Visit {
     private LocalDate date;
     private LocalTime startingHour;
     private LocalTime expectedEndingHour;
-    private LocalTime actualEndingTime;
+    private LocalDateTime actualEndingTime;
     private String guestId;
     private String employeeId;
     private String badgeCode;
 
-    public Visit(String id, LocalDate date, LocalTime startingHour, LocalTime expectedEndingHour, LocalTime actualEndingTime, String guestId, String employeeId, String badgeCode) {
+    public Visit(String id, LocalDate date, LocalTime startingHour, LocalTime expectedEndingHour, LocalDateTime actualEndingTime, String guestId, String employeeId, String badgeCode) {
         this.id = id;
         this.date = date;
         this.startingHour = startingHour;
@@ -56,11 +57,11 @@ public class Visit {
         this.expectedEndingHour = expectedEndingHour;
     }
 
-    public LocalTime getActualEndingTime() {
+    public LocalDateTime getActualEndingTime() {
         return actualEndingTime;
     }
 
-    public void setActualEndingTime(LocalTime actualEndingTime) {
+    public void setActualEndingTime(LocalDateTime actualEndingTime) {
         this.actualEndingTime = actualEndingTime;
     }
 
