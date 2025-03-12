@@ -46,7 +46,7 @@ public class HomeEmployeeController {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
             if (employee == null) {
-                return Response.seeOther(URI.create("/home")).build();
+                return Response.seeOther(URI.create("/")).build();
             } else {
                 return Response.ok(homeEmployee.data("employee", employee)).build();
             }
