@@ -18,14 +18,13 @@ import java.util.List;
 
 public class VisitManager {
 
-    public static List<Visit> getVisitsFromFile() {
+    public List<Visit> getVisitsFromFile() {
         String filePath = "data/visits.csv";
 
         List<Visit> visits = new ArrayList<>();
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
         try (Reader reader = new FileReader(filePath);
              CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());)
@@ -36,12 +35,12 @@ public class VisitManager {
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
-                LocalTime actualEndingTime = LocalTime.parse(record.get("actual_ending_time"), dateTimeFormatter);
+                LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
 
-                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingTime, guestId, employeeId, badgeCode);
+                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, guestId, employeeId, badgeCode);
                 visits.add(visit);
             }
         }
@@ -54,7 +53,7 @@ public class VisitManager {
         return visits;
     }
 
-    public void addVisit(Visit visit) {
+    public void saveVisit(Visit visit) {
         String filePath = "data/visits.csv";
 
         try (Writer writer = new FileWriter(filePath, true);
@@ -112,5 +111,11 @@ public class VisitManager {
         }
 
         return visits;
+    }
+
+    public int getNewId(){
+        List<Visit> visits = getVisitsFromFile();
+
+        return Integer.parseInt(visits.getLast().getId()) + 1;
     }
 }

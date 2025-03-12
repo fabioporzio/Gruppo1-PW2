@@ -32,7 +32,7 @@ public class HomeReceptionController {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
             if (employee == null) {
-                return Response.seeOther(URI.create("/home")).build();
+                return Response.seeOther(URI.create("/")).build();
             } else {
                 return Response.ok(homeReception.data("employee", employee)).build();
             }
@@ -43,8 +43,8 @@ public class HomeReceptionController {
     @Path("/show-visits")
     @GET
     public TemplateInstance showVisits() {
-
-        List<Visit> visits = VisitManager.getVisitsFromFile();
+        VisitManager visitManager = new VisitManager();
+        List<Visit> visits = visitManager.getVisitsFromFile();
         return homeReception.data("visits",visits , "type","showVisits" );
     }
 
