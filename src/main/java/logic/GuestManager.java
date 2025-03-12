@@ -18,7 +18,13 @@ import java.util.List;
 
 @ApplicationScoped
 public class GuestManager {
-    private final String filePath = "data/guests.csv";
+    final String filePath = "data/guests.csv";
+    final VisitManager visitManager;
+
+    public GuestManager(VisitManager visitManager) {
+        this.visitManager = visitManager;
+    }
+
 
     public List<Guest> getGuestsFromFile() {
         List<Guest> guests = new ArrayList<>();
@@ -69,7 +75,7 @@ public class GuestManager {
         List<String> guestsIds = new ArrayList<>();
         List<Guest> filteredGuests = new ArrayList<>();
 
-        List<Visit> loadedVisits = VisitManager.getVisitsFromFile();
+        List<Visit> loadedVisits = visitManager.getVisitsFromFile();
         List<Guest> loadedGuests = getGuestsFromFile();
 
         for (Visit loadedVisit : loadedVisits) {

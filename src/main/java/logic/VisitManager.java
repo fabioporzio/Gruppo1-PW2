@@ -1,5 +1,6 @@
 package logic;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import model.Employee;
 import model.Visit;
 import org.apache.commons.csv.CSVFormat;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@ApplicationScoped
 public class VisitManager {
 
     public List<Visit> getVisitsFromFile() {
