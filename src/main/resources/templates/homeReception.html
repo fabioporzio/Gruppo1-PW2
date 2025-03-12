@@ -36,7 +36,7 @@
         .nav-links a {
             text-decoration: none;
             color: #fff;
-            font-size: 30px;
+            font-size: 20px;
             transition: 0.3s;
             padding: 10px 15px;
         }
@@ -158,7 +158,7 @@
     <nav>
         <div class="menu">
             <div class="nav-links" id="nav-links">
-                <a href="  ">Anagrafa un nuovo ospite</a>
+                <a href="  ">Inserisci nuovo ospite</a>
                 <a href="  ">Inserisci nuova visita</a>
                 <a href="  ">Annulla visita</a>
                 <a href="/logout">LOGOUT</a>
@@ -177,39 +177,39 @@
         <div class="button" onclick="showContent('fine')">Segna fine visita</div>
     </div>
     <section class="content" id="dynamic-content">
-                <table>
+        <table>
+            {#if type == 'showVisits'}
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>data</th>
+                    <th>previsto orario inizio</th>
+                    <th>ora effettiva di inizio</th>
+                    <th>prevista ora di fine</th>
+                    <th>ora effettiva di fine</th>
+                    <th>id ospite</th>
+                    <th>id dipendente</th>
+                    <th>badge</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#for visit in visits}
+                    <tr>
+                        <td>{visit.id}</td>
+                        <td>{visit.date}</td>
+                        <td>{visit.expectedStartingHour}</td>
+                        <td>{visit.actualStartingHour}</td>
+                        <td>{visit.expectedEndingHour}</td>
+                        <td>{visit.actualEndingHour}</td>
+                        <td>{visit.guestId}</td>
+                        <td>{visit.employeeId}</td>
+                        <td>{visit.badgeCode}</td>
+                    </tr>
+                {/for}
+                </tbody>
+            {/if}
+        </table>
 
-                    <tbody>
-                        {#if type == 'showVisits'}
-                            <thead>
-                            <th>
-                            <td>id</td>
-                            <td>data</td>
-                            <td>previsto orario inizio</td>
-                            <td>ora effettiva di inizio</td>
-                            <td>prevista ora di fine</td>
-                            <td>ora effettiva di fine</td>
-                            <td>id ospite</td>
-                            <td>id dipendente</td>
-                            <td>badge</td>
-                            </th>
-                            </thead>
-                        {#for visit in visits}
-                            <tr>
-                                <td>{visit.id}</td>
-                                <td>{visit.date}</td>
-                                <td>{visit.expectedStartingHour}</td>
-                                <td>{visit.actualStartingHour}</td>
-                                <td>{visit.expectedEndingHour}</td>
-                                <td>{visit.actualEndingHour}</td>
-                                <td>{visit.guestId}</td>
-                                <td>{visit.employeeId}</td>
-                                <td>{visit.badgeCode}</td>
-                            </tr>
-                        {/for}
-                        {/if}
-                    </tbody>
-                </table>
         Seleziona un'opzione per visualizzare i dettagli.
     </section>
 </section>
