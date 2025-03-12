@@ -1,6 +1,7 @@
 package logic;
 
 import model.Employee;
+import model.Guest;
 import model.Visit;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -53,7 +54,7 @@ public class VisitManager {
         return visits;
     }
 
-    public void addVisit(Visit visit) {
+    public void saveVisit(Visit visit) {
         String filePath = "data/visits.csv";
 
         try (Writer writer = new FileWriter(filePath, true);
@@ -111,5 +112,11 @@ public class VisitManager {
         }
 
         return visits;
+    }
+
+    public int getNewId(){
+        List<Visit> visits = getVisitsFromFile();
+
+        return Integer.parseInt(visits.getLast().getId()) + 1;
     }
 }
