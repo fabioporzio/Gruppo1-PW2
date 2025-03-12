@@ -2,14 +2,16 @@ package controller;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
-import jakarta.ws.rs.CookieParam;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import logic.SessionManager;
+import logic.VisitManager;
 import model.Employee;
+import model.Visit;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 
 import static logic.SessionManager.NAME_COOKIE_SESSION;
 
@@ -38,11 +40,25 @@ public class HomeReceptionController {
         return Response.seeOther(URI.create("/")).build();
     }
 
-    /*@Path("/show-visits")
+    @Path("/show-visits")
     @GET
     public TemplateInstance showVisits() {
-        return homeReception.data();
-    }*/
+
+        List<Visit> visits = VisitManager.getVisitsFromFile();
+        return homeReception.data("visits",visits , "type","showVisits" );
+    }
+
+    @Path("/filtered-visits")
+    @POST
+    public Response filterVisits(@FormParam("inputDate") LocalDate inputDate) {
+
+        VisitManager filteredVisits = new VisitManager();
+        List<Visit> visits = filteredVisits.getVisitsByDate(inputDate);
+
+        return Response.ok(homeReception.data("visits", visits)).build();
+
+    }
+
 
 
 }
