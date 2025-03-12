@@ -36,7 +36,7 @@ public class VisitManager {
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
-                LocalDateTime actualEndingTime = LocalDateTime.parse(record.get("actual_ending_time"), dateTimeFormatter);
+                LocalTime actualEndingTime = LocalTime.parse(record.get("actual_ending_time"), dateTimeFormatter);
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
@@ -66,7 +66,7 @@ public class VisitManager {
                     visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                     visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualEndingTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     visit.getGuestId(),
                     visit.getEmployeeId(),
                     visit.getBadgeCode()
@@ -95,6 +95,18 @@ public class VisitManager {
 
         for (Visit visit : visits) {
             if (visit.getEmployeeId().equals(employee.getId())) {
+                visits.add(visit);
+            }
+        }
+
+        return visits;
+    }
+
+    public List<Visit> getUnfinishedVisits() {
+        List<Visit> visits = getVisitsFromFile();
+
+        for (Visit visit : visits) {
+            if (visit.getActualStartingHour() != null && visit.getActualEndingHour() == null) {
                 visits.add(visit);
             }
         }

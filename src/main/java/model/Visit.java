@@ -10,20 +10,20 @@ public class Visit {
     private LocalTime expectedStartingHour;
     private LocalTime actualStartingHour;
     private LocalTime expectedEndingHour;
-    private LocalDateTime actualEndingTime;
+    private LocalTime actualEndingHour;
     private String guestId;
     private String employeeId;
     private String badgeCode;
 
     public Visit(String id, LocalDate date, LocalTime expectedStartingHour, LocalTime actualStartingHour,
-                 LocalTime expectedEndingHour, LocalDateTime actualEndingTime, String guestId, String employeeId,
+                 LocalTime expectedEndingHour, LocalTime actualEndingTime, String guestId, String employeeId,
                  String badgeCode) {
         this.id = id;
         this.date = date;
         this.expectedStartingHour = expectedStartingHour;
         this.actualStartingHour = actualStartingHour;
         this.expectedEndingHour = expectedEndingHour;
-        this.actualEndingTime = actualEndingTime;
+        this.actualEndingHour = actualEndingTime;
         this.guestId = guestId;
         this.employeeId = employeeId;
         this.badgeCode = badgeCode;
@@ -69,12 +69,12 @@ public class Visit {
         this.expectedEndingHour = expectedEndingHour;
     }
 
-    public LocalDateTime getActualEndingTime() {
-        return actualEndingTime;
+    public LocalTime getActualEndingHour() {
+        return actualEndingHour;
     }
 
-    public void setActualEndingTime(LocalDateTime actualEndingTime) {
-        this.actualEndingTime = actualEndingTime;
+    public void setActualEndingHour(LocalTime actualEndingHour) {
+        this.actualEndingHour = actualEndingHour;
     }
 
     public String getGuestId() {
