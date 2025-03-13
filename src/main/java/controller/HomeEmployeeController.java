@@ -25,6 +25,8 @@ import static logic.SessionManager.NAME_COOKIE_SESSION;
 @Path("/home-employee")
 public class HomeEmployeeController {
 
+    private final static int MAX_BADGE = 2;
+
     private final Template homeEmployee;
     private final SessionManager sessionManager;
     private final GuestManager guestManager;
@@ -145,6 +147,23 @@ public class HomeEmployeeController {
 
         if (!credentialsValidator.checkDate(date)) {
             errorMessage = "The visit must be at least one day prior";
+        }
+
+        if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)){
+            errorMessage = "The expected start must be before the expected end";
+        }
+
+        List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
+        int countOverlapVisits = 0;
+
+        for(Visit visit : visitsOfDate){
+            if (visit.getExpectedStartingHour().isBefore(expectedEnd) && visit.getExpectedEndingHour().isAfter(expectedStart)) {
+                countOverlapVisits++;
+            }
+        }
+
+        if(countOverlapVisits == MAX_BADGE){
+            errorMessage = "For that time slot the schedule is full";
         }
 
         if(errorMessage != null){

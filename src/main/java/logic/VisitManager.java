@@ -33,17 +33,11 @@ public class VisitManager {
         {
             for (CSVRecord record : csvParser) {
                 String id = record.get("id");
-                System.out.println(id);
-                LocalDate date = LocalDate.parse(record.get("date"), dateFormatter);
-                System.out.println(date);
+                LocalDate date = LocalDate.parse(record.get("date").trim(), dateFormatter);
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
-                System.out.println(expectedStartingHour);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
-                System.out.println(actualStartingHour);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
-                System.out.println(expectedEndingHour);
                 LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
-                System.out.println(actualEndingHour);
                 VisitStatus visitStatus = VisitStatus.valueOf(record.get("visit_status"));
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
@@ -89,14 +83,15 @@ public class VisitManager {
 
     public List<Visit> getVisitsByDate(LocalDate date) {
         List<Visit> visits = getVisitsFromFile();
+        List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
             if (visit.getDate().equals(date)) {
-                visits.add(visit);
+                filteredVisits.add(visit);
             }
         }
 
-        return visits;
+        return filteredVisits;
     }
 
     public List<Visit> getVisitsByEmployeeId(String employeeId) {
@@ -200,7 +195,6 @@ public class VisitManager {
 
     public int getNewId(){
         List<Visit> visits = getVisitsFromFile();
-        System.out.println(visits.size());
 
         if (visits.isEmpty()) {
             return 1;
@@ -208,9 +202,5 @@ public class VisitManager {
         else {
             return Integer.parseInt(visits.getLast().getId()) + 1;
         }
-    }
-
-    public void overwriteVisit(List<Visit> visits) throws IOException {
-
     }
 }
