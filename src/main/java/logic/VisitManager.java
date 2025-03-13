@@ -33,11 +33,17 @@ public class VisitManager {
         {
             for (CSVRecord record : csvParser) {
                 String id = record.get("id");
+                System.out.println(id);
                 LocalDate date = LocalDate.parse(record.get("date"), dateFormatter);
+                System.out.println(date);
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
+                System.out.println(expectedStartingHour);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
+                System.out.println(actualStartingHour);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
+                System.out.println(expectedEndingHour);
                 LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
+                System.out.println(actualEndingHour);
                 VisitStatus visitStatus = VisitStatus.valueOf(record.get("visit_status"));
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
@@ -135,28 +141,57 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    public void deleteVisit(Visit visit) throws IOException {
+    public Visit getVisitById(String inputVisitId) {
         List<Visit> visits = getVisitsFromFile();
 
-        visits.remove(visit);
+        for (Visit visit : visits) {
+            if (visit.getId().equals(inputVisitId)) {
+                return visit;
+            }
+        }
+        return null;
+    }
 
+    public List<Visit> getFilteredVisits(Visit visit) {
+        List<Visit> visits = getVisitsFromFile();
+        List<Visit> filteredVisits = new ArrayList<>();
+
+        for (Visit visit1 : visits) {
+            if (visit1.getId().equals(visit.getId())) {
+                continue;
+            }
+            else {
+                filteredVisits.add(visit1);
+            }
+        }
+
+        return filteredVisits;
+    }
+
+    public void overwriteVisits(List<Visit> visits) {
 
         try(FileWriter writer = new FileWriter(filePath);
-        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "guest_id", "employee_id", "badge_code")))
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "visit_status", "guest_id", "employee_id", "badge_code")))
         {
-            for (Visit newVisit : visits) {
-                csvPrinter.printRecord(
-                        newVisit.getId(),
-                        newVisit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                        newVisit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                        newVisit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                        newVisit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                        newVisit.getActualEndingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                        newVisit.getGuestId(),
-                        newVisit.getEmployeeId(),
-                        newVisit.getBadgeCode()
-                );
+            for (Visit visit : visits) {
+                for (Visit newVisit : visits) {
+                    csvPrinter.printRecord(
+                            newVisit.getId(),
+                            newVisit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                            newVisit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                            newVisit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                            newVisit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                            newVisit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                            newVisit.getStatus().name(),
+                            newVisit.getGuestId(),
+                            newVisit.getEmployeeId(),
+                            newVisit.getBadgeCode()
+                    );
+                }
             }
+        }
+        catch (IOException e){
+            e.printStackTrace();
         }
 
 
@@ -165,6 +200,7 @@ public class VisitManager {
 
     public int getNewId(){
         List<Visit> visits = getVisitsFromFile();
+        System.out.println(visits.size());
 
         if (visits.isEmpty()) {
             return 1;
@@ -172,5 +208,9 @@ public class VisitManager {
         else {
             return Integer.parseInt(visits.getLast().getId()) + 1;
         }
+    }
+
+    public void overwriteVisit(List<Visit> visits) throws IOException {
+
     }
 }
