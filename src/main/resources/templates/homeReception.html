@@ -11,9 +11,6 @@
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
             padding: 0;
-            /*hiding scrollbar*/
-            scrollbar-width: none;
-            -ms-overflow-style: none;
         }
         body {
             background-color: #382673;
@@ -24,12 +21,12 @@
 
         /* HEADER */
         .header {
-            box-shadow: 0px 0px 20px 20px #0000006a;
             width: 100vw;
-            background-color: #382673;
+            background: #000000;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 70px;
             padding: 30px;
         }
         .nav-links {
@@ -60,6 +57,7 @@
             background-color: #fff;
             transition: 0.3s;
         }
+        /* Stili per il titolo */
         .title-box {
             display: flex;
             flex-direction: column;
@@ -78,73 +76,39 @@
             display: flex;
             justify-content: center;
             gap: 150px;
-            width: 90vw;
-            margin-top: 50px;
-            margin-bottom: 20px;
+            margin: 5% 0;
         }
         .button {
             background: #fff;
-            padding: 30px 30px;
+            padding: 40px 40px;
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0px 5px 30px 15px #0000006a;
         }
         .button:hover {
-            background: #909090;
+            background: #ddd;
         }
         .content {
-            display: contents;
-            border-radius: 10px;
-            box-shadow: 0px 5px 30px 15px #0000006a;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-        }
-        .main {
             width: 100%;
-            height: 100%;
+            height: 500px;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 5px 30px 15px #0000006a;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .date-filter {
-            display: flex;
-            padding: 10px;
-            gap: 10px;
             justify-content: center;
             align-items: center;
-            height: fit-content;
-            width: fit-content;
-            & input {
-                font-size: 16px;
-                width: 130px;
-                height: 40px;
-            }
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+            overflow-y: auto;
         }
-        .content table {
-            border-collapse: collapse;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0px 5px 20px 1px #0000006a;
-        }
-        .content th {
-            background-color: #000000;
-            color: white;
-            word-wrap: break-word;
-            text-align: left;
-            padding: 12px;
-            font-size: 18px;
-        }
-        .content td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            font-size: 16px;
-        }
-        .content tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .content tr:hover {
-            background-color: #e1e1e1;
+        .main {
+            width: 90%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* Navbar responsive */
@@ -180,37 +144,11 @@
             }
             .button {
                 padding: 20px 20px;
-                border-radius: 30px;
-            }
-            .content th, .content td {
-                font-size: 14px;
-                padding: 8px;
-            }
-            .content {
-                overflow: hidden;
-                width: 100%;
-            }
-            .content table {
-                width: 100%;
-                display: block;
-            }
-        }
-        @media (max-width: 600px){
-            .content {
-                overflow: hidden;
-                width: 100%;
-            }
-            .content table {
-                width: 100%;
-                display: block;
-            }
-            .content th, .content td {
-                font-size: 14px;
-                padding: 2px;
             }
         }
     </style>
 </head>
+
 <body>
 <header class="header">
     <div class="title-box">
@@ -220,9 +158,9 @@
     <nav>
         <div class="menu">
             <div class="nav-links" id="nav-links">
-                <a href="#">Anagrafa un nuovo ospite</a>
-                <a href="#">Inserisci nuova visita</a>
-                <a href="#">Annulla visita</a>
+                <a href="  ">Inserisci nuovo ospite</a>
+                <a href="  ">Inserisci nuova visita</a>
+                <a href="  ">Annulla visita</a>
                 <a href="/logout">LOGOUT</a>
             </div>
             <div class="hamburger-menu" id="hamburger-menu">
@@ -239,29 +177,22 @@
         <div class="button" onclick="showContent('fine')">Segna fine visita</div>
     </div>
     <section class="content" id="dynamic-content">
-        <table class="content-table">
+        <table>
             {#if type == 'showVisits'}
-                <div class="date-filter">
-                    <h4 style="color: white; font-size: large">Inserisci una data per vedere le visite di quel giorno:</h4>
-                    <form action="/home-reception/filtered-visits" method="POST">
-                        <input type="date" name="inputDate" id="date">
-                        <button style="font-size: large" type="submit" class="filter-button">Inserisci</button>
-                    </form>
-                </div>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Data</th>
-                        <th>Previsto Orario Inizio</th>
-                        <th>Ora Effettiva Inizio</th>
-                        <th>Prevista Ora Fine</th>
-                        <th>Ora Effettiva Fine</th>
-                        <th>ID Ospite</th>
-                        <th>ID Dipendente</th>
-                        <th>Badge</th>
-                    </tr>
+                <tr>
+                    <th>id</th>
+                    <th>data</th>
+                    <th>previsto orario inizio</th>
+                    <th>ora effettiva di inizio</th>
+                    <th>prevista ora di fine</th>
+                    <th>ora effettiva di fine</th>
+                    <th>id ospite</th>
+                    <th>id dipendente</th>
+                    <th>badge</th>
+                </tr>
                 </thead>
-                <tbody style="background-color: white">
+                <tbody>
                 {#for visit in visits}
                     <tr>
                         <td>{visit.id}</td>
@@ -281,6 +212,7 @@
         {#if visits == null}
             <h1 style="color: white; padding-top: 15%" id="placeholder">Seleziona un'opzione per visualizzare i dettagli.</h1>
         {/if}
+
     </section>
 </section>
 
@@ -288,6 +220,57 @@
     document.getElementById("hamburger-menu").addEventListener("click", function () {
         document.getElementById("nav-links").classList.toggle("active");
     });
+
+    async function fetchData(endpoint) {
+        try {
+            let response = await fetch(endpoint);
+            return await response.json();
+        } catch (error) {
+            console.error("Errore nel recupero dei dati:", error);
+            return null;
+        }
+    }
+
+    /*async function showContent(type) {
+        let content = document.getElementById("dynamic-content");
+        content.innerHTML = "<p>Caricamento...</p>";
+
+        if (type === "visite") {
+            let data = await fetchData('/home-reception/show-visits');
+            if (data && data.visits) {
+
+                renderVisits(data.visits);
+            } else {
+                content.innerHTML = "<p>Errore nel recupero delle visite.</p>";
+            }
+        } else if (type === "badge") {
+            let data = await fetchData('/home-reception/assign-badge');
+            if (data && data.badge) {
+                content.innerHTML = `<h2>Assegnazione badge</h2><p>Badge assegnato: $</p>`;
+            } else {
+                content.innerHTML = "<p>Errore nell'assegnazione del badge.</p>";
+            }
+        } else if (type === "fine") {
+            let data = await fetchData('/home-reception/get-unfinished-visit');
+            if (data && data.visits) {
+                renderVisits(data.visits);
+            } else {
+                content.innerHTML = "<p>Errore nel recupero delle visite in sospeso.</p>";
+            }
+        }
+    }
+
+    function renderVisits(visits) {
+        let content = document.getElementById("dynamic-content");
+        content.innerHTML = "<h2>Elenco delle visite</h2>";
+        let list = document.createElement("ul");
+        visits.forEach(visit => {
+            let item = document.createElement("li");
+
+            list.appendChild(item);
+        });
+        content.appendChild(list);
+    }*/
 </script>
 </body>
 </html>

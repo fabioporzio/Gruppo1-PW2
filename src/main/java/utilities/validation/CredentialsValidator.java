@@ -33,6 +33,6 @@ public class CredentialsValidator {
     public boolean checkDate (LocalDate date) {
         LocalDate today = LocalDate.now();
 
-        return date.isBefore(today.minusDays(1));
+        return date.isAfter(today.plusDays(1));
     }
 }

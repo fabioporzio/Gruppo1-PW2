@@ -164,7 +164,7 @@
         <nav>
             <div class="menu">
                 <div class="nav-links" id="nav-links">
-                <a href="login.html">LOGOUT</a>
+                <a href="/logout">LOGOUT</a>
                 </div>
                 <div class="hamburger-menu" id="hamburger-menu">
                     <span></span><span></span><span></span>
@@ -175,11 +175,77 @@
 
 <section class="main">
     <div class="buttons-container">
-        <div class="button" onclick="showContent('registerVisitor')">Anagrafa un nuovo ospite</div>
-        <div class="button" onclick="showContent('newVisit')">Inserisci nuova visita</div>
+        <div class="button"><a href="/home-employee/add-guest">Anagrafa un nuovo ospite</a> </div>
+        <div class="button"><a href="/home-employee/add-visit">Inserisci nuova visita</a></div>
         <div class="button" onclick="showContent('unVisit')">Annulla visita</div>
     </div>
     <section class="content" id="dynamic-content">
+        {#if type == null}
+            Benvenuto {employee.name} {employee.surname}!
+        {/if}
+
+        {#if type == "addGuest"}
+            <h1>Inserisci un nuovo ospite</h1>
+            {#if errorMessage != null}
+                <h2 style="color: red">{errorMessage}</h2>
+            {/if}
+            {#if successMessage != null}
+                <h2 style="color: green">{successMessage}</h2>
+            {/if}
+            <form action="/home-employee/add-guest" method="post">
+                <label for="name">
+                    Nome:
+                    <input type="text" name="name" required>
+                </label>
+                <label for="surname">
+                    Cognome:
+                    <input type="text" name="surname" required>
+                </label>
+                <label for="role">
+                    Ruolo:
+                    <input type="text" name="role" required>
+                </label>
+                <label for="company">
+                    Azienda:
+                    <input type="text" name="company" required>
+                </label>
+                <button type="submit">Aggiungi</button>
+            </form>
+        {/if}
+
+        {#if type == "addVisit"}
+            <h1>Aggiungi una nuova visita</h1>
+            {#if errorMessage != null}
+                <h2 style="color: red">{errorMessage}</h2>
+            {/if}
+            {#if successMessage != null}
+                <h2 style="color: green">{successMessage}</h2>
+            {/if}
+
+            <form action="/home-employee/add-visit" method="post">
+                <label for="date">
+                    Data:
+                    <input type="date" name="date" required>
+                </label>
+                <label for="expectedStart">
+                    Ora di inizio:
+                    <input type="time" name="expectedStart" required>
+                </label>
+                <label for="expectedEnd">
+                    Ora di fine:
+                    <input type="time" name="expectedEnd" required>
+                </label>
+                <label for="guest">
+                    Inserisci l'ospite:
+                    <select name="guest" required>
+                        {#for guest in guests}
+                            <option value="{guest.id}">{guest.name} {guest.surname}</option>
+                        {/for}
+                    </select>
+                </label>
+                <button type="submit">Aggiungi</button>
+            </form>
+        {/if}
         Seleziona un'opzione per visualizzare i dettagli.
         <table>
             <tr>

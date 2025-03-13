@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 import logic.SessionManager;
 import logic.VisitManager;
 import model.Employee;
-import model.Visit;
+import model.visit.Visit;
 
 import java.net.URI;
 import java.time.LocalDate;
