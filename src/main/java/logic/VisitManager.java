@@ -10,7 +10,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class VisitManager {
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
-                LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
+                LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_hour"), timeFormatter);
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
