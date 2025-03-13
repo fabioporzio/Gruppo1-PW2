@@ -250,7 +250,7 @@
                 </div>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>visit_status</th>
                         <th>Data</th>
                         <th>Previsto Orario Inizio</th>
                         <th>Ora Effettiva Inizio</th>
@@ -264,12 +264,12 @@
                 <tbody style="background-color: white">
                 {#for visit in visits}
                     <tr>
-                        <td>{visit.id}</td>
                         <td>{visit.date}</td>
                         <td>{visit.expectedStartingHour}</td>
                         <td>{visit.actualStartingHour}</td>
                         <td>{visit.expectedEndingHour}</td>
                         <td>{visit.actualEndingHour}</td>
+                        <td>{visit.status}</td>
                         <td>{visit.guestId}</td>
                         <td>{visit.employeeId}</td>
                         <td>{visit.badgeCode}</td>
