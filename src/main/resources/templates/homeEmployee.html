@@ -254,7 +254,8 @@
                 {visit.guestId}
                 {visit.employeeId}
                 <form action="/home-employee/delete-visit" method="post">
-                    <button type="submit" name="visitId" value="{visit.id}">Cancella</button>
+                    <input type="hidden" name="visitId" value="{visit.id}">
+                    <button type="submit">Cancella</button>
                 </form>
             {/for}
         {/if}
