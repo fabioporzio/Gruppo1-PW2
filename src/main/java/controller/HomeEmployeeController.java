@@ -198,6 +198,21 @@ public class HomeEmployeeController {
         )).cookie(sessionCookie).build();
     }
 
+    @GET
+    @Path("/delete-visit")
+    public Response deleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId){
+        NewCookie sessionCookie = sessionManager.getSession(sessionId);
+        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+
+        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        return Response.ok(homeEmployee.data(
+                "visits", visits,
+                "type", "deleteVisit",
+                "errorMessage", null,
+                "successMessage", null
+        )).cookie(sessionCookie).build();
+    }
+
     public static boolean isBetweenInclusiveStart(LocalTime time, LocalTime start, LocalTime end) {
         return (time.equals(start) || time.isAfter(start)) && time.isBefore(end);
     }
