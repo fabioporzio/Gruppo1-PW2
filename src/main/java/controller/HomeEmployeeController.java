@@ -14,6 +14,7 @@ import model.visit.Visit;
 import model.visit.VisitStatus;
 import utilities.validation.CredentialsValidator;
 
+import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -182,11 +183,34 @@ public class HomeEmployeeController {
 
     @GET
     @Path("/delete-visit")
-    public Response deleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId){
+    public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId){
         NewCookie sessionCookie = sessionManager.getSession(sessionId);
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
         List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        return Response.ok(homeEmployee.data(
+                "visits", visits,
+                "type", "deleteVisit",
+                "errorMessage", null,
+                "successMessage", null
+        )).cookie(sessionCookie).build();
+    }
+
+    @POST
+    @Path("/delete-visit")
+    public Response deleteVisit(
+            @CookieParam(NAME_COOKIE_SESSION) String sessionId,
+            @FormParam("visitId") String visitId
+    ) {
+        NewCookie sessionCookie = sessionManager.getSession(sessionId);
+        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+
+        Visit visit = visitManager.getVisitById(visitId);
+        List<Visit> filteredVisits = visitManager.getFilteredVisits(visit);
+        visitManager.overwriteVisits(filteredVisits);
+
+        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+
         return Response.ok(homeEmployee.data(
                 "visits", visits,
                 "type", "deleteVisit",
