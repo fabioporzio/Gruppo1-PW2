@@ -179,4 +179,19 @@ public class HomeEmployeeController {
                 "type", "addVisit"
         )).cookie(sessionCookie).build();
     }
+
+    @GET
+    @Path("/delete-visit")
+    public Response deleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId){
+        NewCookie sessionCookie = sessionManager.getSession(sessionId);
+        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+
+        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        return Response.ok(homeEmployee.data(
+                "visits", visits,
+                "type", "deleteVisit",
+                "errorMessage", null,
+                "successMessage", null
+        )).cookie(sessionCookie).build();
+    }
 }
