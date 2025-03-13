@@ -58,7 +58,6 @@ public class VisitManager {
 
     public void saveVisit(Visit visit) {
 
-
         try (Writer writer = new FileWriter(filePath, true);
              CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
         {
@@ -168,29 +167,24 @@ public class VisitManager {
         try(FileWriter writer = new FileWriter(filePath);
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "visit_status", "guest_id", "employee_id", "badge_code")))
         {
-            for (Visit visit : visits) {
-                for (Visit newVisit : visits) {
-                    csvPrinter.printRecord(
-                            newVisit.getId(),
-                            newVisit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                            newVisit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                            newVisit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                            newVisit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                            newVisit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                            newVisit.getStatus().name(),
-                            newVisit.getGuestId(),
-                            newVisit.getEmployeeId(),
-                            newVisit.getBadgeCode()
-                    );
-                }
+            for (Visit newVisit : visits) {
+                csvPrinter.printRecord(
+                        newVisit.getId(),
+                        newVisit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        newVisit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        newVisit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        newVisit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        newVisit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        newVisit.getStatus().name(),
+                        newVisit.getGuestId(),
+                        newVisit.getEmployeeId(),
+                        newVisit.getBadgeCode()
+                );
             }
         }
         catch (IOException e){
             e.printStackTrace();
         }
-
-
-
     }
 
     public int getNewId(){
