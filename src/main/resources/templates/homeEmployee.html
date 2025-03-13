@@ -247,13 +247,13 @@
             </form>
         {/if}
 
-        {#if type == "deleteVisist"}
+        {#if type == "deleteVisit"}
             {#for visit in visits}
                 {visit.id}
                 {visit.date}
                 {visit.guestId}
                 {visit.employeeId}
-                <form>
+                <form action="/home-employee/delete-visit" method="post">
                     <button type="submit" name="visitId" value="{visit.id}">Cancella</button>
                 </form>
             {/for}
