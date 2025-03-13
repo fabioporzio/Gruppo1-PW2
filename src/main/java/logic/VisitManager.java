@@ -33,7 +33,7 @@ public class VisitManager {
         {
             for (CSVRecord record : csvParser) {
                 String id = record.get("id");
-                LocalDate date = LocalDate.parse(record.get("date"), dateFormatter);
+                LocalDate date = LocalDate.parse(record.get("date").trim(), dateFormatter);
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
@@ -83,14 +83,15 @@ public class VisitManager {
 
     public List<Visit> getVisitsByDate(LocalDate date) {
         List<Visit> visits = getVisitsFromFile();
+        List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
             if (visit.getDate().equals(date)) {
-                visits.add(visit);
+                filteredVisits.add(visit);
             }
         }
 
-        return visits;
+        return filteredVisits;
     }
 
     public List<Visit> getVisitsByEmployeeId(String employeeId) {

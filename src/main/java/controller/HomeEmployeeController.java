@@ -24,7 +24,7 @@ import static logic.SessionManager.NAME_COOKIE_SESSION;
 @Path("/home-employee")
 public class HomeEmployeeController {
 
-    private final static int MAX_BADGE = 10;
+    private final static int MAX_BADGE = 2;
 
     private final Template homeEmployee;
     private final SessionManager sessionManager;
@@ -148,9 +148,6 @@ public class HomeEmployeeController {
             errorMessage = "The visit must be at least one day prior";
         }
 
-        expectedStart.withMinute(0);
-        expectedEnd.withMinute(0);
-
         if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)){
             errorMessage = "The expected start must be before the expected end";
         }
@@ -159,9 +156,13 @@ public class HomeEmployeeController {
         int countOverlapVisits = 0;
 
         for(Visit visit : visitsOfDate){
-            if(isBetweenInclusiveStart(expectedStart, visit.getExpectedStartingHour(), visit.getExpectedEndingHour())){
+            if (visit.getExpectedStartingHour().isBefore(expectedEnd) && visit.getExpectedEndingHour().isAfter(expectedStart)) {
                 countOverlapVisits++;
             }
+        }
+
+        if(countOverlapVisits == MAX_BADGE){
+            errorMessage = "For that time slot the schedule is full";
         }
 
         if(errorMessage != null){
@@ -211,9 +212,5 @@ public class HomeEmployeeController {
                 "errorMessage", null,
                 "successMessage", null
         )).cookie(sessionCookie).build();
-    }
-
-    public static boolean isBetweenInclusiveStart(LocalTime time, LocalTime start, LocalTime end) {
-        return (time.equals(start) || time.isAfter(start)) && time.isBefore(end);
     }
 }
