@@ -27,6 +27,10 @@ public class SessionManager {
         return new NewCookie.Builder(NAME_COOKIE_SESSION).value(idSession).build();
     }
 
+    public NewCookie getSession(String idSession) {
+        return new NewCookie.Builder(NAME_COOKIE_SESSION).value(idSession).build();
+    }
+
     public Employee getEmployeeFromSession(String sessionId) {
         List<Employee> employees = employeeManager.getEmployeesFromFile();
 
@@ -37,11 +41,8 @@ public class SessionManager {
                     return employee;
                 }
             }
-            return null;
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     public void removeSession (String sessionId) {

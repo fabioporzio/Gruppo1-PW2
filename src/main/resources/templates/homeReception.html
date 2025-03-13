@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home Reception</title>
 
-
     <style>
         /* Stili generali */
         * {
@@ -213,6 +212,7 @@
         }
     </style>
 </head>
+
 <body>
 <header class="header">
     <div class="title-box">
@@ -222,9 +222,9 @@
     <nav>
         <div class="menu">
             <div class="nav-links" id="nav-links">
-                <a href="#">Anagrafa un nuovo ospite</a>
-                <a href="#">Inserisci nuova visita</a>
-                <a href="#">Annulla visita</a>
+                <a href="  ">Inserisci nuovo ospite</a>
+                <a href="  ">Inserisci nuova visita</a>
+                <a href="  ">Annulla visita</a>
                 <a href="/logout">LOGOUT</a>
             </div>
             <div class="hamburger-menu" id="hamburger-menu">
@@ -241,29 +241,22 @@
         <div class="button" onclick="showContent('fine')">Segna fine visita</div>
     </div>
     <section class="content" id="dynamic-content">
-        <table class="content-table">
+        <table>
             {#if type == 'showVisits'}
-                <div class="date-filter">
-                    <h4 style="color: white; font-size: large">Inserisci una data per vedere le visite di quel giorno:</h4>
-                    <form action="/home-reception/filtered-visits" method="POST">
-                        <input type="date" name="inputDate" id="date">
-                        <button style="font-size: large" type="submit" class="filter-button">Inserisci</button>
-                    </form>
-                </div>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Data</th>
-                        <th>Previsto Orario Inizio</th>
-                        <th>Ora Effettiva Inizio</th>
-                        <th>Prevista Ora Fine</th>
-                        <th>Ora Effettiva Fine</th>
-                        <th>ID Ospite</th>
-                        <th>ID Dipendente</th>
-                        <th>Badge</th>
-                    </tr>
+                <tr>
+                    <th>id</th>
+                    <th>data</th>
+                    <th>previsto orario inizio</th>
+                    <th>ora effettiva di inizio</th>
+                    <th>prevista ora di fine</th>
+                    <th>ora effettiva di fine</th>
+                    <th>id ospite</th>
+                    <th>id dipendente</th>
+                    <th>badge</th>
+                </tr>
                 </thead>
-                <tbody style="background-color: white">
+                <tbody>
                 {#for visit in visits}
                     <tr>
                         <td>{visit.id}</td>
@@ -281,8 +274,9 @@
             {/if}
         </table>
         {#if visits == null}
-            <h1 style="color: white" id="placeholder">Seleziona un'opzione per visualizzare i dettagli.</h1>
+            <h1 style="color: white; padding-top: 15%" id="placeholder">Seleziona un'opzione per visualizzare i dettagli.</h1>
         {/if}
+
     </section>
 </section>
 
@@ -290,6 +284,57 @@
     document.getElementById("hamburger-menu").addEventListener("click", function () {
         document.getElementById("nav-links").classList.toggle("active");
     });
+
+    async function fetchData(endpoint) {
+        try {
+            let response = await fetch(endpoint);
+            return await response.json();
+        } catch (error) {
+            console.error("Errore nel recupero dei dati:", error);
+            return null;
+        }
+    }
+
+    /*async function showContent(type) {
+        let content = document.getElementById("dynamic-content");
+        content.innerHTML = "<p>Caricamento...</p>";
+
+        if (type === "visite") {
+            let data = await fetchData('/home-reception/show-visits');
+            if (data && data.visits) {
+
+                renderVisits(data.visits);
+            } else {
+                content.innerHTML = "<p>Errore nel recupero delle visite.</p>";
+            }
+        } else if (type === "badge") {
+            let data = await fetchData('/home-reception/assign-badge');
+            if (data && data.badge) {
+                content.innerHTML = `<h2>Assegnazione badge</h2><p>Badge assegnato: $</p>`;
+            } else {
+                content.innerHTML = "<p>Errore nell'assegnazione del badge.</p>";
+            }
+        } else if (type === "fine") {
+            let data = await fetchData('/home-reception/get-unfinished-visit');
+            if (data && data.visits) {
+                renderVisits(data.visits);
+            } else {
+                content.innerHTML = "<p>Errore nel recupero delle visite in sospeso.</p>";
+            }
+        }
+    }
+
+    function renderVisits(visits) {
+        let content = document.getElementById("dynamic-content");
+        content.innerHTML = "<h2>Elenco delle visite</h2>";
+        let list = document.createElement("ul");
+        visits.forEach(visit => {
+            let item = document.createElement("li");
+
+            list.appendChild(item);
+        });
+        content.appendChild(list);
+    }*/
 </script>
 </body>
 </html>

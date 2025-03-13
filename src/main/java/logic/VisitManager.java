@@ -2,7 +2,8 @@ package logic;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import model.Employee;
-import model.Visit;
+import model.visit.Visit;
+import model.visit.VisitStatus;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -36,12 +37,13 @@ public class VisitManager {
                 LocalTime expectedStartingHour = LocalTime.parse(record.get("expected_starting_hour"), timeFormatter);
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
-                LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_hour"), timeFormatter);
+                LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
+                VisitStatus visitStatus = VisitStatus.valueOf(record.get("visit_status"));
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
 
-                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, guestId, employeeId, badgeCode);
+                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, visitStatus, guestId, employeeId, badgeCode);
                 visits.add(visit);
             }
         }
@@ -58,15 +60,16 @@ public class VisitManager {
 
 
         try (Writer writer = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "guest_id", "employee_id", "badge_code")))
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
         {
             csvPrinter.printRecord(
                     visit.getId(),
                     visit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                     visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                    visit.getStatus().name(),
                     visit.getGuestId(),
                     visit.getEmployeeId(),
                     visit.getBadgeCode()
@@ -81,27 +84,27 @@ public class VisitManager {
     public List<Visit> getVisitsByDate(LocalDate date) {
         List<Visit> visits = getVisitsFromFile();
 
+        for (Visit visit : visits) {
+            if (visit.getDate().equals(date)) {
+                visits.add(visit);
+            }
+        }
+
+        return visits;
+    }
+
+    public List<Visit> getVisitsByEmployeeId(String employeeId) {
+        List<Visit> visits = getVisitsFromFile();
+
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getDate().equals(date)) {
+            if (visit.getEmployeeId().equals(employeeId)) {
                 filteredVisits.add(visit);
             }
         }
 
         return filteredVisits;
-    }
-
-    public List<Visit> getVisitsByEmployeeId(Employee employee) {
-        List<Visit> visits = getVisitsFromFile();
-        //FIX La lista viene sovrascritta quindi rinvia sempre tutte le visite nei file
-        for (Visit visit : visits) {
-            if (visit.getEmployeeId().equals(employee.getId())) {
-                visits.add(visit); // viene utilizzata la stessa lista
-            }
-        }
-
-        return visits;
     }
 
     public List<Visit> getUnfinishedVisits() {
@@ -163,6 +166,11 @@ public class VisitManager {
     public int getNewId(){
         List<Visit> visits = getVisitsFromFile();
 
-        return Integer.parseInt(visits.getLast().getId()) + 1;
+        if (visits.isEmpty()) {
+            return 1;
+        }
+        else {
+            return Integer.parseInt(visits.getLast().getId()) + 1;
+        }
     }
 }
