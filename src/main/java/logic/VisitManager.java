@@ -20,8 +20,8 @@ import java.util.List;
 @ApplicationScoped
 public class VisitManager {
 
+    static final String filePath = "data/visits.csv";
     public List<Visit> getVisitsFromFile() {
-        String filePath = "data/visits.csv";
 
         List<Visit> visits = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class VisitManager {
     }
 
     public void saveVisit(Visit visit) {
-        String filePath = "data/visits.csv";
+
 
         try (Writer writer = new FileWriter(filePath, true);
              CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
@@ -110,13 +110,57 @@ public class VisitManager {
     public List<Visit> getUnfinishedVisits() {
         List<Visit> visits = getVisitsFromFile();
 
+        List<Visit> filteredVisits = new ArrayList<>();
+
         for (Visit visit : visits) {
             if (visit.getActualStartingHour() != null && visit.getActualEndingHour() == null) {
-                visits.add(visit);
+                filteredVisits.add(visit);
             }
         }
 
-        return visits;
+        return filteredVisits;
+    }
+
+    public List<Visit> getUnstartedVisits() {
+        List<Visit> visits = getVisitsFromFile();
+
+        List<Visit> filteredVisits = new ArrayList<>();
+
+        for (Visit visit : visits) {
+            if (visit.getActualStartingHour() == null && visit.getActualEndingHour() == null) {
+                filteredVisits.add(visit);
+            }
+        }
+
+        return filteredVisits;
+    }
+
+    public void deleteVisit(Visit visit) throws IOException {
+        List<Visit> visits = getVisitsFromFile();
+
+        visits.remove(visit);
+
+
+        try(FileWriter writer = new FileWriter(filePath);
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "guest_id", "employee_id", "badge_code")))
+        {
+            for (Visit newVisit : visits) {
+                csvPrinter.printRecord(
+                        newVisit.getId(),
+                        newVisit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        newVisit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        newVisit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        newVisit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        newVisit.getActualEndingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                        newVisit.getGuestId(),
+                        newVisit.getEmployeeId(),
+                        newVisit.getBadgeCode()
+                );
+            }
+        }
+
+
+
     }
 
     public int getNewId(){
