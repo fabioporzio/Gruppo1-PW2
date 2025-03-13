@@ -2,7 +2,8 @@ package logic;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import model.Employee;
-import model.Visit;
+import model.visit.Visit;
+import model.visit.VisitStatus;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -10,7 +11,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,11 +38,12 @@ public class VisitManager {
                 LocalTime actualStartingHour = LocalTime.parse(record.get("actual_starting_hour"), timeFormatter);
                 LocalTime expectedEndingHour = LocalTime.parse(record.get("expected_ending_hour"), timeFormatter);
                 LocalTime actualEndingHour = LocalTime.parse(record.get("actual_ending_time"), timeFormatter);
+                VisitStatus visitStatus = VisitStatus.valueOf(record.get("visit_status"));
                 String guestId = record.get("guest_id");
                 String employeeId = record.get("employee_id");
                 String badgeCode = record.get("badge_code");
 
-                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, guestId, employeeId, badgeCode);
+                Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, visitStatus, guestId, employeeId, badgeCode);
                 visits.add(visit);
             }
         }
@@ -59,15 +60,16 @@ public class VisitManager {
         String filePath = "data/visits.csv";
 
         try (Writer writer = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "guest_id", "employee_id", "badge_code")))
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
         {
             csvPrinter.printRecord(
                     visit.getId(),
                     visit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                     visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                    visit.getStatus().name(),
                     visit.getGuestId(),
                     visit.getEmployeeId(),
                     visit.getBadgeCode()
@@ -118,6 +120,11 @@ public class VisitManager {
     public int getNewId(){
         List<Visit> visits = getVisitsFromFile();
 
-        return Integer.parseInt(visits.getLast().getId()) + 1;
+        if (visits.isEmpty()) {
+            return 1;
+        }
+        else {
+            return Integer.parseInt(visits.getLast().getId()) + 1;
+        }
     }
 }
