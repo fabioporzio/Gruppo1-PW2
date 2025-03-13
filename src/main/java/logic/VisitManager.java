@@ -93,16 +93,18 @@ public class VisitManager {
         return visits;
     }
 
-    public List<Visit> getVisitsByEmployeeId(Employee employee) {
+    public List<Visit> getVisitsByEmployeeId(String employeeId) {
         List<Visit> visits = getVisitsFromFile();
 
+        List<Visit> filteredVisits = new ArrayList<>();
+
         for (Visit visit : visits) {
-            if (visit.getEmployeeId().equals(employee.getId())) {
-                visits.add(visit);
+            if (visit.getEmployeeId().equals(employeeId)) {
+                filteredVisits.add(visit);
             }
         }
 
-        return visits;
+        return filteredVisits;
     }
 
     public List<Visit> getUnfinishedVisits() {
