@@ -229,11 +229,11 @@
                 </label>
                 <label for="expectedStart">
                     Ora di inizio:
-                    <input type="time" name="expectedStart" required>
+                    <input type="time" min="09:00" max="16:00" step="3600" name="expectedStart" required>
                 </label>
                 <label for="expectedEnd">
                     Ora di fine:
-                    <input type="time" name="expectedEnd" required>
+                    <input type="time" min="10:00" max="17:00" step="3600" name="expectedEnd" required>
                 </label>
                 <label for="guest">
                     Inserisci l'ospite:
