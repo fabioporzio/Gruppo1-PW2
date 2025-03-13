@@ -2,7 +2,7 @@ package logic;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import model.Guest;
-import model.Visit;
+import model.visit.Visit;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -10,9 +10,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class GuestManager {
     public void saveGuest(Guest guest) {
 
         try (Writer writer = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "name", "surname", "role", "company")))
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
         {
             csvPrinter.printRecord(
                     guest.getId(),
@@ -96,6 +93,11 @@ public class GuestManager {
     public int getNewId(){
         List<Guest> guests = getGuestsFromFile();
 
-        return Integer.parseInt(guests.getLast().getId()) + 1;
+        if (guests.isEmpty()) {
+            return 1;
+        }
+        else {
+            return Integer.parseInt(guests.getLast().getId()) + 1;
+        }
     }
 }
