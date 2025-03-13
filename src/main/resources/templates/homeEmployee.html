@@ -177,7 +177,7 @@
     <div class="buttons-container">
         <div class="button"><a href="/home-employee/add-guest">Anagrafa un nuovo ospite</a> </div>
         <div class="button"><a href="/home-employee/add-visit">Inserisci nuova visita</a></div>
-        <div class="button" onclick="showContent('unVisit')">Annulla visita</div>
+        <div class="button"><a href="/home-employee/delete-visit">Annulla visita</a></div>
     </div>
     <section class="content" id="dynamic-content">
         {#if type == null}
@@ -246,6 +246,20 @@
                 <button type="submit">Aggiungi</button>
             </form>
         {/if}
+
+        {#if type == "deleteVisist"}
+            {#for visit in visits}
+                {visit.id}
+                {visit.date}
+                {visit.guestId}
+                {visit.employeeId}
+                <form>
+                    <button type="submit" name="visitId" value="{visit.id}">Cancella</button>
+                </form>
+            {/for}
+        {/if}
+
+
         Seleziona un'opzione per visualizzare i dettagli.
         <table>
             <tr>
