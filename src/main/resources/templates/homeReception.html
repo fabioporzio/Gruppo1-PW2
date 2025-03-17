@@ -220,9 +220,9 @@
     <nav>
         <div class="menu">
             <div class="nav-links" id="nav-links">
-                <a href="#">Anagrafa un nuovo ospite</a>
-                <a href="#">Inserisci nuova visita</a>
-                <a href="#">Annulla visita</a>
+                <a href="/home-reception/add-guest">Anagrafa un nuovo ospite</a>
+                <a href="/home-reception/add-visit">Inserisci nuova visita</a>
+                <a href="/home-reception/delete-visit">Annulla visita</a>
                 <a href="/logout">LOGOUT</a>
             </div>
             <div class="hamburger-menu" id="hamburger-menu">
@@ -240,6 +240,13 @@
     </div>
     <section class="content" id="dynamic-content">
         <table class="content-table">
+            {#if type == null}
+                <h1 style="color: white; margin-top: 15%" id="placeholder">
+                    Benvenuto {employee.name} {employee.surname}!<br>
+                    Seleziona un'opzione per visualizzare i dettagli.
+                </h1>
+            {/if}
+
             {#if type == 'showVisits'}
                 <div class="date-filter">
                     <h4 style="color: white; font-size: large">Inserisci una data per vedere le visite di quel giorno:</h4>
@@ -248,39 +255,140 @@
                         <button style="font-size: large" type="submit" class="filter-button">Filtra</button>
                     </form>
                 </div>
-                <thead>
-                    <tr>
-                        <th>visit_status</th>
-                        <th>Data</th>
-                        <th>Previsto Orario Inizio</th>
-                        <th>Ora Effettiva Inizio</th>
-                        <th>Prevista Ora Fine</th>
-                        <th>Ora Effettiva Fine</th>
-                        <th>ID Ospite</th>
-                        <th>ID Dipendente</th>
-                        <th>Badge</th>
-                    </tr>
-                </thead>
-                <tbody style="background-color: white">
-                {#for visit in visits}
-                    <tr>
-                        <td>{visit.date}</td>
-                        <td>{visit.expectedStartingHour}</td>
-                        <td>{visit.actualStartingHour}</td>
-                        <td>{visit.expectedEndingHour}</td>
-                        <td>{visit.actualEndingHour}</td>
-                        <td>{visit.status}</td>
-                        <td>{visit.guestId}</td>
-                        <td>{visit.employeeId}</td>
-                        <td>{visit.badgeCode}</td>
-                    </tr>
-                {/for}
-                </tbody>
+                {#if visits.isEmpty()}
+                    <h3>Non ci sono visite da visualizzare</h3>
+                {#else}
+                    <thead>
+                        <tr>
+                            <th>visit_status</th>
+                            <th>Data</th>
+                            <th>Previsto Orario Inizio</th>
+                            <th>Ora Effettiva Inizio</th>
+                            <th>Prevista Ora Fine</th>
+                            <th>Ora Effettiva Fine</th>
+                            <th>ID Ospite</th>
+                            <th>ID Dipendente</th>
+                            <th>Badge</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: white">
+                    {#for visit in visits}
+                        <tr>
+                            <td>{visit.date}</td>
+                            <td>{visit.expectedStartingHour}</td>
+                            <td>{visit.actualStartingHour}</td>
+                            <td>{visit.expectedEndingHour}</td>
+                            <td>{visit.actualEndingHour}</td>
+                            <td>{visit.status}</td>
+                            <td>{visit.guestId}</td>
+                            <td>{visit.employeeId}</td>
+                            <td>{visit.badgeCode}</td>
+                        </tr>
+                    {/for}
+                    </tbody>
+                {/if}
+            {/if}
+
+            {#if type == "addGuest"}
+                <h1>Inserisci un nuovo ospite</h1>
+                {#if errorMessage != null}
+                    <h2 style="color: red">{errorMessage}</h2>
+                {/if}
+                {#if successMessage != null}
+                    <h2 style="color: green">{successMessage}</h2>
+                {/if}
+                <form action="/home-reception/add-guest" method="post">
+                    <label for="name">
+                        Nome:
+                        <input type="text" name="name" required>
+                    </label>
+                    <label for="surname">
+                        Cognome:
+                        <input type="text" name="surname" required>
+                    </label>
+                    <label for="role">
+                        Ruolo:
+                        <input type="text" name="role" required>
+                    </label>
+                    <label for="company">
+                        Azienda:
+                        <input type="text" name="company" required>
+                    </label>
+                    <button type="submit">Aggiungi</button>
+                </form>
+            {/if}
+
+            {#if type == "addVisit"}
+                <h1>Aggiungi una nuova visita</h1>
+                {#if errorMessage != null}
+                    <h2 style="color: red">{errorMessage}</h2>
+                {/if}
+                {#if successMessage != null}
+                    <h2 style="color: green">{successMessage}</h2>
+                {/if}
+
+                <form action="/home-reception/add-visit" method="post">
+                    <label for="date">
+                        Data:
+                        <input type="date" name="date" required>
+                    </label>
+                    <label for="expectedStart">
+                        Ora di inizio:
+                        <select name="expectedStart" required>
+                            <option value="" selected disabled></option>
+                            <option value="09:00">9:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                    </label>
+                    <label for="expectedEnd">
+                        Ora di fine:
+                        <select name="expectedEnd" required>
+                            <option value="" selected disabled></option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                        </select>
+                    </label>
+                    <label for="guest">
+                        Inserisci l'ospite:
+                        <select name="guest" required>
+                            {#for guest in guests}
+                                <option value="{guest.id}">{guest.name} {guest.surname}</option>
+                            {/for}
+                        </select>
+                    </label>
+                    <button type="submit">Aggiungi</button>
+                </form>
+            {/if}
+
+            {#if type == "deleteVisit"}
+                {#if visits.isEmpty()}
+                    <h3>Non ci sono visite da visualizzare</h3>
+                {#else}
+                    {#for visit in visits}
+                        {visit.id}
+                        {visit.date}
+                        {visit.guestId}
+                        {visit.employeeId}
+                        <form action="/home-reception/delete-visit" method="post">
+                            <input type="hidden" name="visitId" value="{visit.id}">
+                            <button type="submit">Cancella</button>
+                        </form>
+                    {/for}
+                {/if}
             {/if}
         </table>
-        {#if visits == null}
-            <h1 style="color: white; margin-top: 15%" id="placeholder">Seleziona un'opzione per visualizzare i dettagli.</h1>
-        {/if}
     </section>
 </section>
 
