@@ -74,6 +74,10 @@
             font-size: 20px;
         }
 
+        #placeholder {
+            color: black;
+        }
+
         /* Stili Main */
         .buttons-container {
             display: flex;
@@ -175,13 +179,13 @@
 
 <section class="main">
     <div class="buttons-container">
-        <div class="button"><a href="/home-employee/add-guest">Anagrafa un nuovo ospite</a> </div>
-        <div class="button"><a href="/home-employee/add-visit">Inserisci nuova visita</a></div>
-        <div class="button"><a href="/home-employee/delete-visit">Annulla visita</a></div>
+        <a href="/home-employee/add-guest"><div class="button">Anagrafa un nuovo ospite</div></a>
+        <a href="/home-employee/add-visit"><div class="button">Inserisci nuova visita</div></a>
+        <a href="/home-employee/delete-visit"><div class="button">Annulla visita</div></a>
     </div>
     <section class="content" id="dynamic-content">
         {#if type == null}
-            <h1 style="color: white; margin-top: 15%" id="placeholder">
+            <h1 id="placeholder">
                 Benvenuto {employee.name} {employee.surname}!<br>
                 Seleziona un'opzione per visualizzare i dettagli.
             </h1>
@@ -287,33 +291,6 @@
             {/if}
         {/if}
 
-        Seleziona un'opzione per visualizzare i dettagli.
-        <table>
-            <tr>
-                <th>Nome</th>
-                <th>Cognome</th>
-                <th>Badge</th>
-                <th>Orario</th>
-            </tr>
-            <tr>
-                <td>Mario</td>
-                <td>Rossi</td>
-                <td>123</td>
-                <td>10:00</td>
-            </tr>
-            <tr>
-                <td>Luca</td>
-                <td>Bianchi</td>
-                <td>456</td>
-                <td>11:00</td>
-            </tr>
-            <tr>
-                <td>Paolo</td>
-                <td>Neri</td>
-                <td>789</td>
-                <td>12:00</td>
-            </tr>
-        </table>
     </section>
 </section>
 

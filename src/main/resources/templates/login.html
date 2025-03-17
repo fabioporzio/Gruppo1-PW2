@@ -162,6 +162,9 @@
         <div class="form">
             <div class="login-text">
                 <h1>Benvenuto</h1>
+                {#if message}
+                    <h3 style="color: red">{message}</h3>
+                {/if}
                 <p>"Inserisci le tue credenziali per accedere"</p>
             </div>
             <form action="/" method="post">
