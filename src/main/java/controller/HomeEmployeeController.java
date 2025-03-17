@@ -46,17 +46,18 @@ public class HomeEmployeeController {
     public Response getHome(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ) {
+
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
             if (employee == null) {
                 return Response.seeOther(URI.create("/")).build();
-            } else {
-                NewCookie sessionCookie = sessionManager.getSession(sessionId);
+            }
+            else {
                 return Response.ok(homeEmployee.data(
                         "employee", employee,
                         "type", null
-                )).cookie(sessionCookie).build();
+                )).build();
             }
         }
         return Response.seeOther(URI.create("/")).build();
@@ -66,12 +67,12 @@ public class HomeEmployeeController {
     @GET
     @Path("/add-guest")
     public Response showFormAddGuest(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
-        NewCookie sessionCookie = sessionManager.getSession(sessionId);
+
         return Response.ok(homeEmployee.data(
                 "type", "addGuest",
                 "errorMessage", null,
                 "successMessage", null
-        )).cookie(sessionCookie).build();
+        )).build();
     }
 
     @POST
@@ -83,7 +84,6 @@ public class HomeEmployeeController {
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
-        NewCookie sessionCookie = sessionManager.getSession(sessionId);
         String errorMessage = null;
 
         if(!credentialsValidator.checkStringForm(name)){
@@ -99,7 +99,7 @@ public class HomeEmployeeController {
                     "errorMessage", errorMessage,
                     "successMessage", null,
                     "type", "addGuest"
-            )).cookie(sessionCookie).build();
+            )).build();
         }
 
         String newId = ""+guestManager.getNewId();
@@ -112,7 +112,7 @@ public class HomeEmployeeController {
                 "errorMessage", null,
                 "successMessage", successMessage,
                 "type", "addGuest"
-        )).cookie(sessionCookie).build();
+        )).build();
     }
 
     @GET
@@ -122,13 +122,12 @@ public class HomeEmployeeController {
     ){
         List<Guest> guests = guestManager.getGuestsFromFile();
 
-        NewCookie sessionCookie = sessionManager.getSession(sessionId);
         return Response.ok(homeEmployee.data(
                 "guests", guests,
                 "type", "addVisit",
                 "errorMessage", null,
                 "successMessage", null
-        )).cookie(sessionCookie).build();
+        )).build();
     }
 
     @POST
@@ -139,9 +138,7 @@ public class HomeEmployeeController {
             @FormParam("expectedStart") LocalTime expectedStart,
             @FormParam("expectedEnd") LocalTime expectedEnd,
             @FormParam("guest") String guestId
-    ){
-        NewCookie sessionCookie = sessionManager.getSession(sessionId);
-
+    ) {
         List<Guest> guests = guestManager.getGuestsFromFile();
         String errorMessage = null;
 
@@ -149,7 +146,7 @@ public class HomeEmployeeController {
             errorMessage = "The visit must be at least one day prior";
         }
 
-        if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)){
+        if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
             errorMessage = "The expected start must be before the expected end";
         }
 
@@ -172,7 +169,7 @@ public class HomeEmployeeController {
                     "successMessage", null,
                     "guests", guests,
                     "type", "addVisit"
-            )).cookie(sessionCookie).build();
+            )).build();
         }
 
         String newId = ""+visitManager.getNewId();
@@ -180,12 +177,8 @@ public class HomeEmployeeController {
         LocalTime actualEnd = LocalTime.ofSecondOfDay(0);
         VisitStatus visitStatus = VisitStatus.YET_TO_START;
 
-        System.out.println("Session ID nel post: " + sessionId);
-
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
         String employeeId = employee.getId();
-
-        System.out.println(employeeId);
 
         Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus ,guestId, employeeId, null);
         visitManager.saveVisit(visit);
@@ -197,13 +190,12 @@ public class HomeEmployeeController {
                 "errorMessage", null,
                 "guests", guests,
                 "type", "addVisit"
-        )).cookie(sessionCookie).build();
+        )).build();
     }
 
     @GET
     @Path("/delete-visit")
-    public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId){
-        NewCookie sessionCookie = sessionManager.getSession(sessionId);
+    public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
         List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
@@ -212,7 +204,7 @@ public class HomeEmployeeController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null
-        )).cookie(sessionCookie).build();
+        )).build();
     }
 
     @POST
@@ -221,7 +213,6 @@ public class HomeEmployeeController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("visitId") String visitId
     ) {
-        NewCookie sessionCookie = sessionManager.getSession(sessionId);
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
         Visit visit = visitManager.getVisitById(visitId);
@@ -235,6 +226,6 @@ public class HomeEmployeeController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null
-        )).cookie(sessionCookie).build();
+        )).build();
     }
 }
