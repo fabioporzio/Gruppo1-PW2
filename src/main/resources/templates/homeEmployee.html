@@ -156,6 +156,10 @@
                 padding: 20px 20px;
             }
         }
+        .no-decoration{
+            text-decoration: none!important;
+            color: black;
+        }
     </style>
 </head>
 
@@ -179,9 +183,9 @@
 
 <section class="main">
     <div class="buttons-container">
-        <a href="/home-employee/add-guest"><div class="button">Anagrafa un nuovo ospite</div></a>
-        <a href="/home-employee/add-visit"><div class="button">Inserisci nuova visita</div></a>
-        <a href="/home-employee/delete-visit"><div class="button">Annulla visita</div></a>
+        <a href="/home-employee/add-guest" class="no-decoration"><div class="button">Anagrafa un nuovo ospite</div></a>
+        <a href="/home-employee/add-visit" class="no-decoration"><div class="button">Inserisci nuova visita</div></a>
+        <a href="/home-employee/delete-visit" class="no-decoration"><div class="button">Annulla visita</div></a>
     </div>
     <section class="content" id="dynamic-content">
         {#if type == null}
