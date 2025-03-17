@@ -102,14 +102,14 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if(!credentialsValidator.checkStringForm(badgeCode)){
-            errorMessage = "Badge code is empty";
+            errorMessage = "Il badge è vuoto";
         }
 
         List<Visit> unfinishedVisists = visitManager.getUnfinishedVisits();
 
         for(Visit visit : unfinishedVisists){
             if(visit.getBadgeCode().equals(badgeCode)){
-                errorMessage = "This badge is not available";
+                errorMessage = "Questo badge non è disponibile";
                 break;
             }
         }
@@ -135,7 +135,7 @@ public class HomeReceptionController {
 
         boolean status = visitManager.overwriteVisits(visits);
         if (!status){
-            errorMessage = "Error saving the code badge";
+            errorMessage = "Errore nel savlare il badge";
             return Response.ok(homeReception.data(
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
@@ -172,7 +172,7 @@ public class HomeReceptionController {
         if (!status){
             return Response.ok(homeReception.data(
                     "type", "closeVisit",
-                    "errorMessage", "Error closing visit",
+                    "errorMessage", "Errore nel chiudere la visita",
                     "successMessage", null,
                     "visits", visitManager.getUnfinishedVisits()
             )).build();
@@ -204,11 +204,11 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if(!credentialsValidator.checkStringForm(name)){
-            errorMessage = "Name is not valid";
+            errorMessage = "Il nome non è valido";
         }
 
         if(!credentialsValidator.checkStringForm(surname)){
-            errorMessage = "Surname is not valid";
+            errorMessage = "Il cognome non è valido";
         }
 
         if(errorMessage != null){
@@ -224,7 +224,7 @@ public class HomeReceptionController {
         Guest guest = new Guest(newId, name, surname, role, company);
         guestManager.saveGuest(guest);
 
-        String successMessage = "Successfully added guest";
+        String successMessage = "Ospite aggiunto";
 
         return Response.ok(homeReception.data(
                 "type", "addGuest",
@@ -263,7 +263,7 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
-            errorMessage = "The expected start must be before the expected end";
+            errorMessage = "L'orario previsto di inizio deve essere prima dell'orario previsto di fine.";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -276,7 +276,7 @@ public class HomeReceptionController {
         }
 
         if(countOverlapVisits == MAX_BADGE){
-            errorMessage = "For that time slot the schedule is full";
+            errorMessage = "I badge sono terminati";
         }
 
         if(errorMessage != null){
@@ -301,7 +301,7 @@ public class HomeReceptionController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Successfully added visit";
+            String successMessage = "Visita aggiunta";
 
             return Response.ok(homeReception.data(
                     "type", "addVisit",
@@ -314,7 +314,7 @@ public class HomeReceptionController {
         else{
             return Response.ok(homeReception.data(
                     "type", "addVisit",
-                    "errorMessage", "There is another visit already added",
+                    "errorMessage", "Esiste gia un altra visita aggiunta",
                     "successMessage", null,
                     "guests", guests,
                     "visits", null
