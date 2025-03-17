@@ -116,7 +116,8 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getActualStartingHour() != null && visit.getActualEndingHour() == null) {
+            if (visit.getActualStartingHour() != LocalTime.parse("00:00")
+                    && visit.getActualEndingHour() == LocalTime.parse("00:00")) {
                 filteredVisits.add(visit);
             }
         }
@@ -130,7 +131,8 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getActualStartingHour() == null && visit.getActualEndingHour() == null) {
+            if (visit.getActualStartingHour() == LocalTime.parse("00:00")
+                    && visit.getActualEndingHour() == LocalTime.parse("00:00")) {
                 filteredVisits.add(visit);
             }
         }
@@ -165,7 +167,7 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    public void overwriteVisits(List<Visit> visits) {
+    public boolean overwriteVisits(List<Visit> visits) {
 
         try(FileWriter writer = new FileWriter(filePath);
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "visit_status", "guest_id", "employee_id", "badge_code")))
@@ -184,10 +186,13 @@ public class VisitManager {
                         newVisit.getBadgeCode()
                 );
             }
+            return true;
         }
         catch (IOException e){
             e.printStackTrace();
+            return false;
         }
+
     }
 
     public int getNewId(){

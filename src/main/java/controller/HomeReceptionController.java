@@ -16,6 +16,7 @@ import utilities.validation.CredentialsValidator;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class HomeReceptionController {
             if (employee == null) {
                 return Response.seeOther(URI.create("/")).build();
             } else {
-                return Response.ok(homeReception.data("employee", employee, "type" , null, "visits" , null)).build();
+                return Response.seeOther(URI.create("/home-reception/assign-badge")).build();
             }
         }
         return Response.seeOther(URI.create("/")).build();
@@ -80,11 +81,70 @@ public class HomeReceptionController {
 
     @Path("/assign-badge")
     @GET
-    public TemplateInstance assignBadge() {
+    public TemplateInstance showAssignBadge() {
 
-        String badge = ""; // * Funzione per assegnare badge
-        return homeReception.data("badge", badge, "type","assignBadge");
+        List<Visit> unstartedVisits = visitManager.getUnstartedVisits();
+        return homeReception.data("visits", unstartedVisits, "type","assignBadge");
 
+    }
+
+    @Path("/assign-badge")
+    @POST
+    public Response assignBadge(
+            @FormParam("badge") String badgeCode,
+            @FormParam("visitId") String visitId
+    ){
+
+        String errorMessage = null;
+
+        if(!credentialsValidator.checkStringForm(badgeCode)){
+            errorMessage = "Badge code is empty";
+        }
+
+        List<Visit> unfinishedVisists = visitManager.getUnfinishedVisits();
+
+        for(Visit visit : unfinishedVisists){
+            if(visit.getBadgeCode().equals(badgeCode)){
+                errorMessage = "This badge is not available";
+                break;
+            }
+        }
+
+        if(errorMessage != null){
+            return Response.ok(homeReception.data(
+                    "type", "assignBadge",
+                    "errorMessage", errorMessage,
+                    "successMessage", null,
+                    "visits", null
+            )).build();
+        }
+
+        List<Visit> visits = visitManager.getVisitsFromFile();
+
+        for(Visit visit : visits){
+            if(visit.getId().equals(visitId)){
+                visit.setBadgeCode(badgeCode);
+                visit.setActualStartingHour(LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
+                visit.setStatus(VisitStatus.STARTED);
+            }
+        }
+
+        boolean status = visitManager.overwriteVisits(visits);
+        if (!status){
+            errorMessage = "Error saving the code badge";
+            return Response.ok(homeReception.data(
+                    "type", "assignBadge",
+                    "errorMessage", errorMessage,
+                    "successMessage", null,
+                    "visits", null
+            )).build();
+        }
+        return Response.ok(homeReception.data(
+                "type", "assignBadge",
+                "errorMessage", null,
+                "successMessage", "Badge code saved",
+                "visits", null
+        )).build();
     }
 
     @Path("/get-unfinished-visit")
@@ -215,17 +275,28 @@ public class HomeReceptionController {
         String employeeId = employee.getId();
 
         Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus ,guestId, employeeId, null);
-        visitManager.saveVisit(visit);
+        boolean status = visitManager.saveVisit(visit);
 
-        String successMessage = "Successfully added visit";
+        if (status) {
+            String successMessage = "Successfully added visit";
 
-        return Response.ok(homeReception.data(
-                "type", "addVisit",
-                "errorMessage", null,
-                "successMessage", successMessage,
-                "guests", guests,
-                "visits", null
-        )).build();
+            return Response.ok(homeReception.data(
+                    "type", "addVisit",
+                    "errorMessage", null,
+                    "successMessage", successMessage,
+                    "guests", guests,
+                    "visits", null
+            )).build();
+        }
+        else{
+            return Response.ok(homeReception.data(
+                    "type", "addVisit",
+                    "errorMessage", "There is another visit already added",
+                    "successMessage", null,
+                    "guests", guests,
+                    "visits", null
+            )).build();
+        }
     }
 
     @GET
