@@ -1,6 +1,7 @@
 package logic;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import model.Employee;
 import model.visit.Visit;
 import model.visit.VisitStatus;
 import org.apache.commons.csv.CSVFormat;
@@ -13,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @ApplicationScoped
@@ -123,18 +123,7 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    /***
-     * Filters visits by the employee ID.
-     *
-     * This method filters and returns all visits that were conducted by the specified
-     * employee based on the provided employee ID.
-     *
-     * @param employeeId The ID of the employee to filter visits by.
-     * @return A list of visits conducted by the specified employee.
-     */
-    public List<Visit> getVisitsByEmployeeId(String employeeId) {
-        List<Visit> visits = getVisitsFromFile();
-
+    public List<Visit> filterVisitsByEmployeeId(List<Visit> visits, String employeeId) {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
@@ -317,5 +306,21 @@ public class VisitManager {
             }
         }
         return false;
+    }
+
+    public List<Visit> changeIdsInSurnames(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
+
+        List<Visit> changedVisits = new ArrayList<>();
+
+        for(Visit visit : visits){
+            Guest guest = guestManager.getGuestById(visit.getGuestId());
+            Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
+
+            visit.setGuestId(guest.getSurname());
+            visit.setEmployeeId(employee.getSurname());
+
+            changedVisits.add(visit);
+        }
+        return changedVisits;
     }
 }

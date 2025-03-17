@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -107,6 +108,7 @@ public class HomeEmployeeController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
@@ -129,7 +131,7 @@ public class HomeEmployeeController {
         }
 
         String newId = ""+guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, role, company);
+        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
         guestManager.saveGuest(guest);
 
         String successMessage = "Ospite inserito";
@@ -256,9 +258,12 @@ public class HomeEmployeeController {
     public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        List<Visit> visits = visitManager.getUnstartedVisits();
+        List<Visit> filteredVisits = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+        filteredVisits.sort(Comparator.comparing(Visit::getDate));
+
         return Response.ok(homeEmployee.data(
-                "visits", visits,
+                "visits", filteredVisits,
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null
@@ -284,11 +289,12 @@ public class HomeEmployeeController {
         List<Visit> filteredVisits = visitManager.getFilteredVisits(visit);
         visitManager.overwriteVisits(filteredVisits);
 
-        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
-        visits.sort(Comparator.comparing(Visit::getDate));
+        List<Visit> visits = visitManager.getUnstartedVisits();
+        List<Visit> visitsByEmployeeId = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+        filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
         return Response.ok(homeEmployee.data(
-                "visits", visits,
+                "visits", visitsByEmployeeId,
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null

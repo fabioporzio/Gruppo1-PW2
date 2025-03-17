@@ -40,11 +40,12 @@ public class EmployeeManager {
                 String name = record.get("name");
                 String surname = record.get("surname");
                 LocalDate dateOfBirth = LocalDate.parse(record.get("date_of_birth"), formatter);
+                String phoneNumber = record.get("phone_number");
                 String department = record.get("department");
                 String email = record.get("email");
                 String password = record.get("password");
 
-                Employee employee = new Employee(id, name, surname, dateOfBirth, department, email, password);
+                Employee employee = new Employee(id, name, surname, dateOfBirth, phoneNumber, department, email, password);
                 employees.add(employee);
             }
         }
@@ -74,6 +75,7 @@ public class EmployeeManager {
                     employee.getName(),
                     employee.getSurname(),
                     employee.getDateOfBirth(),
+                    employee.getPhoneNumber(),
                     employee.getDepartment(),
                     employee.getEmail(),
                     employee.getPassword()

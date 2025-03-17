@@ -41,10 +41,11 @@ public class GuestManager {
                 String id = record.get("id");
                 String name = record.get("name");
                 String surname = record.get("surname");
+                String phoneNumber = record.get("phone_number");
                 String role = record.get("role");
                 String company = record.get("company");
 
-                Guest guest = new Guest(id, name, surname, role, company);
+                Guest guest = new Guest(id, name, surname, phoneNumber, role, company);
                 guests.add(guest);
             }
         }
@@ -73,6 +74,7 @@ public class GuestManager {
                     guest.getId(),
                     guest.getName(),
                     guest.getSurname(),
+                    guest.getPhoneNumber(),
                     guest.getRole(),
                     guest.getCompany()
             );
