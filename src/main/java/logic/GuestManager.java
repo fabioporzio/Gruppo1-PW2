@@ -66,6 +66,17 @@ public class GuestManager {
         }
     }
 
+    public Guest getGuestById(String id){
+        List<Guest> guests = getGuestsFromFile();
+
+        for(Guest guest : guests){
+            if(guest.getId().equals(id)){
+                return guest;
+            }
+        }
+        return null;
+    }
+
     //Da testare
     public List<Guest> getGuestsByVisitDate(LocalDate visitDate) {
         List<Visit> filteredVisits = new ArrayList<>();

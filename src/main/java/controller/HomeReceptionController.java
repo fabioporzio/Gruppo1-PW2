@@ -4,6 +4,7 @@ import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import logic.EmployeeManager;
 import logic.GuestManager;
 import logic.SessionManager;
 import logic.VisitManager;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,13 +34,15 @@ public class HomeReceptionController {
     private final VisitManager visitManager;
     private final CredentialsValidator credentialsValidator;
     private final GuestManager guestManager;
+    private final EmployeeManager employeeManager;
 
-    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, CredentialsValidator credentialsValidator, GuestManager guestManager) {
+    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, CredentialsValidator credentialsValidator, GuestManager guestManager, EmployeeManager employeeManager) {
         this.homeReception = homeReception;
         this.sessionManager = sessionManager;
         this.visitManager = visitManager;
         this.credentialsValidator = credentialsValidator;
         this.guestManager = guestManager;
+        this.employeeManager = employeeManager;
     }
 
     @GET
@@ -62,7 +66,7 @@ public class HomeReceptionController {
         visits.sort(Comparator.comparing(Visit::getDate));
 
         return homeReception.data(
-                "visits",visits ,
+                "visits", completeVisits(visits, guestManager, employeeManager),
                 "type","showVisits"
         );
     }
@@ -74,7 +78,7 @@ public class HomeReceptionController {
         List<Visit> visits = visitManager.getVisitsByDate(inputDate);
 
         return Response.ok(homeReception.data(
-                "visits", visits,
+                "visits", completeVisits(visits, guestManager, employeeManager),
                 "type" , "showVisits"
         )).build();
     }
@@ -84,7 +88,7 @@ public class HomeReceptionController {
     public TemplateInstance showAssignBadge() {
 
         List<Visit> unstartedVisits = visitManager.getUnstartedVisits();
-        return homeReception.data("visits", unstartedVisits, "type","assignBadge");
+        return homeReception.data("visits", completeVisits(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
 
     }
 
@@ -352,6 +356,22 @@ public class HomeReceptionController {
                 "successMessage", null,
                 "visits", visits
         )).build();
+    }
+
+    private static List<Visit> completeVisits(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
+
+        List<Visit> completedVisits = new ArrayList<>();
+
+        for(Visit visit : visits){
+            Guest guest = guestManager.getGuestById(visit.getGuestId());
+            Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
+
+            visit.setGuestId(guest.getSurname());
+            visit.setEmployeeId(employee.getSurname());
+
+            completedVisits.add(visit);
+        }
+        return completedVisits;
     }
 
 }
