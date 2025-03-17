@@ -55,7 +55,6 @@ Autenticazione & Autorizzazione
 - Gli utenti devono autenticarsi per accedere al sistema.
 - Supporto per accessi multipli contemporanei con lo stesso utente.
 - Applicazione di criteri minimi di complessità per le password.
-- Miglioramento Opzionale: Tracciamento dello sviluppo tramite GitHub Issues.
 
 Struttura del Progetto
 
