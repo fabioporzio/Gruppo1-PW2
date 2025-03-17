@@ -96,9 +96,7 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    public List<Visit> getVisitsByEmployeeId(String employeeId) {
-        List<Visit> visits = getVisitsFromFile();
-
+    public List<Visit> filterVisitsByEmployeeId(List<Visit> visits, String employeeId) {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
