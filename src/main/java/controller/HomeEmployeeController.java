@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 import static logic.SessionManager.NAME_COOKIE_SESSION;
@@ -230,6 +231,7 @@ public class HomeEmployeeController {
         visitManager.overwriteVisits(filteredVisits);
 
         List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        visits.sort(Comparator.comparing(Visit::getDate));
 
         return Response.ok(homeEmployee.data(
                 "visits", visits,
