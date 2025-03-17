@@ -52,32 +52,35 @@ public class VisitManager {
             e.printStackTrace();
         }
 
-        visits.sort(Comparator.comparing(Visit::getDate));
         return visits;
     }
 
-    public void saveVisit(Visit visit) {
+    public boolean saveVisit(Visit visit) {
 
-        try (Writer writer = new FileWriter(filePath, true);
-             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
-        {
-            csvPrinter.printRecord(
-                    visit.getId(),
-                    visit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
-                    visit.getStatus().name(),
-                    visit.getGuestId(),
-                    visit.getEmployeeId(),
-                    visit.getBadgeCode()
-            );
+        if (!checkDouble(visit)){
+            try (Writer writer = new FileWriter(filePath, true);
+                 CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
+            {
+                csvPrinter.printRecord(
+                        visit.getId(),
+                        visit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        visit.getExpectedStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        visit.getActualStartingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        visit.getExpectedEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        visit.getActualEndingHour().format(DateTimeFormatter.ofPattern("HH:mm")),
+                        visit.getStatus().name(),
+                        visit.getGuestId(),
+                        visit.getEmployeeId(),
+                        visit.getBadgeCode()
+                );
+                return true;
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        return false;
     }
 
     public List<Visit> getVisitsByDate(LocalDate date) {
@@ -113,7 +116,8 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getActualStartingHour() != null && visit.getActualEndingHour() == null) {
+            if (visit.getActualStartingHour() != LocalTime.parse("00:00")
+                    && visit.getActualEndingHour() == LocalTime.parse("00:00")) {
                 filteredVisits.add(visit);
             }
         }
@@ -127,7 +131,8 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getActualStartingHour() == null && visit.getActualEndingHour() == null) {
+            if (visit.getActualStartingHour() == LocalTime.parse("00:00")
+                    && visit.getActualEndingHour() == LocalTime.parse("00:00")) {
                 filteredVisits.add(visit);
             }
         }
@@ -162,7 +167,7 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    public void overwriteVisits(List<Visit> visits) {
+    public boolean overwriteVisits(List<Visit> visits) {
 
         try(FileWriter writer = new FileWriter(filePath);
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "visit_status", "guest_id", "employee_id", "badge_code")))
@@ -181,10 +186,13 @@ public class VisitManager {
                         newVisit.getBadgeCode()
                 );
             }
+            return true;
         }
         catch (IOException e){
             e.printStackTrace();
+            return false;
         }
+
     }
 
     public int getNewId(){
@@ -196,5 +204,19 @@ public class VisitManager {
         else {
             return Integer.parseInt(visits.getLast().getId()) + 1;
         }
+    }
+
+    public boolean checkDouble(Visit visit){
+        List<Visit> visits = getVisitsFromFile();
+
+        for(Visit v : visits){
+            if(v.getDate().equals(visit.getDate()) && v.getExpectedStartingHour().equals(visit.getExpectedStartingHour()) &&
+                v.getExpectedEndingHour().equals(visit.getExpectedEndingHour()) && v.getGuestId().equals(visit.getGuestId()) &&
+                v.getEmployeeId().equals(visit.getEmployeeId())){
+
+                return true;
+            }
+        }
+        return false;
     }
 }
