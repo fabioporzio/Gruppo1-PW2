@@ -74,6 +74,10 @@
             font-size: 20px;
         }
 
+        #placeholder {
+            color: black;
+        }
+
         /* Stili Main */
         .buttons-container {
             display: flex;
@@ -181,7 +185,7 @@
     </div>
     <section class="content" id="dynamic-content">
         {#if type == null}
-            <h1 style="color: white; margin-top: 15%" id="placeholder">
+            <h1 id="placeholder">
                 Benvenuto {employee.name} {employee.surname}!<br>
                 Seleziona un'opzione per visualizzare i dettagli.
             </h1>
@@ -287,33 +291,6 @@
             {/if}
         {/if}
 
-        Seleziona un'opzione per visualizzare i dettagli.
-        <table>
-            <tr>
-                <th>Nome</th>
-                <th>Cognome</th>
-                <th>Badge</th>
-                <th>Orario</th>
-            </tr>
-            <tr>
-                <td>Mario</td>
-                <td>Rossi</td>
-                <td>123</td>
-                <td>10:00</td>
-            </tr>
-            <tr>
-                <td>Luca</td>
-                <td>Bianchi</td>
-                <td>456</td>
-                <td>11:00</td>
-            </tr>
-            <tr>
-                <td>Paolo</td>
-                <td>Neri</td>
-                <td>789</td>
-                <td>12:00</td>
-            </tr>
-        </table>
     </section>
 </section>
 
