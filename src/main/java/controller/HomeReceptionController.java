@@ -66,7 +66,7 @@ public class HomeReceptionController {
         visits.sort(Comparator.comparing(Visit::getDate));
 
         return homeReception.data(
-                "visits", completeVisits(visits, guestManager, employeeManager),
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
                 "type","showVisits"
         );
     }
@@ -78,7 +78,7 @@ public class HomeReceptionController {
         List<Visit> visits = visitManager.getVisitsByDate(inputDate);
 
         return Response.ok(homeReception.data(
-                "visits", completeVisits(visits, guestManager, employeeManager),
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
                 "type" , "showVisits"
         )).build();
     }
@@ -88,7 +88,7 @@ public class HomeReceptionController {
     public TemplateInstance showAssignBadge() {
 
         List<Visit> unstartedVisits = visitManager.getUnstartedVisits();
-        return homeReception.data("visits", completeVisits(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
+        return homeReception.data("visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
 
     }
 
@@ -105,9 +105,9 @@ public class HomeReceptionController {
             errorMessage = "Il badge è vuoto";
         }
 
-        List<Visit> unfinishedVisists = visitManager.getUnfinishedVisits();
+        List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
 
-        for(Visit visit : unfinishedVisists){
+        for(Visit visit : unfinishedVisits){
             if(visit.getBadgeCode().equals(badgeCode)){
                 errorMessage = "Questo badge non è disponibile";
                 break;
@@ -119,7 +119,7 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
                     "successMessage", null,
-                    "visits", null
+                    "visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager)
             )).build();
         }
 
@@ -140,7 +140,7 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
                     "successMessage", null,
-                    "visits", visitManager.getUnstartedVisits()
+                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisits(), guestManager, employeeManager)
             )).build();
         }
         return Response.seeOther(URI.create("home-reception/assign-badge")).build();
@@ -152,7 +152,7 @@ public class HomeReceptionController {
 
         List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
 
-        return homeReception.data("visits", unfinishedVisits, "type", "closeVisit");
+        return homeReception.data("visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager), "type", "closeVisit");
     }
 
     @Path("/close-visit")
@@ -174,7 +174,7 @@ public class HomeReceptionController {
                     "type", "closeVisit",
                     "errorMessage", "Errore nel chiudere la visita",
                     "successMessage", null,
-                    "visits", visitManager.getUnfinishedVisits()
+                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnfinishedVisits(), guestManager, employeeManager)
             )).build();
         }
         return Response.seeOther(URI.create("home-reception/close-visit")).build();
@@ -361,20 +361,6 @@ public class HomeReceptionController {
         )).build();
     }
 
-    private static List<Visit> completeVisits(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
 
-        List<Visit> completedVisits = new ArrayList<>();
-
-        for(Visit visit : visits){
-            Guest guest = guestManager.getGuestById(visit.getGuestId());
-            Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
-
-            visit.setGuestId(guest.getSurname());
-            visit.setEmployeeId(employee.getSurname());
-
-            completedVisits.add(visit);
-        }
-        return completedVisits;
-    }
 
 }
