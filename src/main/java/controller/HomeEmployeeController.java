@@ -181,16 +181,26 @@ public class HomeEmployeeController {
         String employeeId = employee.getId();
 
         Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus ,guestId, employeeId, null);
-        visitManager.saveVisit(visit);
+        boolean status = visitManager.saveVisit(visit);
 
-        String successMessage = "Successfully added visit";
+        if (status) {
+            String successMessage = "Successfully added visit";
 
-        return Response.ok(homeEmployee.data(
-                "successMessage", successMessage,
-                "errorMessage", null,
-                "guests", guests,
-                "type", "addVisit"
-        )).build();
+            return Response.ok(homeEmployee.data(
+                    "successMessage", successMessage,
+                    "errorMessage", null,
+                    "guests", guests,
+                    "type", "addVisit"
+            )).build();
+        }
+        else{
+            return Response.ok(homeEmployee.data(
+                    "successMessage", null,
+                    "errorMessage", "There is another visit already added",
+                    "guests", guests,
+                    "type", "addVisit"
+            )).build();
+        }
     }
 
     @GET
