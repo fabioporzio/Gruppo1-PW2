@@ -121,10 +121,11 @@
                 height: 40px;
             }
         }
-        .content table {
+        .content-table {
             border-collapse: collapse;
             border-radius: 10px;
             overflow: hidden;
+            margin: 10px;
             box-shadow: 0px 5px 20px 1px #0000006a;
         }
         .content th {
@@ -151,6 +152,19 @@
         @media (max-width: 1440px) {
             .nav-links a {
                 font-size: 20px;
+            }
+        }
+        @media (max-width: 1000px) {
+            .content {
+                overflow: hidden;
+                width: 100%;
+            }
+            .content-table {
+                width: 100%;
+            }
+            .content th, .content td {
+                font-size: 14px;
+                padding: 3px;
             }
         }
         @media (max-width: 820px) {
@@ -182,30 +196,28 @@
                 padding: 20px 20px;
                 border-radius: 30px;
             }
-            .content th, .content td {
-                font-size: 14px;
-                padding: 8px;
-            }
             .content {
                 overflow: hidden;
                 width: 100%;
             }
-            .content table {
+            .content-table {
                 width: 100%;
-                display: block;
+            }
+            .content th, .content td {
+                font-size: 14px;
+                padding: 2px;
             }
         }
-        @media (max-width: 600px){
+        @media (max-width: 700px){
             .content {
                 overflow: hidden;
                 width: 100%;
             }
-            .content table {
+            .content-table {
                 width: 100%;
-                display: block;
             }
             .content th, .content td {
-                font-size: 14px;
+                font-size: 12px;
                 padding: 2px;
             }
         }
