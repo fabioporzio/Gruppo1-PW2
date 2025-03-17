@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,6 +43,14 @@ public class HomeEmployeeController {
         this.credentialsValidator = credentialsValidator;
     }
 
+
+    /***
+     * Displays the employee home page.
+     * Redirects to the login page if the session is invalid.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the employee home page
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getHome(
@@ -65,6 +74,13 @@ public class HomeEmployeeController {
 
     }
 
+
+    /***
+     * Shows the form to add a new guest.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the guest form
+     */
     @GET
     @Path("/add-guest")
     public Response showFormAddGuest(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
@@ -76,23 +92,34 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Adds a new guest after validating the input.
+     *
+     * @param sessionId the session cookie
+     * @param name      the guest's first name
+     * @param surname   the guest's last name
+     * @param role      the guest's role
+     * @param company   the guest's company
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/add-guest")
     public Response addGuest(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
         String errorMessage = null;
 
         if(!credentialsValidator.checkStringForm(name)){
-            errorMessage = "Name is not valid";
+            errorMessage = "Nome non valido";
         }
 
         if(!credentialsValidator.checkStringForm(surname)){
-            errorMessage = "Surname is not valid";
+            errorMessage = "Cognome non valido";
         }
 
         if(errorMessage != null){
@@ -104,10 +131,10 @@ public class HomeEmployeeController {
         }
 
         String newId = ""+guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, role, company);
+        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
         guestManager.saveGuest(guest);
 
-        String successMessage = "Successfully added guest";
+        String successMessage = "Ospite inserito";
 
         return Response.ok(homeEmployee.data(
                 "errorMessage", null,
@@ -116,6 +143,12 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Shows the form to add a new visit.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the visit form
+     */
     @GET
     @Path("/add-visit")
     public Response showFormAddVisit(
@@ -131,6 +164,16 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Adds a new visit after checking date, time, and badge availability.
+     *
+     * @param sessionId     the session cookie
+     * @param date          the visit date
+     * @param expectedStart the expected start time
+     * @param expectedEnd   the expected end time
+     * @param guestId       the guest's ID
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/add-visit")
     public Response addVisit(
@@ -144,11 +187,11 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if (!credentialsValidator.checkDate(date)) {
-            errorMessage = "The visit must be at least one day prior";
+            errorMessage = "La visita deve essere inserita almeno un giorno prima";
         }
 
         if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
-            errorMessage = "The expected start must be before the expected end";
+            errorMessage = "L'ora prevista di inizio deve essere prima dell'ora prevista di fine";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -161,7 +204,7 @@ public class HomeEmployeeController {
         }
 
         if(countOverlapVisits == MAX_BADGE){
-            errorMessage = "For that time slot the schedule is full";
+            errorMessage = "I badge sono terminati";
         }
 
         if(errorMessage != null){
@@ -185,7 +228,7 @@ public class HomeEmployeeController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Successfully added visit";
+            String successMessage = "Visita aggiunta";
 
             return Response.ok(homeEmployee.data(
                     "successMessage", successMessage,
@@ -197,27 +240,43 @@ public class HomeEmployeeController {
         else{
             return Response.ok(homeEmployee.data(
                     "successMessage", null,
-                    "errorMessage", "There is another visit already added",
+                    "errorMessage", "Esiste gia un altra visita aggiunta",
                     "guests", guests,
                     "type", "addVisit"
             )).build();
         }
     }
 
+    /***
+     * Shows the list of visits that can be deleted.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the list of visits
+     */
     @GET
     @Path("/delete-visit")
     public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        List<Visit> visits = visitManager.getUnstartedVisits();
+        List<Visit> filteredVisits = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+        filteredVisits.sort(Comparator.comparing(Visit::getDate));
+
         return Response.ok(homeEmployee.data(
-                "visits", visits,
+                "visits", filteredVisits,
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null
         )).build();
     }
 
+    /***
+     * Deletes a visit based on the given visit ID.
+     *
+     * @param sessionId the session cookie
+     * @param visitId   the ID of the visit to delete
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/delete-visit")
     public Response deleteVisit(
@@ -230,11 +289,12 @@ public class HomeEmployeeController {
         List<Visit> filteredVisits = visitManager.getFilteredVisits(visit);
         visitManager.overwriteVisits(filteredVisits);
 
-        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
-        visits.sort(Comparator.comparing(Visit::getDate));
+        List<Visit> visits = visitManager.getUnstartedVisits();
+        List<Visit> visitsByEmployeeId = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+        filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
         return Response.ok(homeEmployee.data(
-                "visits", visits,
+                "visits", visitsByEmployeeId,
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null

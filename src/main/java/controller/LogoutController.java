@@ -21,6 +21,12 @@ public class LogoutController {
         this.sessionManager = sessionManager;
     }
 
+    /**
+     * Processes the logout request by removing the session and redirecting the user to the login page.
+     *
+     * @param sessionId the session ID stored in the user's cookie.
+     * @return a Response redirecting the user to the login page with the session cookie removed.
+     */
     @GET
     public Response processLogout(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId

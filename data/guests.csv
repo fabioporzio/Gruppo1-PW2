@@ -1,6 +1,7 @@
-id,name,surname,role,company,
-1,Mario,Rossi,client,elmec,
-2,Luigi,Verdi,client,mulino bianco,
-3,Princess,Peach,supplier,ferrari,
-4,Tommaso,Brivio,Fornitore,Apple
-5,Marco,Corradini,Fornitore,Bitcoin
+id,name,surname,phone_number,role,company,
+1,Mario,Rossi,0000000000,client,elmec,
+2,Luigi,Verdi,0000000000,client,mulino bianco,
+3,Princess,Peach,0000000000,supplier,ferrari,
+4,Tommaso,Brivio,0000000000,Fornitore,Apple
+5,Marco,Corradini,0000000000,Fornitore,Bitcoin
+6,Stefano,Gioia,3405603040,Consulente,ITSIncom
