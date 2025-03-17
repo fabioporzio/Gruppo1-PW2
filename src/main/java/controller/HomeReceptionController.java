@@ -16,6 +16,7 @@ import utilities.validation.CredentialsValidator;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 import static logic.SessionManager.NAME_COOKIE_SESSION;
@@ -56,20 +57,25 @@ public class HomeReceptionController {
     @Path("/show-visits")
     @GET
     public TemplateInstance showVisits() {
-        VisitManager visitManager = new VisitManager();
         List<Visit> visits = visitManager.getVisitsFromFile();
-        return homeReception.data("visits",visits , "type","showVisits" );
+        visits.sort(Comparator.comparing(Visit::getDate));
+
+        return homeReception.data(
+                "visits",visits ,
+                "type","showVisits"
+        );
     }
 
     @Path("/filtered-visits")
     @POST
     public Response filterVisits(@FormParam("inputDate") LocalDate inputDate) {
 
-        VisitManager filteredVisits = new VisitManager();
-        List<Visit> visits = filteredVisits.getVisitsByDate(inputDate);
+        List<Visit> visits = visitManager.getVisitsByDate(inputDate);
 
-        return Response.ok(homeReception.data("visits", visits,"type" , "showVisits")).build();
-
+        return Response.ok(homeReception.data(
+                "visits", visits,
+                "type" , "showVisits"
+        )).build();
     }
 
     @Path("/assign-badge")
