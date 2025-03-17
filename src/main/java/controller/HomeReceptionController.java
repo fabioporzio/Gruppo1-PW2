@@ -198,6 +198,7 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
@@ -221,7 +222,7 @@ public class HomeReceptionController {
         }
 
         String newId = ""+guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, role, company);
+        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
         guestManager.saveGuest(guest);
 
         String successMessage = "Ospite aggiunto";
