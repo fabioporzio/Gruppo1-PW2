@@ -327,7 +327,9 @@ public class HomeReceptionController {
     public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        List<Visit> visits = visitManager.getUnstartedVisits();
+        visits.sort(Comparator.comparing(Visit::getDate));
+
         return Response.ok(homeReception.data(
                 "type", "deleteVisit",
                 "errorMessage", null,
@@ -348,7 +350,8 @@ public class HomeReceptionController {
         List<Visit> filteredVisits = visitManager.getFilteredVisits(visit);
         visitManager.overwriteVisits(filteredVisits);
 
-        List<Visit> visits = visitManager.getVisitsByEmployeeId(employee.getId());
+        List<Visit> visits = visitManager.getUnstartedVisits();
+        filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
         return Response.ok(homeReception.data(
                 "type", "deleteVisit",
