@@ -88,11 +88,11 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if(!credentialsValidator.checkStringForm(name)){
-            errorMessage = "Name is not valid";
+            errorMessage = "Nome non valido";
         }
 
         if(!credentialsValidator.checkStringForm(surname)){
-            errorMessage = "Surname is not valid";
+            errorMessage = "Cognome non valido";
         }
 
         if(errorMessage != null){
@@ -107,7 +107,7 @@ public class HomeEmployeeController {
         Guest guest = new Guest(newId, name, surname, role, company);
         guestManager.saveGuest(guest);
 
-        String successMessage = "Successfully added guest";
+        String successMessage = "Ospite inserito";
 
         return Response.ok(homeEmployee.data(
                 "errorMessage", null,
@@ -144,11 +144,11 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if (!credentialsValidator.checkDate(date)) {
-            errorMessage = "The visit must be at least one day prior";
+            errorMessage = "La visita deve essere inserita almeno un giorno prima";
         }
 
         if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
-            errorMessage = "The expected start must be before the expected end";
+            errorMessage = "L'ora prevista di inizio deve essere prima dell'ora prevista di fine";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -161,7 +161,7 @@ public class HomeEmployeeController {
         }
 
         if(countOverlapVisits == MAX_BADGE){
-            errorMessage = "For that time slot the schedule is full";
+            errorMessage = "I badge sono terminati";
         }
 
         if(errorMessage != null){
@@ -185,7 +185,7 @@ public class HomeEmployeeController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Successfully added visit";
+            String successMessage = "Visita aggiunta";
 
             return Response.ok(homeEmployee.data(
                     "successMessage", successMessage,
@@ -197,7 +197,7 @@ public class HomeEmployeeController {
         else{
             return Response.ok(homeEmployee.data(
                     "successMessage", null,
-                    "errorMessage", "There is another visit already added",
+                    "errorMessage", "Esiste gia un altra visita aggiunta",
                     "guests", guests,
                     "type", "addVisit"
             )).build();
