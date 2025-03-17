@@ -236,7 +236,7 @@
     <div class="buttons-container">
         <a href="/home-reception/show-visits"><div class="button">Visualizza visite</div></a>
         <a href="/home-reception/assign-badge"><div class="button">Assegna badge</div></a>
-        <div class="button" onclick="showContent('fine')">Segna fine visita</div>
+        <a href="/home-reception/close-visit"><div class="button">Segna fine visita</div></a>
     </div>
     <section class="content" id="dynamic-content">
         <table class="content-table">
@@ -290,7 +290,7 @@
             {/if}
 
             {#if type == "assignBadge"}
-                {#if visits.isEmpty()}
+                {#if visits.isEmpty() || visits == null}
                     <h3>Non ci sono visite da visualizzare</h3>
                 {#else}
                     <thead>
@@ -322,7 +322,50 @@
                                         <input type="hidden" name="visitId" value="{visit.id}">
                                         <input type="text" name="badge" placeholder="Inserisci il codice del badge">
                                         <button type="submit">Inserisci</button>
-                                    </form></td>
+                                    </form>
+                                </td>
+                            </tr>
+                        {/for}
+                    </tbody>
+                {/if}
+            {/if}
+
+            {#if type == "closeVisit"}
+                {#if visits.isEmpty() || visits == null}
+                    <h3>Non ci sono visite da visualizzare</h3>
+                {#else}
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Previsto Orario Inizio</th>
+                            <th>Ora Effettiva Inizio</th>
+                            <th>Prevista Ora Fine</th>
+                            <th>Ora Effettiva Fine</th>
+                            <th>Status</th>
+                            <th>ID Ospite</th>
+                            <th>ID Dipendente</th>
+                            <th>Badge</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: white">
+                        {#for visit in visits}
+                            <tr>
+                                <td>{visit.date}</td>
+                                <td>{visit.expectedStartingHour}</td>
+                                <td>{visit.actualStartingHour}</td>
+                                <td>{visit.expectedEndingHour}</td>
+                                <td>{visit.actualEndingHour}</td>
+                                <td>{visit.status}</td>
+                                <td>{visit.guestId}</td>
+                                <td>{visit.employeeId}</td>
+                                <td>{visit.badgeCode}</td>
+                                <td>
+                                    <form action="/home-reception/close-visit" method="post">
+                                        <input type="hidden" name="visitId" value="{visit.id}">
+                                        <button type="submit">Concludi</button>
+                                    </form>
+                                </td>
                             </tr>
                         {/for}
                     </tbody>

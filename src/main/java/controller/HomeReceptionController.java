@@ -136,25 +136,44 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
                     "successMessage", null,
-                    "visits", null
+                    "visits", visitManager.getUnstartedVisits()
             )).build();
         }
-        return Response.ok(homeReception.data(
-                "type", "assignBadge",
-                "errorMessage", null,
-                "successMessage", "Badge code saved",
-                "visits", null
-        )).build();
+        return Response.seeOther(URI.create("home-reception/assign-badge")).build();
     }
 
-    @Path("/get-unfinished-visit")
+    @Path("/close-visit")
     @GET
-    public TemplateInstance getUnfinishedVisit() {
+    public TemplateInstance showUnfinishedVisit() {
 
-        VisitManager visits = new VisitManager();
-        List<Visit> actualOpenVisits = visits.getUnfinishedVisits();
+        List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
 
-        return homeReception.data("visits", actualOpenVisits, "type", "closeVisit");
+        return homeReception.data("visits", unfinishedVisits, "type", "closeVisit");
+    }
+
+    @Path("/close-visit")
+    @POST
+    public Response closeVisit(@FormParam("visitId") String visitId){
+
+        List<Visit> visits = visitManager.getVisitsFromFile();
+
+        for(Visit visit : visits){
+            if(visit.getId().equals(visitId)){
+                visit.setActualEndingHour(LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
+                visit.setStatus(VisitStatus.ENDED);
+            }
+        }
+
+        boolean status = visitManager.overwriteVisits(visits);
+        if (!status){
+            return Response.ok(homeReception.data(
+                    "type", "closeVisit",
+                    "errorMessage", "Error closing visit",
+                    "successMessage", null,
+                    "visits", visitManager.getUnfinishedVisits()
+            )).build();
+        }
+        return Response.seeOther(URI.create("home-reception/close-visit")).build();
     }
 
     @GET
