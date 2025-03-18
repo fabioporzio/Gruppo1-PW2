@@ -43,6 +43,14 @@ public class HomeEmployeeController {
         this.credentialsValidator = credentialsValidator;
     }
 
+
+    /***
+     * Displays the employee home page.
+     * Redirects to the login page if the session is invalid.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the employee home page
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getHome(
@@ -66,6 +74,13 @@ public class HomeEmployeeController {
 
     }
 
+
+    /***
+     * Shows the form to add a new guest.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the guest form
+     */
     @GET
     @Path("/add-guest")
     public Response showFormAddGuest(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
@@ -77,6 +92,17 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Adds a new guest after validating the input.
+     *
+     * @param sessionId the session cookie
+     * @param name      the guest's first name
+     * @param surname   the guest's last name
+     * @param phoneNumber   the guest's phone number
+     * @param role      the guest's role
+     * @param company   the guest's company
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/add-guest")
     public Response addGuest(
@@ -118,6 +144,12 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Shows the form to add a new visit.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the visit form
+     */
     @GET
     @Path("/add-visit")
     public Response showFormAddVisit(
@@ -133,6 +165,16 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Adds a new visit after checking date, time, and badge availability.
+     *
+     * @param sessionId     the session cookie
+     * @param date          the visit date
+     * @param expectedStart the expected start time
+     * @param expectedEnd   the expected end time
+     * @param guestId       the guest's ID
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/add-visit")
     public Response addVisit(
@@ -206,6 +248,12 @@ public class HomeEmployeeController {
         }
     }
 
+    /***
+     * Shows the list of visits that can be deleted.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the list of visits
+     */
     @GET
     @Path("/delete-visit")
     public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
@@ -223,6 +271,13 @@ public class HomeEmployeeController {
         )).build();
     }
 
+    /***
+     * Deletes a visit based on the given visit ID.
+     *
+     * @param sessionId the session cookie
+     * @param visitId   the ID of the visit to delete
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/delete-visit")
     public Response deleteVisit(

@@ -1,19 +1,5 @@
 package controller;
 
-import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-import logic.EmployeeManager;
-import logic.GuestManager;
-import logic.SessionManager;
-import logic.VisitManager;
-import model.Employee;
-import model.Guest;
-import model.visit.Visit;
-import model.visit.VisitStatus;
-import utilities.validation.CredentialsValidator;
-
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,7 +8,24 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Response;
+import logic.EmployeeManager;
+import logic.GuestManager;
+import logic.SessionManager;
 import static logic.SessionManager.NAME_COOKIE_SESSION;
+import logic.VisitManager;
+import model.Employee;
+import model.Guest;
+import model.visit.Visit;
+import model.visit.VisitStatus;
+import utilities.validation.CredentialsValidator;
 
 @Path("/home-reception")
 public class HomeReceptionController {
@@ -45,6 +48,13 @@ public class HomeReceptionController {
         this.employeeManager = employeeManager;
     }
 
+    /***
+     * Redirects to the login page if the session is invalid.
+     * Redirects to the badge assignment page if the session is valid.
+     *
+     * @param sessionId the session cookie
+     * @return a redirect response
+     */
     @GET
     public Response getHomeReception(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         if (sessionId != null) {
@@ -59,6 +69,11 @@ public class HomeReceptionController {
         return Response.seeOther(URI.create("/")).build();
     }
 
+    /***
+     * Displays all visits sorted by date.
+     *
+     * @return the HTML response with the visits list
+     */
     @Path("/show-visits")
     @GET
     public TemplateInstance showVisits() {
@@ -71,6 +86,12 @@ public class HomeReceptionController {
         );
     }
 
+    /***
+     * Filters visits by a specific date.
+     *
+     * @param inputDate the selected date
+     * @return the HTML response with filtered visits
+     */
     @Path("/filtered-visits")
     @POST
     public Response filterVisits(@FormParam("inputDate") LocalDate inputDate) {
@@ -83,6 +104,11 @@ public class HomeReceptionController {
         )).build();
     }
 
+    /***
+     * Displays unstarted visits for badge assignment.
+     *
+     * @return the HTML response with visit list
+     */
     @Path("/assign-badge")
     @GET
     public TemplateInstance showAssignBadge() {
@@ -92,6 +118,13 @@ public class HomeReceptionController {
 
     }
 
+    /***
+     * Assigns a badge to a visit if available.
+     *
+     * @param badgeCode the badge code
+     * @param visitId   the visit ID
+     * @return a redirect or an error response
+     */
     @Path("/assign-badge")
     @POST
     public Response assignBadge(
@@ -146,6 +179,11 @@ public class HomeReceptionController {
         return Response.seeOther(URI.create("home-reception/assign-badge")).build();
     }
 
+    /***
+     * Displays visits that can be closed.
+     *
+     * @return the HTML response with unfinished visits
+     */
     @Path("/close-visit")
     @GET
     public TemplateInstance showUnfinishedVisit() {
@@ -155,6 +193,12 @@ public class HomeReceptionController {
         return homeReception.data("visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager), "type", "closeVisit");
     }
 
+    /***
+     * Closes a visit by setting its actual ending time.
+     *
+     * @param visitId the ID of the visit to close
+     * @return a redirect or an error response
+     */
     @Path("/close-visit")
     @POST
     public Response closeVisit(@FormParam("visitId") String visitId){
@@ -180,6 +224,12 @@ public class HomeReceptionController {
         return Response.seeOther(URI.create("home-reception/close-visit")).build();
     }
 
+    /***
+     * Displays the form to add a new guest.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the guest form
+     */
     @GET
     @Path("/add-guest")
     public Response showFormAddGuest(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
@@ -192,6 +242,17 @@ public class HomeReceptionController {
         )).build();
     }
 
+    /***
+     * Adds a new guest after validating the input.
+     *
+     * @param sessionId the session cookie
+     * @param name      the guest's first name
+     * @param surname   the guest's last name
+     * @param phoneNumber   the guest's phone number
+     * @param role      the guest's role
+     * @param company   the guest's company
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/add-guest")
     public Response addGuest(
@@ -235,6 +296,12 @@ public class HomeReceptionController {
         )).build();
     }
 
+    /***
+     * Displays the form to add a new visit.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with guest list
+     */
     @GET
     @Path("/add-visit")
     public Response showFormAddVisit(
@@ -252,6 +319,16 @@ public class HomeReceptionController {
         )).build();
     }
 
+    /***
+     * Adds a new visit if there are available badges.
+     *
+     * @param sessionId     the session cookie
+     * @param date          the visit date
+     * @param expectedStart the expected start time
+     * @param expectedEnd   the expected end time
+     * @param guestId       the guest's ID
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/add-visit")
     public Response addVisit(
@@ -324,6 +401,12 @@ public class HomeReceptionController {
         }
     }
 
+    /**
+     * Displays the list of visits that can be deleted.
+     *
+     * @param sessionId the session cookie
+     * @return the HTML response with the visit list
+     */
     @GET
     @Path("/delete-visit")
     public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
@@ -340,6 +423,13 @@ public class HomeReceptionController {
         )).build();
     }
 
+    /**
+     * Deletes a visit based on the given visit ID.
+     *
+     * @param sessionId the session cookie
+     * @param visitId   the ID of the visit to delete
+     * @return the HTML response with success or error messages
+     */
     @POST
     @Path("/delete-visit")
     public Response deleteVisit(
@@ -363,6 +453,20 @@ public class HomeReceptionController {
         )).build();
     }
 
+    private static List<Visit> completeVisits(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
 
+        List<Visit> completedVisits = new ArrayList<>();
+
+        for(Visit visit : visits){
+            Guest guest = guestManager.getGuestById(visit.getGuestId());
+            Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
+
+            visit.setGuestId(guest.getSurname());
+            visit.setEmployeeId(employee.getSurname());
+
+            completedVisits.add(visit);
+        }
+        return completedVisits;
+    }
 
 }
