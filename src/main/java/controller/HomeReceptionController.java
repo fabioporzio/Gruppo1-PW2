@@ -240,11 +240,12 @@ public class HomeReceptionController {
     }
 
     /***
-     * Adds a new guest after validating input fields.
+     * Adds a new guest after validating the input.
      *
      * @param sessionId the session cookie
      * @param name      the guest's first name
      * @param surname   the guest's last name
+     * @param phoneNumber   the guest's phone number
      * @param role      the guest's role
      * @param company   the guest's company
      * @return the HTML response with success or error messages
@@ -255,6 +256,7 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
