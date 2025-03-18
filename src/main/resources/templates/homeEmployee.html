@@ -564,6 +564,7 @@
             modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";
 
             let btnYes = document.createElement("button-confirm");
+            btnYes.style.cursor = "pointer";
             btnYes.textContent = "Sì, elimina";
             btnYes.style.backgroundColor = "#ff4d4d"; // Rosso chiaro
             btnYes.style.padding = "12px 20px";
@@ -584,6 +585,7 @@
             };
 
             let btnNo = document.createElement("button-confirm");
+            btnNo.style.cursor = "pointer";
             btnNo.textContent = "Annulla";
             btnNo.style.backgroundColor = "#555"; // Grigio scuro
             btnNo.style.color = "white";
