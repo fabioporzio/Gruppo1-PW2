@@ -3,7 +3,6 @@ package controller;
 import io.quarkus.qute.Template;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import logic.GuestManager;
 import logic.SessionManager;
@@ -13,12 +12,11 @@ import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
 import utilities.validation.CredentialsValidator;
+import utilities.validation.FormValidator;
 
-import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,13 +32,15 @@ public class HomeEmployeeController {
     private final GuestManager guestManager;
     private final VisitManager visitManager;
     private final CredentialsValidator credentialsValidator;
+    private final FormValidator formValidator;
 
-    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, CredentialsValidator credentialsValidator) {
+    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, CredentialsValidator credentialsValidator, FormValidator formValidator) {
         this.homeEmployee = homeEmployee;
         this.sessionManager = sessionManager;
         this.guestManager = guestManager;
         this.visitManager = visitManager;
         this.credentialsValidator = credentialsValidator;
+        this.formValidator = formValidator;
     }
 
 
@@ -115,12 +115,24 @@ public class HomeEmployeeController {
     ){
         String errorMessage = null;
 
-        if(!credentialsValidator.checkStringForm(name)){
+        if(!formValidator.checkStringForm(name)){
             errorMessage = "Nome non valido";
         }
 
-        if(!credentialsValidator.checkStringForm(surname)){
+        if(errorMessage == null && !formValidator.checkStringForm(surname)){
             errorMessage = "Cognome non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
+            errorMessage = "Numero di telefono non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(role)){
+            errorMessage = "Ruolo non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(company)){
+            errorMessage = "Azienda non valida";
         }
 
         if(errorMessage != null){
@@ -131,7 +143,7 @@ public class HomeEmployeeController {
             )).build();
         }
 
-        String newId = ""+guestManager.getNewId();
+        String newId = "" + guestManager.getNewId();
         Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
         guestManager.saveGuest(guest);
 
@@ -187,24 +199,40 @@ public class HomeEmployeeController {
         List<Guest> guests = guestManager.getGuestsFromFile();
         String errorMessage = null;
 
-        if (!credentialsValidator.checkDate(date)) {
+        if (!formValidator.checkDateNotNull(date)) {
+            errorMessage = "Data non può essere vuota";
+        }
+
+        if (errorMessage == null && !formValidator.checkDate(date)) {
             errorMessage = "La visita deve essere inserita almeno un giorno prima";
         }
 
-        if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
-            errorMessage = "L'ora prevista di inizio deve essere prima dell'ora prevista di fine";
+        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
+            errorMessage = "L'ora di inizio non può essere vuota";
+        }
+
+        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
+            errorMessage = "L'ora di inizio non può essere vuota";
+        }
+
+        if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
+            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(guestId)){
+            errorMessage = "Azienda non valida";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
         int countOverlapVisits = 0;
 
-        for(Visit visit : visitsOfDate){
+        for(Visit visit : visitsOfDate) {
             if (visit.getExpectedStartingHour().isBefore(expectedEnd) && visit.getExpectedEndingHour().isAfter(expectedStart)) {
                 countOverlapVisits++;
             }
         }
 
-        if(countOverlapVisits == MAX_BADGE){
+        if(countOverlapVisits == MAX_BADGE) {
             errorMessage = "I badge sono terminati";
         }
 
@@ -217,7 +245,7 @@ public class HomeEmployeeController {
             )).build();
         }
 
-        String newId = ""+visitManager.getNewId();
+        String newId = "" + visitManager.getNewId();
         LocalTime actualStart = LocalTime.ofSecondOfDay(0);
         LocalTime actualEnd = LocalTime.ofSecondOfDay(0);
         VisitStatus visitStatus = VisitStatus.YET_TO_START;
@@ -238,7 +266,7 @@ public class HomeEmployeeController {
                     "type", "addVisit"
             )).build();
         }
-        else{
+        else {
             return Response.ok(homeEmployee.data(
                     "successMessage", null,
                     "errorMessage", "Esiste gia un altra visita aggiunta",
