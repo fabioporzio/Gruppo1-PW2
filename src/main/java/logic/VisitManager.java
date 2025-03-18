@@ -1,5 +1,10 @@
 package logic;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import jakarta.enterprise.context.ApplicationScoped;
 import model.Employee;
 import model.Guest;

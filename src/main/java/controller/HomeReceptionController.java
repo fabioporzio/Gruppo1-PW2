@@ -1,19 +1,5 @@
 package controller;
 
-import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-import logic.EmployeeManager;
-import logic.GuestManager;
-import logic.SessionManager;
-import logic.VisitManager;
-import model.Employee;
-import model.Guest;
-import model.visit.Visit;
-import model.visit.VisitStatus;
-import utilities.validation.CredentialsValidator;
-
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,7 +8,24 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Response;
+import logic.EmployeeManager;
+import logic.GuestManager;
+import logic.SessionManager;
 import static logic.SessionManager.NAME_COOKIE_SESSION;
+import logic.VisitManager;
+import model.Employee;
+import model.Guest;
+import model.visit.Visit;
+import model.visit.VisitStatus;
+import utilities.validation.CredentialsValidator;
 
 @Path("/home-reception")
 public class HomeReceptionController {
@@ -258,7 +261,8 @@ public class HomeReceptionController {
             @FormParam("surname") String surname,
             @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
-            @FormParam("company") String company
+            @FormParam("company") String company,
+            @FormParam("phoneNumber") String phoneNumber
     ){
         String errorMessage = null;
 
