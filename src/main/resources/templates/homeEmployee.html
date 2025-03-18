@@ -122,8 +122,16 @@
             overflow: hidden;
         }
 
+        .content-table {
+            width: 98%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px;
+        }
+
         .main {
-            width: 90%;
+            width: 98%;
             height: 100%;
             display: flex;
             justify-content: center;
@@ -311,7 +319,7 @@
                     {#if successMessage != null}
                     <h2 class="success-message">{successMessage}</h2>
                     {/if}
-                    <form action="/home-reception/add-guest" method="post">
+                    <form action="/home-employee/add-guest" method="post">
                         <label for="name">
                             Nome:
                             <input type="text" name="name" required>
@@ -436,15 +444,15 @@
                     <p class="success-message">{successMessage}</p>
                     {/if}
 
-                    <form action="/home-reception/add-visit" method="post">
+                    <form action="/home-employee/add-visit" method="post">
                         <label for="date">
                             Data:
-                            <input type="date" name="date" required>
+                            <input style="cursor: text;" type="date" name="date" required>
                         </label>
                         <label for="expectedStart">
                             Ora di inizio:
                             <select name="expectedStart" required>
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Seleziona</option>
                                 <option value="09:00">9:00</option>
                                 <option value="10:00">10:00</option>
                                 <option value="11:00">11:00</option>
@@ -458,7 +466,7 @@
                         <label for="expectedEnd">
                             Ora di fine:
                             <select name="expectedEnd" required>
-                                <option value="" selected disabled></option>
+                                <option value="" selected disabled>Seleziona</option>
                                 <option value="10:00">10:00</option>
                                 <option value="11:00">11:00</option>
                                 <option value="12:00">12:00</option>
@@ -482,10 +490,10 @@
                     {/if}
 
                     {#if type == "deleteVisit"}
-                    {#if visits.isEmpty()}
-                    <h3 style="color: white; margin-top: 15%">Non ci sono visite da eliminare</h3>
+                    {#if visits.isEmpty() || visits == null}
+                    <h3 style="color: white; margin-top: 5%">Non ci sono visite da eliminare</h3>
                     {#else}
-                    <thead>
+                    <thead style="background-color: #000000; color: white">
                         <tr>
                             <th>Data</th>
                             <th>Previsto Orario Inizio</th>
@@ -510,14 +518,13 @@
                             <td>{visit.guestId}</td>
                             <td>{visit.employeeId}</td>
                             <td>
-                                <form action="/home-reception/delete-visit" method="post"
+                                <form action="/home-employee/delete-visit" method="post"
                                     onsubmit="return confirmDelete(event, this)">
                                     <input type="hidden" name="visitId" value="{visit.id}">
                                     <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                        type="submit">Cancella
-                                    </button>
+                                        type="submit">Cancella</button>
                                 </form>
-
+                                </form>
                             </td>
                         </tr>
                         {/for}
@@ -534,7 +541,75 @@
             document.getElementById("nav-links").classList.toggle("active");
         });
 
+        function confirmDelete(event, form) {
+            event.preventDefault();
+            let overlay = document.createElement("div");
+            overlay.style.position = "fixed";
+            overlay.style.top = "0";
+            overlay.style.left = "0";
+            overlay.style.width = "100vw";
+            overlay.style.height = "100vh";
+            overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            overlay.style.display = "flex";
+            overlay.style.justifyContent = "center";
+            overlay.style.alignItems = "center";
+            overlay.style.zIndex = "1000";
 
+            let modal = document.createElement("div");
+            modal.style.backgroundColor = "white";
+            modal.style.padding = "70px";
+            modal.style.borderRadius = "10px";
+            modal.style.fontSize = "30px";
+            modal.style.textAlign = "center";
+            modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";
+
+            let btnYes = document.createElement("button-confirm");
+            btnYes.textContent = "Sì, elimina";
+            btnYes.style.backgroundColor = "#ff4d4d"; // Rosso chiaro
+            btnYes.style.padding = "12px 20px";
+            btnYes.style.fontSize = "16px";
+            btnYes.style.fontWeight = "bold";
+            btnYes.style.borderRadius = "8px";
+            btnYes.style.border = "2px solid #ff0000";
+            btnYes.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
+            btnYes.style.marginRight = "20px";
+            btnYes.onmouseover = function () {
+                btnYes.style.backgroundColor = "#cc0000"; // Rosso più scuro al passaggio del mouse
+            };
+            btnYes.onmouseout = function () {
+                btnYes.style.backgroundColor = "#ff4d4d";
+            };
+            btnYes.onclick = function () {
+                form.submit();
+            };
+
+            let btnNo = document.createElement("button-confirm");
+            btnNo.textContent = "Annulla";
+            btnNo.style.backgroundColor = "#555"; // Grigio scuro
+            btnNo.style.color = "white";
+            btnNo.style.padding = "12px 20px";
+            btnNo.style.fontSize = "16px";
+            btnNo.style.borderRadius = "8px";
+            btnNo.style.border = "2px solid #333";
+            btnNo.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
+            btnNo.style.marginLeft = "20px";
+            btnNo.onmouseover = function () {
+                btnNo.style.backgroundColor = "#777"; // Grigio più chiaro al passaggio del mouse
+            };
+            btnNo.onmouseout = function () {
+                btnNo.style.backgroundColor = "#555";
+            };
+            btnNo.onclick = function () {
+                document.body.removeChild(overlay);
+            };
+
+            modal.appendChild(btnYes);
+            modal.appendChild(btnNo);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            return false;
+        }
     </script>
 </body>
 
