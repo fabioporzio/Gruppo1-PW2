@@ -11,7 +11,6 @@ import model.Employee;
 import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
-import utilities.validation.CredentialsValidator;
 import utilities.validation.FormValidator;
 
 import java.net.URI;
@@ -31,15 +30,13 @@ public class HomeEmployeeController {
     private final SessionManager sessionManager;
     private final GuestManager guestManager;
     private final VisitManager visitManager;
-    private final CredentialsValidator credentialsValidator;
     private final FormValidator formValidator;
 
-    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, CredentialsValidator credentialsValidator, FormValidator formValidator) {
+    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, FormValidator formValidator) {
         this.homeEmployee = homeEmployee;
         this.sessionManager = sessionManager;
         this.guestManager = guestManager;
         this.visitManager = visitManager;
-        this.credentialsValidator = credentialsValidator;
         this.formValidator = formValidator;
     }
 
