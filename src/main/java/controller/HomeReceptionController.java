@@ -261,8 +261,7 @@ public class HomeReceptionController {
             @FormParam("surname") String surname,
             @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
-            @FormParam("company") String company,
-            @FormParam("phoneNumber") String phoneNumber
+            @FormParam("company") String company
     ){
         String errorMessage = null;
 
