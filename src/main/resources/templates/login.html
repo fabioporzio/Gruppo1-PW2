@@ -14,7 +14,6 @@
             box-sizing: border-box;
         }
 
-        /* Animazioni */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -25,16 +24,7 @@
                 transform: scale(1);
             }
         }
-        @keyframes speen {
-            0% {
-                transform: perspective(600px) rotateY(0deg);
-            }
-            100% {
-                transform: perspective(600px) rotateY(360deg);
-            }
-        }
 
-        /* Corpo e contenitore */
         body {
             background-color: #382673;
             height: 100vh;
@@ -48,24 +38,23 @@
         .login-container {
             display: flex;
             flex-wrap: wrap;
-            background: #ffffff;
-            width: 80%;
+            background: #f4f6f9;
+            width: 90%;
+            height: 90%;
             max-width: 1400px;
-            height: 80%;
             border-radius: 30px;
             box-shadow: 0 0 25px 25px #0000006a;
             overflow: hidden;
             animation: fadeIn 1.5s ease-in-out;
         }
 
-        /* Sezione login */
         .login-box {
             flex: 1;
-            padding: 13%;
+            padding: 10%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-width: 400px;
+            min-width: 300px;
             background-color: #382673;
         }
 
@@ -75,125 +64,135 @@
         }
 
         .login-text h1 {
-            font-size: 60px;
-            margin-bottom: 20px;
+            font-size: 40px;
+            margin-bottom: 10px;
             color: #ffffff;
         }
 
         .login-text p {
-            font-size: 22px;
+            font-size: 18px;
             color: #909090;
         }
 
         .input-box {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         .input-box input,
         .input-box button {
             border-radius: 12px;
-            font-size: 18px;
-            padding: 15px;
+            font-size: 16px;
+            padding: 10px;
         }
 
         .input-box input {
-            border: 1px solid #0000003b;
-            text-indent: 15px;
+            width: 80%;
+            align-self: center;
+            border: 1px solid #455a64;
+            text-indent: 10px;
             outline: none;
         }
 
         .input-box input:focus {
-            border-color: #382673;
+            border: 2px solid #4081ff;
         }
 
         .input-box button {
-            background: #382673;
+            background: #37474f;
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
             align-self: center;
-            max-width: 250px;
+            max-width: 200px;
+            margin-top: 40px;
         }
 
         .input-box button:hover {
-            background-color: #5c3b99;
+            background-color: #4081ff;
         }
 
-        /* Cilindro animato */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none; /* Nasconde inizialmente */
+            text-align: center;
+            margin-top: 10px;
+        }
+
         .image-box {
             flex: 1;
-            min-width: 400px;
+            min-width: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: white;
+            background: url('/1.gif') no-repeat center center;
+            background-size: contain;
         }
 
-        .tube {
-            transform-style: preserve-3d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: speen 6s infinite linear;
-            width: 300px;
-            height: 300px;
-            position: relative;
+        @media (max-width: 860px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .image-box {
+                order: 2;
+                min-height: 200px;
+                background-size: cover;
+            }
+
+            .login-box {
+                order: 1;
+                padding: 8%;
+            }
+
+            .login-text h1 {
+                font-size: 32px;
+            }
+
+            .login-text p {
+                font-size: 16px;
+            }
+
+            .input-box input,
+            .input-box button {
+                font-size: 14px;
+                padding: 8px;
+            }
         }
 
-        .strip {
-            transform-style: preserve-3d;
-            height: 300px;
-            width: calc(300px / 30);
-            position: absolute;
-            background-image: url(/1.gif);
-            background-size: 300px 300px;
-            background-repeat: no-repeat;
-            backface-visibility: hidden;
+        @media (max-width: 480px) {
+            .image-box {
+                min-height: 200px;
+            }
         }
     </style>
 </head>
 
 <body>
-<div class="login-container">
-    <div class="login-box">
-        <div class="form">
-            <div class="login-text">
-                <h1>Benvenuto</h1>
-                {#if message}
-                    <h3 style="color: red">{message}</h3>
-                {/if}
-                <p>"Inserisci le tue credenziali per accedere"</p>
-            </div>
-            <form action="/" method="post">
-                <div class="input-box">
-                    <input type="text" name="email" placeholder="Inserisci la tua email" required />
-                    <input type="password" name="password" placeholder="Inserisci la tua password" required />
-                    <button type="submit">Entra</button>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="form">
+                <div class="login-text">
+                    <h1>Benvenuto</h1>
+                    <h3 style="color: red;">{message}</h3>
+                    
+                    <p>"Inserisci le tue credenziali per accedere"</p>
                 </div>
-            </form>
+                <form action="/" method="post">
+                    <div class="input-box">
+                        <input type="text" name="email" placeholder="Inserisci la tua email" required />
+                        <input type="password" name="password" placeholder="Inserisci la tua password" required />
+                        <span class="error-message">Credenziali non valide, riprova.</span>
+                        <button type="submit">Entra</button>
+                    </div>
+                </form>
+            </div>
         </div>
+        <div class="image-box"></div>
     </div>
-    <div class="image-box">
-        <div class="tube"></div>
-    </div>
-</div>
-
-<script>
-    const count = 64; // Numero di pannelli per il cilindro
-    const tube = document.querySelector('.tube');
-
-    // Creazione dinamica delle strisce per il cilindro
-    for (let i = 0; i < count; i++) {
-        const strip = document.createElement('div');
-        strip.classList.add('strip');
-        strip.style.transform = `rotateY(${(360 / count) * i}deg) translateZ(150px)`;
-        strip.style.backgroundPosition = `${-(i * (300 / count))}px 0`; // Posizione precisa per ogni pannello
-        tube.appendChild(strip);
-    }
-</script>
 </body>
 
 </html>
