@@ -1,8 +1,11 @@
 package utilities.validation;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@ApplicationScoped
 public class FormValidator {
 
     /***
