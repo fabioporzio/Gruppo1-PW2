@@ -164,7 +164,6 @@
             background-color: #000000;
             color: white;
             word-wrap: break-word;
-            text-align: left;
             padding: 12px;
             font-size: 18px;
         }
@@ -398,7 +397,7 @@
                         <td>
                             <form action="/home-reception/assign-badge" method="post" style="display: flex;flex-direction: row;justify-content: center;align-items: center;">
                                 <input type="hidden" name="visitId" value="{visit.id}">
-                                <input class="filter-button" type="text" name="badge"
+                                <input class="filter-button" style="cursor: text;" type="text" name="badge"
                                     placeholder="Inserisci qui il codice badge">
                                 <button style="padding: 5px; cursor: pointer; border: none; border-radius: 5px; background: none; margin-left: 2px"
                                     type="submit">
@@ -682,12 +681,12 @@
                 <form action="/home-reception/add-visit" method="post">
                     <label for="date">
                         Data:
-                        <input type="date" name="date" required>
+                        <input style="cursor: text;" type="date" name="date" required>
                     </label>
                     <label for="expectedStart">
                         Ora di inizio:
                         <select name="expectedStart" required>
-                            <option value="" selected disabled></option>
+                            <option value="" selected disabled>Seleziona</option>
                             <option value="09:00">9:00</option>
                             <option value="10:00">10:00</option>
                             <option value="11:00">11:00</option>
@@ -701,7 +700,7 @@
                     <label for="expectedEnd">
                         Ora di fine:
                         <select name="expectedEnd" required>
-                            <option value="" selected disabled></option>
+                            <option value="" selected disabled>Seleziona</option>
                             <option value="10:00">10:00</option>
                             <option value="11:00">11:00</option>
                             <option value="12:00">12:00</option>
