@@ -322,13 +322,14 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ){
         List<Guest> guests = guestManager.getGuestsFromFile();
+        List<Employee> employees = employeeManager.getEmployeesFromFile();
 
         return Response.ok(homeReception.data(
                 "type", "addVisit",
                 "errorMessage", null,
                 "successMessage", null,
                 "guests", guests,
-                "visits", null
+                "employees", employees
         )).build();
     }
 
@@ -397,7 +398,7 @@ public class HomeReceptionController {
                     "errorMessage", errorMessage,
                     "successMessage", null,
                     "guests", guests,
-                    "visits", null
+                    "employees", null
             )).build();
         }
 
