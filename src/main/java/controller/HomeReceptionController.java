@@ -4,7 +4,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,6 +25,7 @@ import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
 import utilities.validation.CredentialsValidator;
+import utilities.validation.FormValidator;
 
 @Path("/home-reception")
 public class HomeReceptionController {
@@ -36,14 +36,16 @@ public class HomeReceptionController {
     private final SessionManager sessionManager;
     private final VisitManager visitManager;
     private final CredentialsValidator credentialsValidator;
+    private final FormValidator formValidator;
     private final GuestManager guestManager;
     private final EmployeeManager employeeManager;
 
-    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, CredentialsValidator credentialsValidator, GuestManager guestManager, EmployeeManager employeeManager) {
+    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, CredentialsValidator credentialsValidator, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager) {
         this.homeReception = homeReception;
         this.sessionManager = sessionManager;
         this.visitManager = visitManager;
         this.credentialsValidator = credentialsValidator;
+        this.formValidator = formValidator;
         this.guestManager = guestManager;
         this.employeeManager = employeeManager;
     }
@@ -134,7 +136,7 @@ public class HomeReceptionController {
 
         String errorMessage = null;
 
-        if(!credentialsValidator.checkStringForm(badgeCode)){
+        if(!formValidator.checkStringForm(badgeCode)){
             errorMessage = "Il badge è vuoto";
         }
 
@@ -265,12 +267,24 @@ public class HomeReceptionController {
     ){
         String errorMessage = null;
 
-        if(!credentialsValidator.checkStringForm(name)){
-            errorMessage = "Il nome non è valido";
+        if(!formValidator.checkStringForm(name)){
+            errorMessage = "Nome non valido";
         }
 
-        if(!credentialsValidator.checkStringForm(surname)){
-            errorMessage = "Il cognome non è valido";
+        if(errorMessage == null && !formValidator.checkStringForm(surname)){
+            errorMessage = "Cognome non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
+            errorMessage = "Numero di telefono non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(role)){
+            errorMessage = "Ruolo non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(company)){
+            errorMessage = "Azienda non valida";
         }
 
         if(errorMessage != null){
@@ -340,8 +354,28 @@ public class HomeReceptionController {
         List<Guest> guests = guestManager.getGuestsFromFile();
         String errorMessage = null;
 
-        if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
-            errorMessage = "L'orario previsto di inizio deve essere prima dell'orario previsto di fine.";
+        if (!formValidator.checkDateNotNull(date)) {
+            errorMessage = "Data non può essere vuota";
+        }
+
+        if (errorMessage == null && !formValidator.checkDate(date)) {
+            errorMessage = "La visita deve essere inserita almeno un giorno prima";
+        }
+
+        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
+            errorMessage = "L'ora di inizio non può essere vuota";
+        }
+
+        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
+            errorMessage = "L'ora di inizio non può essere vuota";
+        }
+
+        if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
+            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(guestId)){
+            errorMessage = "Azienda non valida";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
