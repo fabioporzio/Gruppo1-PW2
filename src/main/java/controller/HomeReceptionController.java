@@ -24,7 +24,6 @@ import model.Employee;
 import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
-import utilities.validation.CredentialsValidator;
 import utilities.validation.FormValidator;
 
 @Path("/home-reception")
@@ -35,16 +34,14 @@ public class HomeReceptionController {
     private final Template homeReception;
     private final SessionManager sessionManager;
     private final VisitManager visitManager;
-    private final CredentialsValidator credentialsValidator;
     private final FormValidator formValidator;
     private final GuestManager guestManager;
     private final EmployeeManager employeeManager;
 
-    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, CredentialsValidator credentialsValidator, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager) {
+    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager) {
         this.homeReception = homeReception;
         this.sessionManager = sessionManager;
         this.visitManager = visitManager;
-        this.credentialsValidator = credentialsValidator;
         this.formValidator = formValidator;
         this.guestManager = guestManager;
         this.employeeManager = employeeManager;
