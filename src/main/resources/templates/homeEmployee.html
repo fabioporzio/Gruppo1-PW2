@@ -288,7 +288,7 @@
             {#else}
                 {#for visit in visits}
                     {visit.id}
-                    {visit.date}
+                    {visit.date.format("dd/MM/yyyy")}
                     {visit.guestId}
                     {visit.employeeId}
                     <form action="/home-employee/delete-visit" method="post">

@@ -352,7 +352,7 @@
                     <tbody style="background-color: white">
                     {#for visit in visits}
                         <tr>
-                            <td>{visit.date}</td>
+                            <td>{visit.date.format("dd/MM/yyyy")}</td>
                             <td>{visit.expectedStartingHour}</td>
                             <td>{visit.actualStartingHour}</td>
                             <td>{visit.expectedEndingHour}</td>
@@ -387,7 +387,7 @@
                     <tbody style="background-color: white">
                     {#for visit in visits}
                     <tr>
-                        <td>{visit.date}</td>
+                        <td>{visit.date.format("dd/MM/yyyy")}</td>
                         <td>{visit.expectedStartingHour}</td>
                         <td>{visit.actualStartingHour}</td>
                         <td>{visit.expectedEndingHour}</td>
@@ -433,7 +433,7 @@
                     <tbody style="background-color: white">
                     {#for visit in visits}
                         <tr>
-                            <td>{visit.date}</td>
+                            <td>{visit.date.format("dd/MM/yyyy")}</td>
                             <td>{visit.expectedStartingHour}</td>
                             <td>{visit.actualStartingHour}</td>
                             <td>{visit.expectedEndingHour}</td>
@@ -752,7 +752,7 @@
                         <tbody style="background-color: white">
                         {#for visit in visits}
                             <tr>
-                                <td>{visit.date}</td>
+                                <td>{visit.date.format("dd/MM/yyyy")}</td>
                                 <td>{visit.expectedStartingHour}</td>
                                 <td>{visit.actualStartingHour}</td>
                                 <td>{visit.expectedEndingHour}</td>
