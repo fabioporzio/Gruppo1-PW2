@@ -451,21 +451,4 @@ public class HomeReceptionController {
                 "visits", visits
         )).build();
     }
-
-    private static List<Visit> completeVisits(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
-
-        List<Visit> completedVisits = new ArrayList<>();
-
-        for(Visit visit : visits){
-            Guest guest = guestManager.getGuestById(visit.getGuestId());
-            Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
-
-            visit.setGuestId(guest.getSurname());
-            visit.setEmployeeId(employee.getSurname());
-
-            completedVisits.add(visit);
-        }
-        return completedVisits;
-    }
-
 }
