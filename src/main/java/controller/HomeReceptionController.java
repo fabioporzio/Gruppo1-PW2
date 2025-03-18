@@ -350,6 +350,7 @@ public class HomeReceptionController {
             @FormParam("guest") String guestId
     ) {
         List<Guest> guests = guestManager.getGuestsFromFile();
+        List<Employee> employees = employeeManager.getEmployeesFromFile();
         String errorMessage = null;
 
         if (!formValidator.checkDateNotNull(date)) {
@@ -395,7 +396,7 @@ public class HomeReceptionController {
                     "errorMessage", errorMessage,
                     "successMessage", null,
                     "guests", guests,
-                    "employees", null
+                    "employees", employees
             )).build();
         }
 
@@ -418,7 +419,7 @@ public class HomeReceptionController {
                     "errorMessage", null,
                     "successMessage", successMessage,
                     "guests", guests,
-                    "visits", null
+                    "employees", employees
             )).build();
         }
         else{
@@ -427,7 +428,7 @@ public class HomeReceptionController {
                     "errorMessage", "Esiste gia un altra visita aggiunta",
                     "successMessage", null,
                     "guests", guests,
-                    "visits", null
+                    "employees", employees
             )).build();
         }
     }
