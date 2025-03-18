@@ -143,7 +143,6 @@
         .filter-button {
             padding: 10px 10px;
             border-radius: 10px;
-            border: none;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -369,7 +368,7 @@
 
                 {#if type == "assignBadge"}
                 {#if visits.isEmpty() || visits == null}
-                <h3 style="color: white; margin-top: 15%">Non ci sono badge da visualizzare</h3>
+                <h3 style="color: white; margin-top: 15%">Non ci sono visite prenotate per oggi</h3>
                 {#else}
                 <thead>
                     <tr>
@@ -396,12 +395,14 @@
                         <td>{visit.guestId}</td>
                         <td>{visit.employeeId}</td>
                         <td>
-                            <form action="/home-reception/assign-badge" method="post">
+                            <form action="/home-reception/assign-badge" method="post" style="display: flex;flex-direction: row;justify-content: center;align-items: center;">
                                 <input type="hidden" name="visitId" value="{visit.id}">
                                 <input class="filter-button" type="text" name="badge"
                                     placeholder="Inserisci qui il codice badge">
-                                <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                    type="submit">Inserisci</button>
+                                <button style="padding: 5px; cursor: pointer; border: none; border-radius: 5px; background: none; margin-left: 2px"
+                                    type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512"><path fill="#000000" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                                </button>
                             </form>
                         </td>
                     </tr>

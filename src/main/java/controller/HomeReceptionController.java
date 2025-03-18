@@ -113,7 +113,7 @@ public class HomeReceptionController {
     @GET
     public TemplateInstance showAssignBadge() {
 
-        List<Visit> unstartedVisits = visitManager.getUnstartedVisits();
+        List<Visit> unstartedVisits = visitManager.getUnstartedVisitsByDate(LocalDate.now());
         return homeReception.data("visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
 
     }
@@ -152,7 +152,7 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
                     "successMessage", null,
-                    "visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager)
+                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
             )).build();
         }
 
