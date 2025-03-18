@@ -2,6 +2,7 @@ package logic;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import model.Employee;
+import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
 import org.apache.commons.csv.CSVFormat;
