@@ -98,6 +98,7 @@ public class HomeEmployeeController {
      * @param sessionId the session cookie
      * @param name      the guest's first name
      * @param surname   the guest's last name
+     * @param phoneNumber   the guest's phone number
      * @param role      the guest's role
      * @param company   the guest's company
      * @return the HTML response with success or error messages

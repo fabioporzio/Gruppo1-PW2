@@ -274,7 +274,7 @@
                     Inserisci l'ospite:
                     <select name="guest" required>
                         {#for guest in guests}
-                            <option value="{guest.id}">{guest.name} {guest.surname}</option>
+                            <option value="{guest.id}">{guest.name} {guest.surname} {guest.phoneNumber}</option>
                         {/for}
                     </select>
                 </label>

@@ -243,11 +243,12 @@ public class HomeReceptionController {
     }
 
     /***
-     * Adds a new guest after validating input fields.
+     * Adds a new guest after validating the input.
      *
      * @param sessionId the session cookie
      * @param name      the guest's first name
      * @param surname   the guest's last name
+     * @param phoneNumber   the guest's phone number
      * @param role      the guest's role
      * @param company   the guest's company
      * @return the HTML response with success or error messages
@@ -258,9 +259,9 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
-            @FormParam("company") String company,
-            @FormParam("phoneNumber") String phoneNumber
+            @FormParam("company") String company
     ){
         String errorMessage = null;
 
@@ -307,13 +308,14 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ){
         List<Guest> guests = guestManager.getGuestsFromFile();
+        List<Employee> employees = employeeManager.getEmployeesFromFile();
 
         return Response.ok(homeReception.data(
                 "type", "addVisit",
                 "errorMessage", null,
                 "successMessage", null,
                 "guests", guests,
-                "visits", null
+                "employees", employees
         )).build();
     }
 
@@ -362,7 +364,7 @@ public class HomeReceptionController {
                     "errorMessage", errorMessage,
                     "successMessage", null,
                     "guests", guests,
-                    "visits", null
+                    "employees", null
             )).build();
         }
 

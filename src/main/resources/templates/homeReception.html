@@ -676,58 +676,60 @@
                     <p class="success-message">{successMessage}</p>
                     {/if}
 
-                    <form action="/home-reception/add-visit" method="post">
-                        <label for="date">
-                            Data:
-                            <input style="cursor: text;" type="date" name="date" required>
-                        </label>
+                <form action="/home-reception/add-visit" method="post">
+                    <label for="date">
+                        Data:
+                        <input type="date" name="date" required>
+                    </label>
+                    <label for="expectedStart">
+                        Ora di inizio:
+                        <select name="expectedStart" required>
+                            <option value="" selected disabled></option>
+                            <option value="09:00">9:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                    </label>
+                    <label for="expectedEnd">
+                        Ora di fine:
+                        <select name="expectedEnd" required>
+                            <option value="" selected disabled></option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                        </select>
+                    </label>
+                    <label for="guest">
+                        Inserisci l'ospite:
+                        <select name="guest" required>
+                            {#for guest in guests}
+                                <option value="{guest.id}">{guest.name} {guest.surname} {guest.phoneNumber}</option>
+                            {/for}
+                        </select>
+                    </label>
+                    <label for="employee">
+                        Inserisci il dipendente:
+                        <select name="employee" required>
+                            {#for employee in employees}
+                                <option value="{employee.id}">{employee.name} {employee.surname}</option>
+                            {/for}
+                        </select>
+                    </label>
+                    <button type="submit">Aggiungi</button>
+                </form>
+            {/if}
 
-                        <label for="expectedStart">
-                            Ora di inizio:
-                            <select name="expectedStart" required>
-                                <option value="" selected disabled>Seleziona</option>
-                                <option value="09:00">9:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                            </select>
-                        </label>
-
-                        <label for="expectedEnd">
-                            Ora di fine:
-                            <select name="expectedEnd" required>
-                                <option value="" selected disabled>Seleziona</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                            </select>
-                        </label>
-
-                        <label for="guest">
-                            Inserisci l'ospite:
-                            <select name="guest" required>
-                                <option value="" selected disabled>Seleziona un ospite</option>
-                                {#for guest in guests}
-                                <option value="{guest.id}">{guest.name} {guest.surname}</option>
-                                {/for}
-                            </select>
-                        </label>
-
-                        <button type="submit">Aggiungi</button>
-                    </form>
-                </div>
-                {/if}
-
-                {#if type == "deleteVisit"}
+            {#if type == "deleteVisit"}
                 {#if visits.isEmpty()}
                 <h3 style="color: white; margin-top: 15%">Non ci sono visite da eliminare</h3>
                 {#else}
