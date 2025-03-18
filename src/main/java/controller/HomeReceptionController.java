@@ -4,7 +4,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import model.Employee;
 import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
-import utilities.validation.CredentialsValidator;
+import utilities.validation.FormValidator;
 
 @Path("/home-reception")
 public class HomeReceptionController {
@@ -35,15 +34,15 @@ public class HomeReceptionController {
     private final Template homeReception;
     private final SessionManager sessionManager;
     private final VisitManager visitManager;
-    private final CredentialsValidator credentialsValidator;
+    private final FormValidator formValidator;
     private final GuestManager guestManager;
     private final EmployeeManager employeeManager;
 
-    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, CredentialsValidator credentialsValidator, GuestManager guestManager, EmployeeManager employeeManager) {
+    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager) {
         this.homeReception = homeReception;
         this.sessionManager = sessionManager;
         this.visitManager = visitManager;
-        this.credentialsValidator = credentialsValidator;
+        this.formValidator = formValidator;
         this.guestManager = guestManager;
         this.employeeManager = employeeManager;
     }
@@ -113,7 +112,7 @@ public class HomeReceptionController {
     @GET
     public TemplateInstance showAssignBadge() {
 
-        List<Visit> unstartedVisits = visitManager.getUnstartedVisits();
+        List<Visit> unstartedVisits = visitManager.getUnstartedVisitsByDate(LocalDate.now());
         return homeReception.data("visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
 
     }
@@ -134,7 +133,7 @@ public class HomeReceptionController {
 
         String errorMessage = null;
 
-        if(!credentialsValidator.checkStringForm(badgeCode)){
+        if(!formValidator.checkStringForm(badgeCode)){
             errorMessage = "Il badge è vuoto";
         }
 
@@ -152,7 +151,7 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
                     "successMessage", null,
-                    "visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager)
+                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
             )).build();
         }
 
@@ -243,11 +242,12 @@ public class HomeReceptionController {
     }
 
     /***
-     * Adds a new guest after validating input fields.
+     * Adds a new guest after validating the input.
      *
      * @param sessionId the session cookie
      * @param name      the guest's first name
      * @param surname   the guest's last name
+     * @param phoneNumber   the guest's phone number
      * @param role      the guest's role
      * @param company   the guest's company
      * @return the HTML response with success or error messages
@@ -258,18 +258,30 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
-            @FormParam("company") String company,
-            @FormParam("phoneNumber") String phoneNumber
+            @FormParam("company") String company
     ){
         String errorMessage = null;
 
-        if(!credentialsValidator.checkStringForm(name)){
-            errorMessage = "Il nome non è valido";
+        if(!formValidator.checkStringForm(name)){
+            errorMessage = "Nome non valido";
         }
 
-        if(!credentialsValidator.checkStringForm(surname)){
-            errorMessage = "Il cognome non è valido";
+        if(errorMessage == null && !formValidator.checkStringForm(surname)){
+            errorMessage = "Cognome non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
+            errorMessage = "Numero di telefono non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(role)){
+            errorMessage = "Ruolo non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(company)){
+            errorMessage = "Azienda non valida";
         }
 
         if(errorMessage != null){
@@ -307,13 +319,14 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ){
         List<Guest> guests = guestManager.getGuestsFromFile();
+        List<Employee> employees = employeeManager.getEmployeesFromFile();
 
         return Response.ok(homeReception.data(
                 "type", "addVisit",
                 "errorMessage", null,
                 "successMessage", null,
                 "guests", guests,
-                "visits", null
+                "employees", employees
         )).build();
     }
 
@@ -337,10 +350,31 @@ public class HomeReceptionController {
             @FormParam("guest") String guestId
     ) {
         List<Guest> guests = guestManager.getGuestsFromFile();
+        List<Employee> employees = employeeManager.getEmployeesFromFile();
         String errorMessage = null;
 
-        if(expectedStart.isAfter(expectedEnd) || expectedStart.equals(expectedEnd)) {
-            errorMessage = "L'orario previsto di inizio deve essere prima dell'orario previsto di fine.";
+        if (!formValidator.checkDateNotNull(date)) {
+            errorMessage = "Data non può essere vuota";
+        }
+
+        if (errorMessage == null && !formValidator.checkDate(date)) {
+            errorMessage = "La visita deve essere inserita almeno un giorno prima";
+        }
+
+        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
+            errorMessage = "L'ora di inizio non può essere vuota";
+        }
+
+        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
+            errorMessage = "L'ora di inizio non può essere vuota";
+        }
+
+        if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
+            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(guestId)){
+            errorMessage = "Azienda non valida";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -362,7 +396,7 @@ public class HomeReceptionController {
                     "errorMessage", errorMessage,
                     "successMessage", null,
                     "guests", guests,
-                    "visits", null
+                    "employees", employees
             )).build();
         }
 
@@ -385,7 +419,7 @@ public class HomeReceptionController {
                     "errorMessage", null,
                     "successMessage", successMessage,
                     "guests", guests,
-                    "visits", null
+                    "employees", employees
             )).build();
         }
         else{
@@ -394,7 +428,7 @@ public class HomeReceptionController {
                     "errorMessage", "Esiste gia un altra visita aggiunta",
                     "successMessage", null,
                     "guests", guests,
-                    "visits", null
+                    "employees", employees
             )).build();
         }
     }
@@ -450,21 +484,4 @@ public class HomeReceptionController {
                 "visits", visits
         )).build();
     }
-
-    private static List<Visit> completeVisits(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
-
-        List<Visit> completedVisits = new ArrayList<>();
-
-        for(Visit visit : visits){
-            Guest guest = guestManager.getGuestById(visit.getGuestId());
-            Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
-
-            visit.setGuestId(guest.getSurname());
-            visit.setEmployeeId(employee.getSurname());
-
-            completedVisits.add(visit);
-        }
-        return completedVisits;
-    }
-
 }

@@ -5,22 +5,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import model.Employee;
 import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class VisitManager {
@@ -156,10 +156,11 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getActualStartingHour() != LocalTime.parse("00:00")
-                    && visit.getActualEndingHour() == LocalTime.parse("00:00")) {
-                filteredVisits.add(visit);
+            if (!(visit.getActualStartingHour() != LocalTime.parse("00:00")
+                    && visit.getActualEndingHour() == LocalTime.parse("00:00"))) {
+                continue;
             }
+            filteredVisits.add(visit);
         }
 
         return filteredVisits;
@@ -175,12 +176,43 @@ public class VisitManager {
      */
     public List<Visit> getUnstartedVisits() {
         List<Visit> visits = getVisitsFromFile();
-
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if (visit.getActualStartingHour() == LocalTime.parse("00:00")
-                    && visit.getActualEndingHour() == LocalTime.parse("00:00")) {
+            if(!visit.getBadgeCode().isEmpty()) {
+                continue;
+            }
+            else if (!(visit.getActualStartingHour() == LocalTime.parse("00:00")
+                    && visit.getActualEndingHour() == LocalTime.parse("00:00"))) {
+                continue;
+            }
+            filteredVisits.add(visit);
+        }
+
+        return filteredVisits;
+    }
+
+    /**
+     * Filters unstarted visits by a specific date.
+     *
+     * This method filters and returns all unstarted visits that match the provided date.
+     *
+     * @param date The date to filter visits by.
+     * @return A list of unstarted visits that match the provided date.
+     */
+    public List<Visit> getUnstartedVisitsByDate(LocalDate date) {
+        List<Visit> visits = getVisitsFromFile();
+        List<Visit> filteredVisits = new ArrayList<>();
+
+        for (Visit visit : visits) {
+            if(visit.getDate().equals(date)) {
+                if(!visit.getBadgeCode().isEmpty()) {
+                    continue;
+                }
+                else if (!(visit.getActualStartingHour() == LocalTime.parse("00:00")
+                        && visit.getActualEndingHour() == LocalTime.parse("00:00"))) {
+                    continue;
+                }
                 filteredVisits.add(visit);
             }
         }

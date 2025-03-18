@@ -283,48 +283,48 @@
 </head>
 
 <body>
-    <header class="header">
-        <div class="title-box">
-            <h1>InfoDrive</h1>
-            <p>"Il portale smart per la gestione intelligente"</p>
-        </div>
-        <nav>
-            <div class="menu">
-                <div class="nav-links" id="nav-links">
-                    <a href="/home-reception/add-guest">Anagrafa un nuovo ospite</a>
-                    <a href="/home-reception/add-visit">Inserisci nuova visita</a>
-                    <a href="/home-reception/delete-visit">Annulla visita</a>
-                    <a href="/logout">LOGOUT</a>
-                </div>
-                <div class="hamburger-menu" id="hamburger-menu">
-                    <span></span><span></span><span></span>
-                </div>
+<header class="header">
+    <div class="title-box">
+        <h1>InfoDrive</h1>
+        <p>"Il portale smart per la gestione intelligente"</p>
+    </div>
+    <nav>
+        <div class="menu">
+            <div class="nav-links" id="nav-links">
+                <a href="/home-reception/add-guest">Anagrafa un nuovo ospite</a>
+                <a href="/home-reception/add-visit">Inserisci nuova visita</a>
+                <a href="/home-reception/delete-visit">Annulla visita</a>
+                <a href="/logout">LOGOUT</a>
             </div>
-        </nav>
-    </header>
-
-    <section class="main">
-        <div class="buttons-container">
-            <a href="/home-reception/show-visits" class="no-decoration">
-                <div class="button">Visualizza visite</div>
-            </a>
-            <a href="/home-reception/assign-badge" class="no-decoration">
-                <div class="button">Assegna badge</div>
-            </a>
-            <a href="/home-reception/close-visit" class="no-decoration">
-                <div class="button">Segna fine visita</div>
-            </a>
+            <div class="hamburger-menu" id="hamburger-menu">
+                <span></span><span></span><span></span>
+            </div>
         </div>
-        <section class="content" id="dynamic-content">
-            <table class="content-table">
-                {#if type == null}
+    </nav>
+</header>
+
+<section class="main">
+    <div class="buttons-container">
+        <a href="/home-reception/show-visits" class="no-decoration">
+            <div class="button">Visualizza visite</div>
+        </a>
+        <a href="/home-reception/assign-badge" class="no-decoration">
+            <div class="button">Assegna badge</div>
+        </a>
+        <a href="/home-reception/close-visit" class="no-decoration">
+            <div class="button">Segna fine visita</div>
+        </a>
+    </div>
+    <section class="content" id="dynamic-content">
+        <table class="content-table">
+            {#if type == null}
                 <h1 style="color: white; margin-top: 15%" id="placeholder">
                     Benvenuto {employee.name} {employee.surname}!<br>
                     Seleziona un'opzione per visualizzare i dettagli.
                 </h1>
-                {/if}
+            {/if}
 
-                {#if type == 'showVisits'}
+            {#if type == 'showVisits'}
                 <div class="date-filter">
                     <h4 style="color: white; font-size: large">Inserisci una data per vedere le visite di quel giorno:
                     </h4>
@@ -334,9 +334,9 @@
                     </form>
                 </div>
                 {#if visits.isEmpty() || visits == null}
-                <h3 style="color: white; margin-top: 15%">Non ci sono visite da visualizzare</h3>
+                    <h3 style="color: white; margin-top: 15%">Non ci sono visite da visualizzare</h3>
                 {#else}
-                <thead>
+                    <thead>
                     <tr>
                         <th>Data</th>
                         <th>Previsto Orario Inizio</th>
@@ -348,28 +348,28 @@
                         <th>Dipendente</th>
                         <th>Badge</th>
                     </tr>
-                </thead>
-                <tbody style="background-color: white">
+                    </thead>
+                    <tbody style="background-color: white">
                     {#for visit in visits}
-                    <tr>
-                        <td>{visit.date}</td>
-                        <td>{visit.expectedStartingHour}</td>
-                        <td>{visit.actualStartingHour}</td>
-                        <td>{visit.expectedEndingHour}</td>
-                        <td>{visit.actualEndingHour}</td>
-                        <td>{visit.status}</td>
-                        <td>{visit.guestId}</td>
-                        <td>{visit.employeeId}</td>
-                        <td>{visit.badgeCode}</td>
-                    </tr>
+                        <tr>
+                            <td>{visit.date}</td>
+                            <td>{visit.expectedStartingHour}</td>
+                            <td>{visit.actualStartingHour}</td>
+                            <td>{visit.expectedEndingHour}</td>
+                            <td>{visit.actualEndingHour}</td>
+                            <td>{visit.status}</td>
+                            <td>{visit.guestId}</td>
+                            <td>{visit.employeeId}</td>
+                            <td>{visit.badgeCode}</td>
+                        </tr>
                     {/for}
-                </tbody>
+                    </tbody>
                 {/if}
-                {/if}
+            {/if}
 
-                {#if type == "assignBadge"}
+            {#if type == "assignBadge"}
                 {#if visits.isEmpty() || visits == null}
-                <h3 style="color: white; margin-top: 15%">Non ci sono badge da visualizzare</h3>
+                <h3 style="color: white; margin-top: 15%">Non ci sono visite prenotate per oggi</h3>
                 {#else}
                 <thead>
                     <tr>
@@ -383,8 +383,8 @@
                         <th>Dipendente</th>
                         <th>Badge</th>
                     </tr>
-                </thead>
-                <tbody style="background-color: white">
+                    </thead>
+                    <tbody style="background-color: white">
                     {#for visit in visits}
                     <tr>
                         <td>{visit.date}</td>
@@ -396,25 +396,27 @@
                         <td>{visit.guestId}</td>
                         <td>{visit.employeeId}</td>
                         <td>
-                            <form action="/home-reception/assign-badge" method="post">
+                            <form action="/home-reception/assign-badge" method="post" style="display: flex;flex-direction: row;justify-content: center;align-items: center;">
                                 <input type="hidden" name="visitId" value="{visit.id}">
                                 <input class="filter-button" type="text" name="badge"
                                     placeholder="Inserisci qui il codice badge">
-                                <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                    type="submit">Inserisci</button>
+                                <button style="padding: 5px; cursor: pointer; border: none; border-radius: 5px; background: none; margin-left: 2px"
+                                    type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512"><path fill="#000000" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                                </button>
                             </form>
                         </td>
                     </tr>
                     {/for}
-                </tbody>
+                    </tbody>
                 {/if}
-                {/if}
+            {/if}
 
-                {#if type == "closeVisit"}
+            {#if type == "closeVisit"}
                 {#if visits.isEmpty() || visits == null}
-                <h3 style="color: white; margin-top: 15%">Non ci sono visite da visualizzare</h3>
+                    <h3 style="color: white; margin-top: 15%">Non ci sono visite da visualizzare</h3>
                 {#else}
-                <thead>
+                    <thead>
                     <tr>
                         <th>Data</th>
                         <th>Previsto Orario Inizio</th>
@@ -427,33 +429,34 @@
                         <th>Badge</th>
                         <th></th>
                     </tr>
-                </thead>
-                <tbody style="background-color: white">
+                    </thead>
+                    <tbody style="background-color: white">
                     {#for visit in visits}
-                    <tr>
-                        <td>{visit.date}</td>
-                        <td>{visit.expectedStartingHour}</td>
-                        <td>{visit.actualStartingHour}</td>
-                        <td>{visit.expectedEndingHour}</td>
-                        <td>{visit.actualEndingHour}</td>
-                        <td>{visit.status}</td>
-                        <td>{visit.guestId}</td>
-                        <td>{visit.employeeId}</td>
-                        <td>{visit.badgeCode}</td>
-                        <td>
-                            <form action="/home-reception/close-visit" method="post">
-                                <input type="hidden" name="visitId" value="{visit.id}">
-                                <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                    type="submit">Concludi</button>
-                            </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{visit.date}</td>
+                            <td>{visit.expectedStartingHour}</td>
+                            <td>{visit.actualStartingHour}</td>
+                            <td>{visit.expectedEndingHour}</td>
+                            <td>{visit.actualEndingHour}</td>
+                            <td>{visit.status}</td>
+                            <td>{visit.guestId}</td>
+                            <td>{visit.employeeId}</td>
+                            <td>{visit.badgeCode}</td>
+                            <td>
+                                <form action="/home-reception/close-visit" method="post">
+                                    <input type="hidden" name="visitId" value="{visit.id}">
+                                    <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
+                                            type="submit">Concludi
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                     {/for}
-                </tbody>
+                    </tbody>
                 {/if}
-                {/if}
+            {/if}
 
-                {#if type == "addGuest"}
+            {#if type == "addGuest"}
                 <style>
                     .guest-form {
                         background-color: white;
@@ -572,281 +575,286 @@
                         <button type="submit">Aggiungi</button>
                     </form>
                 </div>
-                {/if}
+            {/if}
 
 
-                {#if type == "addVisit"}
-                <style>
+            {#if type == "addVisit"}
+            <style>
+                .visit-form {
+                    background-color: white;
+                    color: black;
+                    padding: 40px;
+                    border-radius: 30px;
+                    box-shadow: 0px 5px 30px 15px #0000006a;
+                    width: 90%;
+                    max-width: 500px;
+                    margin: 5% auto;
+                }
+
+                .visit-form h1 {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+
+                .visit-form label {
+                    display: flex;
+                    flex-direction: column;
+                    margin: 10px 0;
+                    font-weight: bold;
+                }
+
+                .visit-form input,
+                .visit-form select {
+                    width: 80%;
+                    cursor: pointer;
+                    align-self: center;
+                    padding: 10px;
+                    margin-top: 5px;
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    background-color: white;
+                }
+
+                .visit-form button {
+                    width: 30%;
+                    padding: 15px;
+                    background-color: black;
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    margin-top: 15px;
+                    font-size: 16px;
+                }
+
+                .visit-form button:hover {
+                    background-color: #333;
+                }
+
+                .error-message,
+                .success-message {
+                    text-align: center;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                .error-message {
+                    color: red;
+                }
+
+                .success-message {
+                    color: green;
+                }
+
+                @media (max-width: 600px) {
                     .visit-form {
-                        background-color: white;
-                        color: black;
-                        padding: 40px;
-                        border-radius: 30px;
-                        box-shadow: 0px 5px 30px 15px #0000006a;
-                        width: 90%;
-                        max-width: 500px;
-                        margin: 5% auto;
+                        padding: 20px;
                     }
 
                     .visit-form h1 {
-                        text-align: center;
-                        margin-bottom: 20px;
-                    }
-
-                    .visit-form label {
-                        display: flex;
-                        flex-direction: column;
-                        margin: 10px 0;
-                        font-weight: bold;
+                        font-size: 22px;
                     }
 
                     .visit-form input,
                     .visit-form select {
-                        width: 80%;
-                        cursor: pointer;
-                        align-self: center;
-                        padding: 10px;
-                        margin-top: 5px;
-                        border: 1px solid #ccc;
-                        border-radius: 10px;
-                        font-size: 16px;
-                        background-color: white;
+                        font-size: 14px;
                     }
 
                     .visit-form button {
-                        width: 30%;
-                        padding: 15px;
-                        background-color: black;
-                        color: white;
-                        border: none;
-                        border-radius: 10px;
-                        cursor: pointer;
-                        margin-top: 15px;
-                        font-size: 16px;
+                        font-size: 14px;
+                        padding: 12px;
                     }
+                }
+            </style>
 
-                    .visit-form button:hover {
-                        background-color: #333;
-                    }
+            <div class="visit-form">
+                <h1>Aggiungi una nuova visita</h1>
 
-                    .error-message,
-                    .success-message {
-                        text-align: center;
-                        font-size: 16px;
-                        font-weight: bold;
-                    }
-
-                    .error-message {
-                        color: red;
-                    }
-
-                    .success-message {
-                        color: green;
-                    }
-
-                    @media (max-width: 600px) {
-                        .visit-form {
-                            padding: 20px;
-                        }
-
-                        .visit-form h1 {
-                            font-size: 22px;
-                        }
-
-                        .visit-form input,
-                        .visit-form select {
-                            font-size: 14px;
-                        }
-
-                        .visit-form button {
-                            font-size: 14px;
-                            padding: 12px;
-                        }
-                    }
-                </style>
-
-                <div class="visit-form">
-                    <h1>Aggiungi una nuova visita</h1>
-
-                    {#if errorMessage != null}
+                {#if errorMessage != null}
                     <p class="error-message">{errorMessage}</p>
-                    {/if}
+                {/if}
 
-                    {#if successMessage != null}
+                {#if successMessage != null}
                     <p class="success-message">{successMessage}</p>
-                    {/if}
+                {/if}
 
-                    <form action="/home-reception/add-visit" method="post">
-                        <label for="date">
-                            Data:
-                            <input style="cursor: text;" type="date" name="date" required>
-                        </label>
-
-                        <label for="expectedStart">
-                            Ora di inizio:
-                            <select name="expectedStart" required>
-                                <option value="" selected disabled>Seleziona</option>
-                                <option value="09:00">9:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                            </select>
-                        </label>
-
-                        <label for="expectedEnd">
-                            Ora di fine:
-                            <select name="expectedEnd" required>
-                                <option value="" selected disabled>Seleziona</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                            </select>
-                        </label>
-
-                        <label for="guest">
-                            Inserisci l'ospite:
-                            <select name="guest" required>
-                                <option value="" selected disabled>Seleziona un ospite</option>
-                                {#for guest in guests}
-                                <option value="{guest.id}">{guest.name} {guest.surname}</option>
-                                {/for}
-                            </select>
-                        </label>
-
-                        <button type="submit">Aggiungi</button>
-                    </form>
-                </div>
+                <form action="/home-reception/add-visit" method="post">
+                    <label for="date">
+                        Data:
+                        <input type="date" name="date" required>
+                    </label>
+                    <label for="expectedStart">
+                        Ora di inizio:
+                        <select name="expectedStart" required>
+                            <option value="" selected disabled></option>
+                            <option value="09:00">9:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                    </label>
+                    <label for="expectedEnd">
+                        Ora di fine:
+                        <select name="expectedEnd" required>
+                            <option value="" selected disabled></option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                        </select>
+                    </label>
+                    <label for="guest">
+                        Inserisci l'ospite:
+                        <select name="guest" required>
+                            {#for guest in guests}
+                                <option value="{guest.id}">{guest.name} {guest.surname} {guest.phoneNumber}</option>
+                            {/for}
+                        </select>
+                    </label>
+                    <label for="employee">
+                        Inserisci il dipendente:
+                        <select name="employee" required>
+                            {#for employee in employees}
+                                <option value="{employee.id}">{employee.name} {employee.surname}</option>
+                            {/for}
+                        </select>
+                    </label>
+                    <button type="submit">Aggiungi</button>
+                </form>
                 {/if}
 
                 {#if type == "deleteVisit"}
-                {#if visits.isEmpty()}
-                <h3 style="color: white; margin-top: 15%">Non ci sono visite da eliminare</h3>
-                {#else}
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Previsto Orario Inizio</th>
-                        <th>Ora Effettiva Inizio</th>
-                        <th>Prevista Ora Fine</th>
-                        <th>Ora Effettiva Fine</th>
-                        <th>Status</th>
-                        <th>Ospite</th>
-                        <th>Dipendente</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody style="background-color: white">
-                    {#for visit in visits}
-                    <tr>
-                        <td>{visit.date}</td>
-                        <td>{visit.expectedStartingHour}</td>
-                        <td>{visit.actualStartingHour}</td>
-                        <td>{visit.expectedEndingHour}</td>
-                        <td>{visit.actualEndingHour}</td>
-                        <td>{visit.status}</td>
-                        <td>{visit.guestId}</td>
-                        <td>{visit.employeeId}</td>
-                        <td>
-                            <form action="/home-reception/delete-visit" method="post"
-                                onsubmit="return confirmDelete(event, this)">
-                                <input type="hidden" name="visitId" value="{visit.id}">
-                                <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                    type="submit">Cancella</button>
-                            </form>
+                    {#if visits.isEmpty()}
+                        <h3 style="color: white; margin-top: 15%">Non ci sono visite da eliminare</h3>
+                    {#else}
+                        <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Previsto Orario Inizio</th>
+                            <th>Ora Effettiva Inizio</th>
+                            <th>Prevista Ora Fine</th>
+                            <th>Ora Effettiva Fine</th>
+                            <th>Status</th>
+                            <th>Ospite</th>
+                            <th>Dipendente</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody style="background-color: white">
+                        {#for visit in visits}
+                            <tr>
+                                <td>{visit.date}</td>
+                                <td>{visit.expectedStartingHour}</td>
+                                <td>{visit.actualStartingHour}</td>
+                                <td>{visit.expectedEndingHour}</td>
+                                <td>{visit.actualEndingHour}</td>
+                                <td>{visit.status}</td>
+                                <td>{visit.guestId}</td>
+                                <td>{visit.employeeId}</td>
+                                <td>
+                                    <form action="/home-reception/delete-visit" method="post"
+                                          onsubmit="return confirmDelete(event, this)">
+                                        <input type="hidden" name="visitId" value="{visit.id}">
+                                        <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
+                                                type="submit">Cancella
+                                        </button>
+                                    </form>
 
-                        </td>
-                    </tr>
-                    {/for}
-            </table>
-            {/if}
-            {/if}
-            </table>
-        </section>
+                                </td>
+                            </tr>
+                        {/for}
+                        </tbody>
+                    {/if}
+                {/if}
+            </div>
+        </table>
     </section>
+</section>
 
-    <script>
-        document.getElementById("hamburger-menu").addEventListener("click", function () {
-            document.getElementById("nav-links").classList.toggle("active");
-        });
-        function confirmDelete(event, form) {
-            event.preventDefault();
-            let overlay = document.createElement("div");
-            overlay.style.position = "fixed";
-            overlay.style.top = "0";
-            overlay.style.left = "0";
-            overlay.style.width = "100vw";
-            overlay.style.height = "100vh";
-            overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-            overlay.style.display = "flex";
-            overlay.style.justifyContent = "center";
-            overlay.style.alignItems = "center";
-            overlay.style.zIndex = "1000";
+<script>
+    document.getElementById("hamburger-menu").addEventListener("click", function () {
+        document.getElementById("nav-links").classList.toggle("active");
+    });
 
-            let modal = document.createElement("div");
-            modal.style.backgroundColor = "white";
-            modal.style.padding = "70px";
-            modal.style.borderRadius = "10px";
-            modal.style.fontSize = "30px";
-            modal.style.textAlign = "center";
-            modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";
+    function confirmDelete(event, form) {
+        event.preventDefault();
+        let overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100vw";
+        overlay.style.height = "100vh";
+        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        overlay.style.display = "flex";
+        overlay.style.justifyContent = "center";
+        overlay.style.alignItems = "center";
+        overlay.style.zIndex = "1000";
 
-            let btnYes = document.createElement("button-confirm");
-            btnYes.textContent = "Sì, elimina";
-            btnYes.style.backgroundColor = "#ff4d4d"; // Rosso chiaro
-            btnYes.style.padding = "12px 20px";
-            btnYes.style.fontSize = "16px";
-            btnYes.style.fontWeight = "bold";
-            btnYes.style.borderRadius = "8px";
-            btnYes.style.border = "2px solid #ff0000";
-            btnYes.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-            btnYes.style.marginRight = "20px";
-            btnYes.onmouseover = function () {
-                btnYes.style.backgroundColor = "#cc0000"; // Rosso più scuro al passaggio del mouse
-            };
-            btnYes.onmouseout = function () {
-                btnYes.style.backgroundColor = "#ff4d4d";
-            };
-            btnYes.onclick = function () {
-                form.submit();
-            };
+        let modal = document.createElement("div");
+        modal.style.backgroundColor = "white";
+        modal.style.padding = "70px";
+        modal.style.borderRadius = "10px";
+        modal.style.fontSize = "30px";
+        modal.style.textAlign = "center";
+        modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";
 
-            let btnNo = document.createElement("button-confirm");
-            btnNo.textContent = "Annulla";
-            btnNo.style.backgroundColor = "#555"; // Grigio scuro
-            btnNo.style.color = "white";
-            btnNo.style.padding = "12px 20px";
-            btnNo.style.fontSize = "16px";
-            btnNo.style.borderRadius = "8px";
-            btnNo.style.border = "2px solid #333";
-            btnNo.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-            btnNo.style.marginLeft = "20px";
-            btnNo.onmouseover = function () {
-                btnNo.style.backgroundColor = "#777"; // Grigio più chiaro al passaggio del mouse
-            };
-            btnNo.onmouseout = function () {
-                btnNo.style.backgroundColor = "#555";
-            };
-            btnNo.onclick = function () {
-                document.body.removeChild(overlay);
-            };
+        let btnYes = document.createElement("button-confirm");
+        btnYes.textContent = "Sì, elimina";
+        btnYes.style.backgroundColor = "#ff4d4d"; // Rosso chiaro
+        btnYes.style.padding = "12px 20px";
+        btnYes.style.fontSize = "16px";
+        btnYes.style.fontWeight = "bold";
+        btnYes.style.borderRadius = "8px";
+        btnYes.style.border = "2px solid #ff0000";
+        btnYes.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
+        btnYes.style.marginRight = "20px";
+        btnYes.onmouseover = function () {
+            btnYes.style.backgroundColor = "#cc0000"; // Rosso più scuro al passaggio del mouse
+        };
+        btnYes.onmouseout = function () {
+            btnYes.style.backgroundColor = "#ff4d4d";
+        };
+        btnYes.onclick = function () {
+            form.submit();
+        };
 
-            modal.appendChild(btnYes);
-            modal.appendChild(btnNo);
-            overlay.appendChild(modal);
-            document.body.appendChild(overlay);
+        let btnNo = document.createElement("button-confirm");
+        btnNo.textContent = "Annulla";
+        btnNo.style.backgroundColor = "#555"; // Grigio scuro
+        btnNo.style.color = "white";
+        btnNo.style.padding = "12px 20px";
+        btnNo.style.fontSize = "16px";
+        btnNo.style.borderRadius = "8px";
+        btnNo.style.border = "2px solid #333";
+        btnNo.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
+        btnNo.style.marginLeft = "20px";
+        btnNo.onmouseover = function () {
+            btnNo.style.backgroundColor = "#777"; // Grigio più chiaro al passaggio del mouse
+        };
+        btnNo.onmouseout = function () {
+            btnNo.style.backgroundColor = "#555";
+        };
+        btnNo.onclick = function () {
+            document.body.removeChild(overlay);
+        };
 
-            return false;
-        }
-    </script>
+        modal.appendChild(btnYes);
+        modal.appendChild(btnNo);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        return false;
+    }
+</script>
 </body>
 
 </html>
