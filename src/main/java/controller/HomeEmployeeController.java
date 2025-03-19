@@ -81,12 +81,16 @@ public class HomeEmployeeController {
     @GET
     @Path("/add-guest")
     public Response showFormAddGuest(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
-
-        return Response.ok(homeEmployee.data(
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+            return Response.ok(homeEmployee.data(
+                "employee", employee,
                 "type", "addGuest",
                 "errorMessage", null,
                 "successMessage", null
         )).build();
+        }
+        return Response.seeOther(URI.create("/")).build();
     }
 
     /***
@@ -110,6 +114,7 @@ public class HomeEmployeeController {
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
+
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(name)){
@@ -131,13 +136,16 @@ public class HomeEmployeeController {
         if(errorMessage == null && !formValidator.checkStringForm(company)){
             errorMessage = "Azienda non valida";
         }
-
-        if(errorMessage != null){
-            return Response.ok(homeEmployee.data(
-                    "errorMessage", errorMessage,
-                    "successMessage", null,
-                    "type", "addGuest"
-            )).build();
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+            if(errorMessage != null){
+                return Response.ok(homeEmployee.data(
+                        "employee",employee,
+                        "errorMessage", errorMessage,
+                        "successMessage", null,
+                        "type", "addGuest"
+                )).build();
+            }
         }
 
         String newId = "" + guestManager.getNewId();
@@ -145,12 +153,16 @@ public class HomeEmployeeController {
         guestManager.saveGuest(guest);
 
         String successMessage = "Ospite inserito";
-
-        return Response.ok(homeEmployee.data(
-                "errorMessage", null,
-                "successMessage", successMessage,
-                "type", "addGuest"
-        )).build();
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+            return Response.ok(homeEmployee.data(
+                    "employee", employee,
+                    "errorMessage", null,
+                    "successMessage", successMessage,
+                    "type", "addGuest"
+            )).build();
+        }
+        return Response.seeOther(URI.create("/")).build();
     }
 
     /***
@@ -164,14 +176,19 @@ public class HomeEmployeeController {
     public Response showFormAddVisit(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ){
-        List<Guest> guests = guestManager.getGuestsFromFile();
 
-        return Response.ok(homeEmployee.data(
-                "guests", guests,
-                "type", "addVisit",
-                "errorMessage", null,
-                "successMessage", null
-        )).build();
+        List<Guest> guests = guestManager.getGuestsFromFile();
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+            return Response.ok(homeEmployee.data(
+                    "employee",employee,
+                    "guests", guests,
+                    "type", "addVisit",
+                    "errorMessage", null,
+                    "successMessage", null
+            )).build();
+        }
+        return Response.seeOther(URI.create("/")).build();
     }
 
     /***
@@ -232,14 +249,18 @@ public class HomeEmployeeController {
         if(countOverlapVisits == MAX_BADGE) {
             errorMessage = "I badge sono terminati";
         }
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        if(errorMessage != null){
-            return Response.ok(homeEmployee.data(
-                    "errorMessage", errorMessage,
-                    "successMessage", null,
-                    "guests", guests,
-                    "type", "addVisit"
-            )).build();
+            if(errorMessage != null){
+                return Response.ok(homeEmployee.data(
+                        "employee",employee,
+                        "errorMessage", errorMessage,
+                        "successMessage", null,
+                        "guests", guests,
+                        "type", "addVisit"
+                )).build();
+            }
         }
 
         String newId = "" + visitManager.getNewId();
@@ -257,6 +278,7 @@ public class HomeEmployeeController {
             String successMessage = "Visita aggiunta";
 
             return Response.ok(homeEmployee.data(
+                    "employee",employee,
                     "successMessage", successMessage,
                     "errorMessage", null,
                     "guests", guests,
@@ -265,6 +287,7 @@ public class HomeEmployeeController {
         }
         else {
             return Response.ok(homeEmployee.data(
+                    "employee",employee,
                     "successMessage", null,
                     "errorMessage", "Esiste gia un altra visita aggiunta",
                     "guests", guests,
@@ -289,6 +312,7 @@ public class HomeEmployeeController {
         filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
         return Response.ok(homeEmployee.data(
+                "employee",employee,
                 "visits", filteredVisits,
                 "type", "deleteVisit",
                 "errorMessage", null,
@@ -320,6 +344,7 @@ public class HomeEmployeeController {
         filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
         return Response.ok(homeEmployee.data(
+                "employee",employee,
                 "visits", visitsByEmployeeId,
                 "type", "deleteVisit",
                 "errorMessage", null,
