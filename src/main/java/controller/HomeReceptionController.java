@@ -15,11 +15,10 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
-import logic.EmployeeManager;
-import logic.GuestManager;
-import logic.SessionManager;
+import logic.*;
+
 import static logic.SessionManager.NAME_COOKIE_SESSION;
-import logic.VisitManager;
+
 import model.Employee;
 import model.Guest;
 import model.visit.Visit;
@@ -29,22 +28,22 @@ import utilities.validation.FormValidator;
 @Path("/home-reception")
 public class HomeReceptionController {
 
-    private final static int MAX_BADGE = 2;
-
     private final Template homeReception;
     private final SessionManager sessionManager;
     private final VisitManager visitManager;
     private final FormValidator formValidator;
     private final GuestManager guestManager;
     private final EmployeeManager employeeManager;
+    private final BadgeManager badgeManager;
 
-    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager) {
+    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager, BadgeManager badgeManager) {
         this.homeReception = homeReception;
         this.sessionManager = sessionManager;
         this.visitManager = visitManager;
         this.formValidator = formValidator;
         this.guestManager = guestManager;
         this.employeeManager = employeeManager;
+        this.badgeManager = badgeManager;
     }
 
     /***
@@ -132,18 +131,25 @@ public class HomeReceptionController {
             @FormParam("badge") String badgeCode,
             @FormParam("visitId") String visitId
     ){
-
+        List<String> badges = badgeManager.getBadgesFromFile();
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(badgeCode)){
-            errorMessage = "Il badge è vuoto";
+            errorMessage = "Badge code is empty.";
+        }
+
+        for(String badge:badges){
+            if(!badge.equals(badgeCode)){
+                errorMessage = "The badge code don't exist.";
+                break;
+            }
         }
 
         List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
 
         for(Visit visit : unfinishedVisits){
             if(visit.getBadgeCode().equals(badgeCode)){
-                errorMessage = "Questo badge non è disponibile";
+                errorMessage = "This badge code is not available";
                 break;
             }
         }
@@ -397,7 +403,7 @@ public class HomeReceptionController {
             }
         }
 
-        if(countOverlapVisits == MAX_BADGE){
+        if(countOverlapVisits == badgeManager.countBadges()){
             errorMessage = "I badge sono terminati";
         }
 

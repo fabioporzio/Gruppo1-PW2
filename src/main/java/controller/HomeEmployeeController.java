@@ -4,6 +4,7 @@ import io.quarkus.qute.Template;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import logic.BadgeManager;
 import logic.GuestManager;
 import logic.SessionManager;
 import logic.VisitManager;
@@ -24,20 +25,20 @@ import static logic.SessionManager.NAME_COOKIE_SESSION;
 @Path("/home-employee")
 public class HomeEmployeeController {
 
-    private final static int MAX_BADGE = 2;
-
     private final Template homeEmployee;
     private final SessionManager sessionManager;
     private final GuestManager guestManager;
     private final VisitManager visitManager;
     private final FormValidator formValidator;
+    private final BadgeManager badgeManager;
 
-    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, FormValidator formValidator) {
+    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, FormValidator formValidator, BadgeManager badgeManager) {
         this.homeEmployee = homeEmployee;
         this.sessionManager = sessionManager;
         this.guestManager = guestManager;
         this.visitManager = visitManager;
         this.formValidator = formValidator;
+        this.badgeManager = badgeManager;
     }
 
 
@@ -257,7 +258,7 @@ public class HomeEmployeeController {
             }
         }
 
-        if(countOverlapVisits == MAX_BADGE) {
+        if(countOverlapVisits == badgeManager.countBadges()) {
             errorMessage = "I badge sono terminati";
         }
         if (sessionId != null) {
