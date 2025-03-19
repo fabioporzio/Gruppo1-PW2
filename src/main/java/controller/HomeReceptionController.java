@@ -468,7 +468,7 @@ public class HomeReceptionController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null,
-                "visits", visits
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager)
         )).build();
     }
 
@@ -498,7 +498,7 @@ public class HomeReceptionController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null,
-                "visits", visits
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager)
         )).build();
     }
 }
