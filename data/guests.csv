@@ -1,7 +1,9 @@
-id,name,surname,phone_number,role,company,
-1,Mario,Rossi,0000000000,client,elmec,
-2,Luigi,Verdi,0000000000,client,mulino bianco,
-3,Princess,Peach,0000000000,supplier,ferrari,
-4,Tommaso,Brivio,0000000000,Fornitore,Apple
-5,Marco,Corradini,0000000000,Fornitore,Bitcoin
-6,Stefano,Gioia,3405603040,Consulente,ITSIncom
+id,name,surname,email,phone_number,role,company,
+1,Mario,Rossi,mario.rossi@gmail.com,3204567890,client,elmec,
+2,Luigi,Verdi,luigi.verdi@gmail.com,3349876543,client,mulino bianco,
+3,Princess,Peach,princess.peach@gmail.com,3471234567,supplier,ferrari,
+4,Tommaso,Brivio,tommaso.brivio@gmail.com,3602345678,Fornitore,Apple
+5,Marco,Corradini,marco.corradini@gmail.com,3918765432,Fornitore,Bitcoin
+6,Stefano,Gioia,stefano.gioia@gmail.com,3405603040,Consulente,ITSIncom
+7,Fabio,Porzio,fabio.porzio@gmail.com,3405603040,client,Qualcosa
+8,Fabio,Porzio,fabio.porzio@gmail.com,3405603040,supplier,Qualcosa

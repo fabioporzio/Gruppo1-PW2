@@ -4,14 +4,16 @@ public class Guest {
     private String id;
     private String name;
     private String surname;
+    private String email;
     private String phoneNumber;
     private String role;
     private String company;
 
-    public Guest(String id, String name, String surname, String phoneNumber, String role, String company) {
+    public Guest(String id, String name, String surname, String email, String phoneNumber, String role, String company) {
         this.id = id;
         this.name = name;
         this.surname = surname;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.company = company;
@@ -39,6 +41,14 @@ public class Guest {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {

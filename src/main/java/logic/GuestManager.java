@@ -41,11 +41,12 @@ public class GuestManager {
                 String id = record.get("id");
                 String name = record.get("name");
                 String surname = record.get("surname");
+                String email = record.get("email");
                 String phoneNumber = record.get("phone_number");
                 String role = record.get("role");
                 String company = record.get("company");
 
-                Guest guest = new Guest(id, name, surname, phoneNumber, role, company);
+                Guest guest = new Guest(id, name, surname, email, phoneNumber, role, company);
                 guests.add(guest);
             }
         }
@@ -74,6 +75,7 @@ public class GuestManager {
                     guest.getId(),
                     guest.getName(),
                     guest.getSurname(),
+                    guest.getEmail(),
                     guest.getPhoneNumber(),
                     guest.getRole(),
                     guest.getCompany()
@@ -165,7 +167,7 @@ public class GuestManager {
         List<Guest> guests = getGuestsFromFile();
 
         for (Guest guest : guests) {
-            if (guest.getPhoneNumber().equals(Inputguest.getPhoneNumber())) {
+            if (guest.getEmail().equals(Inputguest.getEmail())) {
                 return false;
             }
         }

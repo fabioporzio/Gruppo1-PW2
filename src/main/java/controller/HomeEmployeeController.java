@@ -4,6 +4,7 @@ import io.quarkus.qute.Template;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import logic.BadgeManager;
 import logic.GuestManager;
 import logic.SessionManager;
 import logic.VisitManager;
@@ -24,20 +25,20 @@ import static logic.SessionManager.NAME_COOKIE_SESSION;
 @Path("/home-employee")
 public class HomeEmployeeController {
 
-    private final static int MAX_BADGE = 2;
-
     private final Template homeEmployee;
     private final SessionManager sessionManager;
     private final GuestManager guestManager;
     private final VisitManager visitManager;
     private final FormValidator formValidator;
+    private final BadgeManager badgeManager;
 
-    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, FormValidator formValidator) {
+    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, FormValidator formValidator, BadgeManager badgeManager) {
         this.homeEmployee = homeEmployee;
         this.sessionManager = sessionManager;
         this.guestManager = guestManager;
         this.visitManager = visitManager;
         this.formValidator = formValidator;
+        this.badgeManager = badgeManager;
     }
 
 
@@ -110,6 +111,7 @@ public class HomeEmployeeController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("email") String email,
             @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
             @FormParam("company") String company
@@ -125,6 +127,10 @@ public class HomeEmployeeController {
             errorMessage = "Cognome non valido";
         }
 
+        if(errorMessage == null && !formValidator.checkStringForm(email)){
+            errorMessage = "Email non valida";
+        }
+
         if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
             errorMessage = "Numero di telefono non valido";
         }
@@ -136,6 +142,14 @@ public class HomeEmployeeController {
         if(errorMessage == null && !formValidator.checkStringForm(company)){
             errorMessage = "Azienda non valida";
         }
+
+        String newId = ""+guestManager.getNewId();
+        Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
+
+        if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
+            errorMessage = "L'ospite è già inserito";
+        }
+
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             if(errorMessage != null){
@@ -148,8 +162,6 @@ public class HomeEmployeeController {
             }
         }
 
-        String newId = "" + guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
         guestManager.saveGuest(guest);
 
         String successMessage = "Ospite inserito";
@@ -246,7 +258,7 @@ public class HomeEmployeeController {
             }
         }
 
-        if(countOverlapVisits == MAX_BADGE) {
+        if(countOverlapVisits == badgeManager.countBadges()) {
             errorMessage = "I badge sono terminati";
         }
         if (sessionId != null) {
