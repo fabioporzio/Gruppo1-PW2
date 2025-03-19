@@ -15,10 +15,12 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
-import logic.*;
-
+import logic.BadgeManager;
+import logic.EmployeeManager;
+import logic.GuestManager;
+import logic.SessionManager;
 import static logic.SessionManager.NAME_COOKIE_SESSION;
-
+import logic.VisitManager;
 import model.Employee;
 import model.Guest;
 import model.visit.Visit;
@@ -111,10 +113,18 @@ public class HomeReceptionController {
      */
     @Path("/assign-badge")
     @GET
-    public TemplateInstance showAssignBadge() {
+    public TemplateInstance showAssignBadge(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
+        if (sessionId != null) {
+            List<Visit> unstartedVisits = visitManager.getUnstartedVisitsByDate(LocalDate.now());
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+            return homeReception.data(
+                "employee",employee,
+                "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
+        }
 
-        List<Visit> unstartedVisits = visitManager.getUnstartedVisitsByDate(LocalDate.now());
-        return homeReception.data("visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager), "type","assignBadge");
+        
+
+       return null;
 
     }
 
