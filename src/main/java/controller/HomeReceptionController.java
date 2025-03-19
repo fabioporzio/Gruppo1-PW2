@@ -260,6 +260,7 @@ public class HomeReceptionController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("name") String name,
             @FormParam("surname") String surname,
+            @FormParam("email") String email,
             @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
             @FormParam("company") String company
@@ -272,6 +273,10 @@ public class HomeReceptionController {
 
         if(errorMessage == null && !formValidator.checkStringForm(surname)){
             errorMessage = "Cognome non valido";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringForm(email)){
+            errorMessage = "Email non valida";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
@@ -287,7 +292,7 @@ public class HomeReceptionController {
         }
 
         String newId = ""+guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
+        Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
 
         if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
             errorMessage = "L'ospite è già inserito";
