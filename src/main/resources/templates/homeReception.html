@@ -481,7 +481,8 @@
                         font-weight: bold;
                     }
 
-                    .guest-form input {
+                    .guest-form input,
+                    .guest-form select {
                         align-self: center;
                         width: 80%;
                         padding: 10px;
@@ -531,7 +532,8 @@
                             font-size: 22px;
                         }
 
-                        .guest-form input {
+                        .guest-form input,
+                        .guest-form select {
                             font-size: 14px;
                         }
 
@@ -559,6 +561,10 @@
                         <label for="surname">
                             Cognome:
                             <input type="text" name="surname" required>
+                        </label>
+                        <label for="email">
+                            Email:
+                            <input type="email" name="email" required>
                         </label>
                         <label for="phoneNumber">
                             Numero di telefono:
@@ -722,7 +728,7 @@
                         <select name="guest" required>
                             <option value="" selected disabled></option>
                             {#for guest in guests}
-                                <option value="{guest.id}">{guest.name} {guest.surname} {guest.phoneNumber}</option>
+                                <option value="{guest.id}">{guest.name} {guest.surname} {guest.email}</option>
                             {/for}
                         </select>
                     </label>
