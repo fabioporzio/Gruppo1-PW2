@@ -160,4 +160,15 @@ public class GuestManager {
             return Integer.parseInt(guests.getLast().getId()) + 1;
         }
     }
+
+    public boolean isGuestAlreadyExisting(Guest Inputguest) {
+        List<Guest> guests = getGuestsFromFile();
+
+        for (Guest guest : guests) {
+            if (guest.getPhoneNumber().equals(Inputguest.getPhoneNumber())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

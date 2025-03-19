@@ -81,7 +81,8 @@ public class HomeReceptionController {
 
         return homeReception.data(
                 "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
-                "type","showVisits"
+                "type","showVisits",
+                "inputDate", null
         );
     }
 
@@ -99,7 +100,8 @@ public class HomeReceptionController {
 
         return Response.ok(homeReception.data(
                 "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
-                "type" , "showVisits"
+                "type" , "showVisits",
+                "date", inputDate
         )).build();
     }
 
@@ -280,8 +282,15 @@ public class HomeReceptionController {
             errorMessage = "Ruolo non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(company)){
+        if (errorMessage == null && !formValidator.checkStringForm(company)){
             errorMessage = "Azienda non valida";
+        }
+
+        String newId = ""+guestManager.getNewId();
+        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
+
+        if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
+            errorMessage = "L'ospite è già inserito";
         }
 
         if(errorMessage != null){
@@ -293,10 +302,7 @@ public class HomeReceptionController {
             )).build();
         }
 
-        String newId = ""+guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, phoneNumber, role, company);
         guestManager.saveGuest(guest);
-
         String successMessage = "Ospite aggiunto";
 
         return Response.ok(homeReception.data(
