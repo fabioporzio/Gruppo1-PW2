@@ -132,7 +132,7 @@ public class HomeEmployeeController {
             errorMessage = "Email non valida";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
+        if(errorMessage == null && (!formValidator.checkStringForm(phoneNumber) || !formValidator.checkPhoneNumber(phoneNumber))){
             errorMessage = "Numero di telefono non valido";
         }
 
