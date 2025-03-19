@@ -5,11 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.HashMap;
+
 import java.util.List;
 
 import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
@@ -377,15 +376,16 @@ public class HomeReceptionController {
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
         List<Guest> guests = guestManager.getGuestsFromFile();
         List<Employee> employees = employeeManager.getEmployeesFromFile();
-        HashMap<String, Object> responseData = new HashMap<>();
-        responseData.put("type", "addVisit");
-        responseData.put("errorMessage", null);
-        responseData.put("successMessage", null);
-        responseData.put("guests", guests);
-        responseData.put("employees", employees);
-        responseData.put("employee", employee);
 
-        return Response.ok(responseData).build();
+        return Response.ok(homeReception
+                .data("type" , "addVisit")
+                .data("errorMessage", null)
+                .data("successMessage", null)
+                .data("guests", guests)
+                .data("employees", employees)
+                .data("employee", employee)
+
+        ).build();
 
 
 
@@ -453,14 +453,14 @@ public class HomeReceptionController {
 
         if(errorMessage != null){
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
-            HashMap<String, Object> responseData = new HashMap<>();
-            responseData.put("type", "addVisit");
-            responseData.put("errorMessage", errorMessage);
-            responseData.put("successMessage", null);
-            responseData.put("guests", guests);
-            responseData.put("employees", employees);
-            responseData.put("employee", employee);
-            return Response.ok(responseData).build();
+            return Response.ok(homeReception
+                    .data("type", "addVisit")
+                    .data("errorMessage", errorMessage)
+                    .data("successMessage", null)
+                    .data("guests", guests)
+                    .data("employees", employees)
+                    .data("employee", employee)
+            ).build();
         }
 
         String newId = ""+visitManager.getNewId();
@@ -476,25 +476,25 @@ public class HomeReceptionController {
 
         if (status) {
             String successMessage = "Visita aggiunta";
-            HashMap<String, Object> responseData = new HashMap<>();
-            responseData.put("type","addVisit");
-            responseData.put("errorMessage", null);
-            responseData.put("successMessage", successMessage);
-            responseData.put("guests", guests);
-            responseData.put("employees", employees);
-            responseData.put("employee", employee);
 
-            return Response.ok(responseData).build();
+            return Response.ok(homeReception
+                    .data("type", "addVisit")
+                    .data("errorMessage", null)
+                    .data("successMessage", successMessage)
+                    .data("guests", guests)
+                    .data("employees", employees)
+                    .data("employee", employee)
+            ).build();
         }
         else{
-            HashMap<String, Object> responseData = new HashMap<>();
-            responseData.put("type","addVisit");
-            responseData.put("errorMessage", "Esiste gia un altra visita aggiunta");
-            responseData.put("successMessage", null);
-            responseData.put("guests", guests);
-            responseData.put("employees", employees);
-            responseData.put("employee", employee);
-            return Response.ok(responseData).build();
+            return Response.ok(homeReception
+                    .data("type","addVisit")
+                    .data("errorMessage", "Essiste gia un altra visita aggiunta")
+                    .data("successMessage", null)
+                    .data("guests", guests)
+                    .data("employees", employees)
+                    .data("employee", employee)
+            ).build();
         }
     }
 
