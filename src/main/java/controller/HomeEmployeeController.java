@@ -4,10 +4,7 @@ import io.quarkus.qute.Template;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import logic.BadgeManager;
-import logic.GuestManager;
-import logic.SessionManager;
-import logic.VisitManager;
+import logic.*;
 import model.Employee;
 import model.Guest;
 import model.visit.Visit;
@@ -28,14 +25,16 @@ public class HomeEmployeeController {
     private final Template homeEmployee;
     private final SessionManager sessionManager;
     private final GuestManager guestManager;
+    private final EmployeeManager employeeManager;
     private final VisitManager visitManager;
     private final FormValidator formValidator;
     private final BadgeManager badgeManager;
 
-    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, VisitManager visitManager, FormValidator formValidator, BadgeManager badgeManager) {
+    public HomeEmployeeController(Template homeEmployee, SessionManager sessionManager, GuestManager guestManager, EmployeeManager employeeManager, VisitManager visitManager, FormValidator formValidator, BadgeManager badgeManager) {
         this.homeEmployee = homeEmployee;
         this.sessionManager = sessionManager;
         this.guestManager = guestManager;
+        this.employeeManager = employeeManager;
         this.visitManager = visitManager;
         this.formValidator = formValidator;
         this.badgeManager = badgeManager;
@@ -61,9 +60,13 @@ public class HomeEmployeeController {
                 return Response.seeOther(URI.create("/")).build();
             }
             else {
+                List<Visit> visits = visitManager.getVisitsFromFile();
+                List<Visit> filteredVisits = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+                filteredVisits.sort(Comparator.comparing(Visit::getDate));
                 return Response.ok(homeEmployee.data(
                         "employee", employee,
-                        "type", null
+                        "type", "homePage",
+                        "visits", visitManager.changeIdsInSurnames(filteredVisits, guestManager, employeeManager)
                 )).build();
             }
         }
@@ -323,7 +326,7 @@ public class HomeEmployeeController {
 
         return Response.ok(homeEmployee.data(
                 "employee",employee,
-                "visits", filteredVisits,
+                "visits", visitManager.changeIdsInSurnames(filteredVisits, guestManager, employeeManager),
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null
@@ -355,7 +358,7 @@ public class HomeEmployeeController {
 
         return Response.ok(homeEmployee.data(
                 "employee",employee,
-                "visits", visitsByEmployeeId,
+                "visits", visitManager.changeIdsInSurnames(visitsByEmployeeId, guestManager, employeeManager),
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null

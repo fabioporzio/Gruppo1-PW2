@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
@@ -136,7 +137,7 @@ public class HomeReceptionController {
             )).build();
         }
 
-        
+
 
        return null;
 
@@ -160,7 +161,7 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(badgeCode)){
-            errorMessage = "No code badge was input";
+            errorMessage = "L'input del codice è vuoto.";
         }
 
         boolean badgeStatus = false;
@@ -172,7 +173,7 @@ public class HomeReceptionController {
         }
 
         if (errorMessage == null && !badgeStatus) {
-            errorMessage = "This badge code is already assigned";
+            errorMessage = "Questo codice è già in uso.";
         }
 
         List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
@@ -210,7 +211,7 @@ public class HomeReceptionController {
         boolean status = visitManager.overwriteVisits(visits);
         if (!status){
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
-            errorMessage = "An error occurred while trying to assign badge";
+            errorMessage = "Errore nel salvare il badge";
             return Response.ok(homeReception.data(
                     "employee",employee,
                     "type", "assignBadge",
@@ -276,7 +277,7 @@ public class HomeReceptionController {
             return Response.ok(homeReception.data(
                     "employee",employee,
                     "type", "closeVisit",
-                    "errorMessage", "An error occurred while trying to close a visit",
+                    "errorMessage", "Errore nel chiudere la visita",
                     "successMessage", null,
                     "visits", visitManager.changeIdsInSurnames(visitManager.getUnfinishedVisits(), guestManager, employeeManager)
             )).build();
@@ -328,34 +329,34 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(name)){
-            errorMessage = "Name is not valid";
+            errorMessage = "Nome non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(surname)){
-            errorMessage = "Surname is not valid";
+            errorMessage = "Cognome non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(email)){
-            errorMessage = "Email is not valid";
+            errorMessage = "Email non valida";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
-            errorMessage = "Phone number is not valid";
+            errorMessage = "Numero di telefono non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(role)){
-            errorMessage = "Role is not valid";
+            errorMessage = "Ruolo non valido";
         }
 
         if (errorMessage == null && !formValidator.checkStringForm(company)){
-            errorMessage = "Company is not valid";
+            errorMessage = "Azienda non valida";
         }
 
         String newId = ""+guestManager.getNewId();
         Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
 
         if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
-            errorMessage = "The guest already exists";
+            errorMessage = "L'ospite è già inserito";
         }
 
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
@@ -371,7 +372,7 @@ public class HomeReceptionController {
         }
 
         guestManager.saveGuest(guest);
-        String successMessage = "Guest successfully added";
+        String successMessage = "Ospite aggiunto";
 
         return Response.ok(homeReception.data(
                 "employee", employee,
@@ -436,31 +437,31 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if (!formValidator.checkDateNotNull(date)) {
-            errorMessage = "Date field cannot be empty";
+            errorMessage = "Data non può essere vuota";
         }
 
         if (errorMessage == null && !formValidator.checkDate(date)) {
-            errorMessage = "The visit must added at least one day prior to the date";
+            errorMessage = "La visita deve essere inserita almeno un giorno prima";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
-            errorMessage = "The starting hour field cannot be empty";
+            errorMessage = "L'ora di inizio non può essere vuota";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
-            errorMessage = "The ending hour field cannot be empty";
+            errorMessage = "L'ora di inizio non può essere vuota";
         }
 
         if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
-            errorMessage = "Starting hour must be before ending hour";
+            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(guestId)){
-            errorMessage = "Guest is not valid";
+            errorMessage = "Ospite non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(employeeId)){
-            errorMessage = "Employee is not valid";
+            errorMessage = "Dipendente non valido";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -473,7 +474,7 @@ public class HomeReceptionController {
         }
 
         if(countOverlapVisits == badgeManager.countBadges()){
-            errorMessage = "There aren't any more badges available";
+            errorMessage = "I badge sono terminati";
         }
 
         if(errorMessage != null){
@@ -540,7 +541,7 @@ public class HomeReceptionController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null,
-                "visits", visits,
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager)
                 "employee", employee
         )).build();
     }
@@ -572,7 +573,7 @@ public class HomeReceptionController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null,
-                "visits", visits
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager)
         )).build();
     }
 }
