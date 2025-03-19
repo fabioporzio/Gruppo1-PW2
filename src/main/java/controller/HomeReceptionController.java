@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-
 import java.util.List;
 
 import io.quarkus.qute.Template;
@@ -128,10 +127,14 @@ public class HomeReceptionController {
         if (sessionId != null) {
             List<Visit> unstartedVisits = visitManager.getUnstartedVisitsByDate(LocalDate.now());
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+
             return Response.ok(homeReception.data(
-                "employee",employee,
-                "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager),
-                    "type","assignBadge")).build();
+                    "type", "assignBadge",
+                    "employee", employee,
+                    "errorMessage", null,
+                    "successMessage", null,
+                    "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager)
+            )).build();
         }
 
         
@@ -158,21 +161,26 @@ public class HomeReceptionController {
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(badgeCode)){
-            errorMessage = "Badge code is empty.";
+            errorMessage = "Non è stato inserito alcun codice badge";
         }
 
+        boolean badgeStatus = false;
         for(String badge:badges){
-            if(!badge.equals(badgeCode)){
-                errorMessage = "The badge code don't exist.";
+            if(badge.equals(badgeCode)){
+                badgeStatus = true;
                 break;
             }
+        }
+
+        if (errorMessage == null && !badgeStatus) {
+            errorMessage = "Il codice del badge non esiste";
         }
 
         List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
 
         for(Visit visit : unfinishedVisits){
-            if(visit.getBadgeCode().equals(badgeCode)){
-                errorMessage = "This badge code is not available";
+            if(errorMessage == null && visit.getBadgeCode().equals(badgeCode)){
+                errorMessage = "Il codice del badge non è disponibile";
                 break;
             }
         }
@@ -209,10 +217,18 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", errorMessage,
                     "successMessage", null,
-                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisits(), guestManager, employeeManager)
+                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
             )).build();
         }
-        return Response.seeOther(URI.create("home-reception/assign-badge")).build();
+
+        String successMessage = "Codice badge assegnato correttamente";
+
+        return Response.ok(homeReception.data(
+                "type", "assignBadge",
+                "errorMessage", null,
+                "successMessage", successMessage,
+                "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
+        )).build();
     }
 
     /***
@@ -228,7 +244,11 @@ public class HomeReceptionController {
 
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        return Response.ok(homeReception.data("employee",employee,"visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager), "type", "closeVisit")).build();
+        return Response.ok(homeReception.data(
+                "employee",employee,
+                "visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager),
+                "type", "closeVisit")
+        ).build();
     }
 
     /***
@@ -338,6 +358,7 @@ public class HomeReceptionController {
         if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
             errorMessage = "L'ospite è già inserito";
         }
+
         Employee employee = sessionManager.getEmployeeFromSession(sessionId);
         if(errorMessage != null){
 
