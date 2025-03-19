@@ -108,10 +108,6 @@
             background: #909090;
         }
 
-        .button:active {
-            background: #000;
-        }
-
         .content {
             display: contents;
             border-radius: 10px;
@@ -333,7 +329,12 @@
                         </label>
                         <label for="role">
                             Ruolo:
-                            <input type="text" name="role" required>
+                            <select name="role" required>
+                                <option value="" selected disabled></option>
+                                <option value="supplier">Fornitore</option>
+                                <option value="client">Cliente</option>
+                                <option value="consultant">Consulente</option>
+                            </select>
                         </label>
                         <label for="company">
                             Azienda:
@@ -343,6 +344,43 @@
                     </form>
                 </div>
                 {/if}
+        {#if type == "addGuest"}
+            <h1>Inserisci un nuovo ospite</h1>
+            {#if errorMessage != null}
+                <h2 style="color: red">{errorMessage}</h2>
+            {/if}
+            {#if successMessage != null}
+                <h2 style="color: green">{successMessage}</h2>
+            {/if}
+            <form action="/home-employee/add-guest" method="post">
+                <label for="name">
+                    Nome:
+                    <input type="text" name="name" required>
+                </label>
+                <label for="surname">
+                    Cognome:
+                    <input type="text" name="surname" required>
+                </label>
+                <label for="phoneNumber">
+                    Numero di telefono (con prefisso):
+                    <input type="tel" name="phoneNumber" required>
+                </label>
+                <label for="role">
+                    Ruolo:
+                    <select name="role" required>
+                        <option value="" selected disabled></option>
+                        <option value="supplier">Fornitore</option>
+                        <option value="client">Cliente</option>
+                        <option value="consultant">Consulente</option>
+                    </select>
+                </label>
+                <label for="company">
+                    Azienda:
+                    <input type="text" name="company" required>
+                </label>
+                <button type="submit">Aggiungi</button>
+            </form>
+        {/if}
 
                 {#if type == "addVisit"}
                 <style>
@@ -521,8 +559,9 @@
                                     onsubmit="return confirmDelete(event, this)">
                                     <input type="hidden" name="visitId" value="{visit.id}">
                                     <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                        type="submit">Cancella</button>
-                                </form>
+                                        type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><path fill="#000000" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z"/></svg>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -534,6 +573,25 @@
             </table>
         </section>
     </section>
+        {#if type == "deleteVisit"}
+            {#if visits.isEmpty()}
+                <h3>Non ci sono visite da visualizzare</h3>
+            {#else}
+                {#for visit in visits}
+                    {visit.id}
+                    {visit.date}
+                    {visit.guestId}
+                    {visit.employeeId}
+                    <form action="/home-employee/delete-visit" method="post">
+                        <input type="hidden" name="visitId" value="{visit.id}">
+                        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><path fill="#000000" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z"/></svg></button>
+                    </form>
+                {/for}
+            {/if}
+        {/if}
+
+    </section>
+</section>
 
     <script>
         document.getElementById("hamburger-menu").addEventListener("click", function () {

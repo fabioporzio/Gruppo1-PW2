@@ -311,7 +311,7 @@
             <div class="button">Assegna badge</div>
         </a>
         <a href="/home-reception/close-visit" class="no-decoration">
-            <div class="button">Segna fine visita</div>
+            <div class="button">Concludi visita</div>
         </a>
     </div>
     <section class="content" id="dynamic-content">
@@ -368,7 +368,7 @@
 
             {#if type == "assignBadge"}
                 {#if visits.isEmpty() || visits == null}
-                <h3 style="color: white; margin-top: 15%">Non ci sono visite prenotate per oggi</h3>
+                <h3 style="color: white; margin-top: 15%">Non ci sono badge da assegnare per oggi</h3>
                 {#else}
                 <thead>
                     <tr>
@@ -401,7 +401,7 @@
                                     placeholder="Inserisci qui il codice badge">
                                 <button style="padding: 5px; cursor: pointer; border: none; border-radius: 5px; background: none; margin-left: 2px"
                                     type="submit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512"><path fill="#000000" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><path fill="#000000" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
                                 </button>
                             </form>
                         </td>
@@ -413,7 +413,7 @@
 
             {#if type == "closeVisit"}
                 {#if visits.isEmpty() || visits == null}
-                    <h3 style="color: white; margin-top: 15%">Non ci sono visite da visualizzare</h3>
+                    <h3 style="color: white; margin-top: 15%">Non ci sono visite iniziate</h3>
                 {#else}
                     <thead>
                     <tr>
@@ -444,8 +444,9 @@
                             <td>
                                 <form action="/home-reception/close-visit" method="post">
                                     <input type="hidden" name="visitId" value="{visit.id}">
-                                    <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                            type="submit">Concludi
+                                    <button style="padding: 5px 0px; cursor: pointer; border: none; background: none;"
+                                            type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><path fill="#0cdf0c" d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
                                     </button>
                                 </form>
                             </td>
@@ -565,7 +566,12 @@
                         </label>
                         <label for="role">
                             Ruolo:
-                            <input type="text" name="role" required>
+                            <select name="role" required>
+                                <option value="" selected disabled></option>
+                                <option value="supplier">Fornitore</option>
+                                <option value="client">Cliente</option>
+                                <option value="consultant">Consulente</option>
+                            </select>
                         </label>
                         <label for="company">
                             Azienda:
@@ -714,6 +720,7 @@
                     <label for="guest">
                         Inserisci l'ospite:
                         <select name="guest" required>
+                            <option value="" selected disabled></option>
                             {#for guest in guests}
                                 <option value="{guest.id}">{guest.name} {guest.surname} {guest.phoneNumber}</option>
                             {/for}
@@ -722,6 +729,7 @@
                     <label for="employee">
                         Inserisci il dipendente:
                         <select name="employee" required>
+                            <option value="" selected disabled></option>
                             {#for employee in employees}
                                 <option value="{employee.id}">{employee.name} {employee.surname}</option>
                             {/for}
@@ -733,7 +741,7 @@
 
                 {#if type == "deleteVisit"}
                     {#if visits.isEmpty()}
-                        <h3 style="color: white; margin-top: 15%">Non ci sono visite da eliminare</h3>
+                        <h3 style="color: white; margin-top: 15%">Non ci sono visite prenotate</h3>
                     {#else}
                         <thead>
                         <tr>
@@ -763,8 +771,9 @@
                                     <form action="/home-reception/delete-visit" method="post"
                                           onsubmit="return confirmDelete(event, this)">
                                         <input type="hidden" name="visitId" value="{visit.id}">
-                                        <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                                type="submit">Cancella
+                                        <button style="padding: 5px 0px; cursor: pointer; border: none;  background: none;"
+                                                type="submit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21" viewBox="0 0 448 512"><path fill="#000000" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z"/></svg>
                                         </button>
                                     </form>
 
