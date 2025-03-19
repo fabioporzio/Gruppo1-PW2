@@ -121,34 +121,34 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(name)){
-            errorMessage = "Name is not valid";
+            errorMessage = "Nome non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(surname)){
-            errorMessage = "Surname is not valid";
+            errorMessage = "Cognome non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(email)){
-            errorMessage = "Email is not valid";
+            errorMessage = "Email non valida";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
-            errorMessage = "Phone number is not valid";
+            errorMessage = "Numero di telefono non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(role)){
-            errorMessage = "Role is not valid";
+            errorMessage = "Ruolo non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(company)){
-            errorMessage = "Company is not valid";
+            errorMessage = "Azienda non valida";
         }
 
         String newId = ""+guestManager.getNewId();
         Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
 
         if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
-            errorMessage = "The guest already exists";
+            errorMessage = "Esiste già un ospite con questa email";
         }
 
         if (sessionId != null) {
@@ -227,27 +227,27 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if (!formValidator.checkDateNotNull(date)) {
-            errorMessage = "Date field cannot be empty";
+            errorMessage = "La data non può essere vuota";
         }
 
         if (errorMessage == null && !formValidator.checkDate(date)) {
-            errorMessage = "The visit must added at least one day prior to the date";
+            errorMessage = "La visita deve essere aggiunta almeno un giorno in anticipo";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
-            errorMessage = "The starting hour field cannot be empty";
+            errorMessage = "L'ora di inizio non può essere vuota";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
-            errorMessage = "The ending hour field cannot be empty";
+            errorMessage = "L'ora di fine non può essere vuota";
         }
 
         if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
-            errorMessage = "Starting hour must be before ending hour";
+            errorMessage = "L'ora di inizio non deve essere successiva a quella di fine";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(guestId)){
-            errorMessage = "Guest is not valid";
+            errorMessage = "Ospite non valido";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -260,7 +260,7 @@ public class HomeEmployeeController {
         }
 
         if(countOverlapVisits == badgeManager.countBadges()) {
-            errorMessage = "There aren't any more badges available";
+            errorMessage = "Non ci sono più badge disponibili";
         }
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
@@ -288,7 +288,7 @@ public class HomeEmployeeController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Visit successfully added";
+            String successMessage = "Visita aggiunta correttamente";
 
             return Response.ok(homeEmployee.data(
                     "employee",employee,
@@ -302,7 +302,7 @@ public class HomeEmployeeController {
             return Response.ok(homeEmployee.data(
                     "employee",employee,
                     "successMessage", null,
-                    "errorMessage", "An other visit already exists\"",
+                    "errorMessage", "Esiste già un altra visita con questi dati",
                     "guests", guests,
                     "type", "addVisit"
             )).build();
