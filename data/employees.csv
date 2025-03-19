@@ -1,6 +1,6 @@
 id,name,surname,date_of_birth,phone_number,department,email,password
 1,Fabio,Porzio,03/05/2000,0000000000,IT,fabio.porzio@itsincom.it,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
-2,Marco,Corradini,01/01/2001,1111111111,Reception,marco.corradini@gmail.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
+2,Marco,Corradini,01/01/2001,1111111111,Reception,marco.corradini@gmail.com,$2a$12$kKBPgIup9cNYATBdVvn9JO4OaYJwmy04wtOHdv7VIHjmDyv2yKbae
 3,Luca,Mimmo,23/03/2005,1111111111,Reception,luca@gmail.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
 4,Tommaso,Brivio,23/03/2005,1111111111,Reception,tommaso@gmail.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
 5,test,test,23/04/1996,1111111111,Reception,reception@infodrive.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O

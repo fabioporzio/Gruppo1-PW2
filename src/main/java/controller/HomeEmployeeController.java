@@ -40,7 +40,6 @@ public class HomeEmployeeController {
         this.badgeManager = badgeManager;
     }
 
-
     /***
      * Displays the employee home page.
      * Redirects to the login page if the session is invalid.
@@ -74,7 +73,6 @@ public class HomeEmployeeController {
         return Response.seeOther(URI.create("/")).build();
 
     }
-
 
     /***
      * Shows the form to add a new guest.
@@ -123,34 +121,34 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(name)){
-            errorMessage = "Nome non valido";
+            errorMessage = "Name is not valid";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(surname)){
-            errorMessage = "Cognome non valido";
+            errorMessage = "Surname is not valid";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(email)){
-            errorMessage = "Email non valida";
+            errorMessage = "Email is not valid";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
-            errorMessage = "Numero di telefono non valido";
+            errorMessage = "Phone number is not valid";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(role)){
-            errorMessage = "Ruolo non valido";
+            errorMessage = "Role is not valid";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(company)){
-            errorMessage = "Azienda non valida";
+            errorMessage = "Company is not valid";
         }
 
         String newId = ""+guestManager.getNewId();
         Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
 
         if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
-            errorMessage = "L'ospite è già inserito";
+            errorMessage = "The guest already exists";
         }
 
         if (sessionId != null) {
@@ -167,7 +165,7 @@ public class HomeEmployeeController {
 
         guestManager.saveGuest(guest);
 
-        String successMessage = "Ospite inserito";
+        String successMessage = "Guest successfully added";
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeEmployee.data(
@@ -229,27 +227,27 @@ public class HomeEmployeeController {
         String errorMessage = null;
 
         if (!formValidator.checkDateNotNull(date)) {
-            errorMessage = "Data non può essere vuota";
+            errorMessage = "Date field cannot be empty";
         }
 
         if (errorMessage == null && !formValidator.checkDate(date)) {
-            errorMessage = "La visita deve essere inserita almeno un giorno prima";
+            errorMessage = "The visit must added at least one day prior to the date";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
-            errorMessage = "L'ora di inizio non può essere vuota";
+            errorMessage = "The starting hour field cannot be empty";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
-            errorMessage = "L'ora di inizio non può essere vuota";
+            errorMessage = "The ending hour field cannot be empty";
         }
 
         if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
-            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
+            errorMessage = "Starting hour must be before ending hour";
         }
 
         if(errorMessage == null && !formValidator.checkStringForm(guestId)){
-            errorMessage = "Azienda non valida";
+            errorMessage = "Guest is not valid";
         }
 
         List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
@@ -262,7 +260,7 @@ public class HomeEmployeeController {
         }
 
         if(countOverlapVisits == badgeManager.countBadges()) {
-            errorMessage = "I badge sono terminati";
+            errorMessage = "There aren't any more badges available";
         }
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
@@ -290,7 +288,7 @@ public class HomeEmployeeController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Visita aggiunta";
+            String successMessage = "Visit successfully added";
 
             return Response.ok(homeEmployee.data(
                     "employee",employee,
@@ -304,7 +302,7 @@ public class HomeEmployeeController {
             return Response.ok(homeEmployee.data(
                     "employee",employee,
                     "successMessage", null,
-                    "errorMessage", "Esiste gia un altra visita aggiunta",
+                    "errorMessage", "An other visit already exists\"",
                     "guests", guests,
                     "type", "addVisit"
             )).build();
