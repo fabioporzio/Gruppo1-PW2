@@ -6,6 +6,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -109,6 +110,10 @@ public class EmployeeManager {
         return null;
     }
 
+    public static boolean checkPassword(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
+    }
+
     /***
      * Retrieves an employee by their email and password credentials.
      *
@@ -123,11 +128,17 @@ public class EmployeeManager {
     public Employee getEmployeeByCredentials(String email, String password) {
         List<Employee> employees = getEmployeesFromFile();
 
+
+
         for (Employee employee : employees) {
-            if (employee.getEmail().equals(email) && employee.getPassword().equals(password)) {
+            System.out.println("Plain Password: " + password);
+            System.out.println("Hashed Password from CSV: " + employee.getPassword());
+            if (employee.getEmail().equals(email) && checkPassword(password ,employee.getPassword() )) {
                 return employee;
             }
         }
+
+
 
         return null;
     }
