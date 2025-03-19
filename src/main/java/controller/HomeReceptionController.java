@@ -81,7 +81,7 @@ public class HomeReceptionController {
         return homeReception.data(
                 "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
                 "type","showVisits",
-                "inputDate", null
+                "date", null
         );
     }
 
