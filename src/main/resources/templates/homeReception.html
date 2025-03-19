@@ -182,6 +182,21 @@
             background-color: #e1e1e1;
         }
 
+        .error-message,
+        .success-message {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .success-message {
+            color: green;
+        }
+
         /* Navbar responsive */
         @media (max-width: 1440px) {
             .nav-links a {
@@ -285,7 +300,6 @@
 <header class="header">
     <div class="title-box">
         <h1>Dashboard</h1>
-        <p>{employee.name} {employee.surname}</p>
     </div>
     <nav>
         <div class="menu">
@@ -370,6 +384,12 @@
                 {#if visits.isEmpty() || visits == null}
                 <h3 style="color: white; margin-top: 15%">Non ci sono badge da assegnare per oggi</h3>
                 {#else}
+                    {#if errorMessage != null}
+                        <h2 class="error-message">{errorMessage}</h2>
+                    {/if}
+                    {#if successMessage != null}
+                        <h2 class="success-message">{successMessage}</h2>
+                    {/if}
                 <thead>
                     <tr>
                         <th>Data</th>
