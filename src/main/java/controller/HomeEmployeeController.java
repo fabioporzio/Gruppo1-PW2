@@ -71,7 +71,6 @@ public class HomeEmployeeController {
             }
         }
         return Response.seeOther(URI.create("/")).build();
-
     }
 
     /***
@@ -117,30 +116,34 @@ public class HomeEmployeeController {
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
-
         String errorMessage = null;
 
-        if(!formValidator.checkStringForm(name)){
+        if(!formValidator.checkStringNotNullOrEmpty(name)){
             errorMessage = "Nome non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(surname)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(surname)){
             errorMessage = "Cognome non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(email)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(email)){
             errorMessage = "Email non valida";
         }
 
-        if(errorMessage == null && (!formValidator.checkStringForm(phoneNumber) || !formValidator.checkPhoneNumber(phoneNumber))){
+        if (errorMessage == null && !formValidator.isEmailValid(email)) {
+            errorMessage = "Email deve contenere una @";
+        }
+
+        phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
+        if(errorMessage == null && (!formValidator.checkStringForm(phoneNumber) || phoneNumber.isEmpty())){
             errorMessage = "Numero di telefono non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(role)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(role)){
             errorMessage = "Ruolo non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(company)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(company)){
             errorMessage = "Azienda non valida";
         }
 
@@ -165,7 +168,7 @@ public class HomeEmployeeController {
 
         guestManager.saveGuest(guest);
 
-        String successMessage = "Guest successfully added";
+        String successMessage = "Ospite aggiunto";
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeEmployee.data(
@@ -230,7 +233,7 @@ public class HomeEmployeeController {
             errorMessage = "La data non può essere vuota";
         }
 
-        if (errorMessage == null && !formValidator.checkDate(date)) {
+        if (errorMessage == null && !formValidator.checkDateIsAfterToday(date)) {
             errorMessage = "La visita deve essere aggiunta almeno un giorno in anticipo";
         }
 
@@ -242,11 +245,11 @@ public class HomeEmployeeController {
             errorMessage = "L'ora di fine non può essere vuota";
         }
 
-        if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
+        if(errorMessage == null && formValidator.checkStartingTimeIsAfterEndingTime(expectedStart, expectedEnd)) {
             errorMessage = "L'ora di inizio non deve essere successiva a quella di fine";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(guestId)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(guestId)){
             errorMessage = "Ospite non valido";
         }
 
@@ -288,7 +291,7 @@ public class HomeEmployeeController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Visita aggiunta correttamente";
+            String successMessage = "Visita aggiunta";
 
             return Response.ok(homeEmployee.data(
                     "employee",employee,

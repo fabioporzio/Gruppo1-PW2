@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
@@ -136,11 +135,7 @@ public class HomeReceptionController {
                     "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager)
             )).build();
         }
-
-
-
        return null;
-
     }
 
     /***
@@ -160,7 +155,7 @@ public class HomeReceptionController {
         List<String> badges = badgeManager.getBadgesFromFile();
         String errorMessage = null;
 
-        if(!formValidator.checkStringForm(badgeCode)){
+        if(!formValidator.checkStringNotNullOrEmpty(badgeCode)){
             errorMessage = "L'input del codice è vuoto.";
         }
 
@@ -180,7 +175,7 @@ public class HomeReceptionController {
 
         for(Visit visit : unfinishedVisits){
             if(errorMessage == null && visit.getBadgeCode().equals(badgeCode)){
-                errorMessage = "This badge code is not available";
+                errorMessage = "Questo badge non è disponibile";
                 break;
             }
         }
@@ -221,7 +216,7 @@ public class HomeReceptionController {
             )).build();
         }
 
-        String successMessage = "Badge code assigned correctly";
+        String successMessage = "Badge assegnato";
 
         return Response.ok(homeReception.data(
                 "type", "assignBadge",
@@ -277,7 +272,7 @@ public class HomeReceptionController {
             return Response.ok(homeReception.data(
                     "employee",employee,
                     "type", "closeVisit",
-                    "errorMessage", "Errore nel chiudere la visita",
+                    "errorMessage", "Errore nel concludere la visita",
                     "successMessage", null,
                     "visits", visitManager.changeIdsInSurnames(visitManager.getUnfinishedVisits(), guestManager, employeeManager)
             )).build();
@@ -328,27 +323,32 @@ public class HomeReceptionController {
     ){
         String errorMessage = null;
 
-        if(!formValidator.checkStringForm(name)){
+        if(!formValidator.checkStringNotNullOrEmpty(name)){
             errorMessage = "Nome non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(surname)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(surname)){
             errorMessage = "Cognome non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(email)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(email)){
             errorMessage = "Email non valida";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
+        if (errorMessage == null && !formValidator.isEmailValid(email)) {
+            errorMessage = "Email deve contenere una @";
+        }
+
+        phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
+        if(errorMessage == null && (!formValidator.checkStringNotNullOrEmpty(phoneNumber) || phoneNumber.isEmpty())){
             errorMessage = "Numero di telefono non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(role)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(role)){
             errorMessage = "Ruolo non valido";
         }
 
-        if (errorMessage == null && !formValidator.checkStringForm(company)){
+        if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(company)){
             errorMessage = "Azienda non valida";
         }
 
@@ -407,9 +407,6 @@ public class HomeReceptionController {
                 .data("employee", employee)
 
         ).build();
-
-
-
     }
 
     /***
@@ -440,7 +437,7 @@ public class HomeReceptionController {
             errorMessage = "Data non può essere vuota";
         }
 
-        if (errorMessage == null && !formValidator.checkDate(date)) {
+        if (errorMessage == null && !formValidator.checkDateIsAfterToday(date)) {
             errorMessage = "La visita deve essere inserita almeno un giorno prima";
         }
 
@@ -452,15 +449,15 @@ public class HomeReceptionController {
             errorMessage = "L'ora di inizio non può essere vuota";
         }
 
-        if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
-            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
+        if(errorMessage == null && formValidator.checkStartingTimeIsAfterEndingTime(expectedStart, expectedEnd)) {
+            errorMessage = "L'ora di inizio non deve essere successiva a quella di fine";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(guestId)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(guestId)){
             errorMessage = "Ospite non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(employeeId)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(employeeId)){
             errorMessage = "Dipendente non valido";
         }
 
@@ -474,7 +471,7 @@ public class HomeReceptionController {
         }
 
         if(countOverlapVisits == badgeManager.countBadges()){
-            errorMessage = "I badge sono terminati";
+            errorMessage = "Non ci sono più badge disponibili";
         }
 
         if(errorMessage != null){
@@ -514,7 +511,7 @@ public class HomeReceptionController {
         else{
             return Response.ok(homeReception
                     .data("type","addVisit")
-                    .data("errorMessage", "Essiste gia un altra visita aggiunta")
+                    .data("errorMessage", "Esiste già un altra visita con questi dati")
                     .data("successMessage", null)
                     .data("guests", guests)
                     .data("employees", employees)
