@@ -135,7 +135,7 @@ public class HomeEmployeeController {
         }
 
         phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
-        if(errorMessage == null && (!formValidator.checkStringForm(phoneNumber) || phoneNumber.isEmpty())){
+        if(errorMessage == null && (!formValidator.checkStringNotNullOrEmpty(phoneNumber) || phoneNumber.isEmpty())){
             errorMessage = "Numero di telefono non valido";
         }
 
