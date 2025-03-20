@@ -15,9 +15,6 @@
             /*hiding scrollbar*/
             scrollbar-width: auto;
             -ms-overflow-style: none;
-            /*hiding scrollbar*/
-            scrollbar-width: auto;
-            -ms-overflow-style: none;
         }
 
         body {
@@ -37,20 +34,10 @@
             height: 90px;
             background: #382673;
             color: #ffffff;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 90px;
-            background: #382673;
-            color: #ffffff;
             display: flex;
-            box-shadow: 0px 5px 30px 15px #0000006a;
             box-shadow: 0px 5px 30px 15px #0000006a;
             align-items: center;
             justify-content: space-between;
-            padding: 40px 40px;
-            z-index: 10003 transition: top 1s ease-in-out;
             padding: 40px 40px;
             z-index: 10003 transition: top 1s ease-in-out;
         }
@@ -111,8 +98,6 @@
             gap: 150px;
             width: 90vw;
             margin-top: 60px;
-            width: 90vw;
-            margin-top: 60px;
         }
 
         .button {
@@ -169,8 +154,6 @@
         }
 
         .main {
-            margin-top: 3%;
-            width: 100%;
             margin-top: 3%;
             width: 100%;
             height: 100%;
@@ -236,41 +219,27 @@
         </div>
         <nav>
             <div class="menu">
-                <div class="nav-links" id="nav-links">
-                    <a href="/home-employee">Home</a>
-                    <a href="/logout">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512">
+                <div class="nav-links" id="nav-links"> <a href="/home-employee">Home</a> <a href="/logout"> <svg
+                            xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512">
                             <path fill="#ffffff"
                                 d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z" />
-                        </svg>
-                    </a>
-                </div>
-                <div class="hamburger-menu" id="hamburger-menu">
-                    <span></span><span></span><span></span>
-                </div>
+                        </svg> </a> </div>
+                <div class="hamburger-menu" id="hamburger-menu"> <span></span><span></span><span></span> </div>
             </div>
         </nav>
     </header>
-
     <section class="main">
-        <div class="buttons-container">
-            <a href="/home-employee/add-guest" class="no-decoration">
+        <div class="buttons-container"> <a href="/home-employee/add-guest" class="no-decoration">
                 <div class="button">Anagrafa un nuovo ospite</div>
-            </a>
-            <a href="/home-employee/add-visit" class="no-decoration">
+            </a> <a href="/home-employee/add-visit" class="no-decoration">
                 <div class="button">Inserisci nuova visita</div>
-            </a>
-            <a href="/home-employee/delete-visit" class="no-decoration">
+            </a> <a href="/home-employee/delete-visit" class="no-decoration">
                 <div class="button">Annulla visita</div>
-            </a>
-        </div>
+            </a> </div>
         <section class="content" id="dynamic-content">
-            <table class="content-table">
-                {#if type == "homePage"}
-                {#if visits.isEmpty() || visits == null}
-                <h3 style="color: white; margin-top: 5%">Non ci sono visite da visualizzare</h3>
-                {#else}
-                <thead style="background-color: #000000; color: white">
+            <table class="content-table"> {#if type == "homePage"} {#if visits.isEmpty() || visits == null} <h3
+                    style="color: white; margin-top: 5%">Non ci sono visite da visualizzare</h3> {#else} <thead
+                    style="background-color: #000000; color: white">
                     <tr>
                         <th>Data</th>
                         <th>Previsto Orario Inizio</th>
@@ -283,9 +252,7 @@
                         <th>Badge</th>
                     </tr>
                 </thead>
-                <tbody style="background-color: white">
-                    {#for visit in visits}
-                    <tr>
+                <tbody style="background-color: white"> {#for visit in visits} <tr>
                         <td>{visit.date.format("dd/MM/yyyy")}</td>
                         <td>{visit.expectedStartingHour}</td>
                         <td>{visit.actualStartingHour}</td>
@@ -295,24 +262,15 @@
                         <td>{visit.guestId}</td>
                         <td>{visit.employeeId}</td>
                         <td>{visit.badgeCode}</td>
-                    </tr>
-                    {/for}
-                </tbody>
-                {/if}
-                {/if}
-
-                {#if type == "addGuest"}
-                <style>
+                    </tr> {/for} </tbody> {/if} {/if} {#if type == "addGuest"} <style>
                     .guest-form {
                         background-color: white;
                         color: black;
-                        padding: 20px;
                         padding: 20px;
                         border-radius: 30px;
                         box-shadow: 0px 5px 30px 15px #0000006a;
                         width: 90%;
                         max-width: 500px;
-                        margin-top: 2%;
                         margin-top: 2%;
                     }
 
@@ -391,56 +349,21 @@
                     }
                 </style>
                 <div class="guest-form">
-                    <h1>Inserisci un nuovo ospite</h1>
-                    {#if errorMessage != null}
-                    <h2 class="error-message">{errorMessage}</h2>
-                    {/if}
-                    {#if successMessage != null}
-                    <h2 class="success-message">{successMessage}</h2>
-                    {/if}
-                    <form action="/home-employee/add-guest" method="post">
-                        <label for="name">
-                            Nome:
-                            <input type="text" name="name" required>
-                        </label>
-                        <label for="surname">
-                            Cognome:
-                            <input type="text" name="surname" required>
-                        </label>
-                        <label for="email">
-                            Email:
-                            <input type="email" name="email" required>
-                        </label>
-                        <label for="phoneNumber">
-                            Numero di telefono (con prefisso):
-                            <input type="tel" name="phoneNumber" required>
-                        </label>
-                        <label for="role">
-                            Ruolo:
-                            <select name="role" required>
-                                <option value="" selected disabled>Seleziona</option>
+                    <h1>Inserisci un nuovo ospite</h1> {#if errorMessage != null} <h2 class="error-message">
+                        {errorMessage}</h2> {/if} {#if successMessage != null} <h2 class="success-message">
+                        {successMessage}</h2> {/if} <form action="/home-employee/add-guest" method="post"> <label
+                            for="name"> Nome: <input type="text" name="name" required> </label> <label for="surname">
+                            Cognome: <input type="text" name="surname" required> </label> <label for="email"> Email:
+                            <input type="email" name="email" required> </label> <label for="phoneNumber"> Numero di
+                            telefono (con prefisso): <input type="tel" name="phoneNumber" required> </label> <label
+                            for="role"> Ruolo: <select name="role" required>
                                 <option value="" selected disabled>Seleziona</option>
                                 <option value="supplier">Fornitore</option>
                                 <option value="client">Cliente</option>
                                 <option value="consultant">Consulente</option>
-                            </select>
-                        </label>
-                        <label for="company">
-                            Azienda:
-                            <input type="text" name="company" required>
-                        </label>
-                        <button type="submit">Aggiungi</button>
-                    </form>
-                </div>
-                {/if}
-                {#if type == "addVisit"}
-                <style>
-                    .new-visit {
-                        font-weight: bold;
-                        background-color: #909090;
-                        color: white;
-                    }
-
+                            </select> </label> <label for="company"> Azienda: <input type="text" name="company"
+                                required> </label> <button type="submit">Aggiungi</button> </form>
+                </div> {/if} {#if type == "addVisit"} <style>
                     .visit-form {
                         background-color: white;
                         color: black;
@@ -510,132 +433,30 @@
 
                     @media (max-width: 600px) {
                         .visit-form {
-                            background-color: white;
-                            color: black;
-                            padding: 30px;
-                            border-radius: 30px;
-                            box-shadow: 0px 5px 30px 15px #0000006a;
-                            width: 90%;
-                            max-width: 500px;
-                            margin: 2%;
+                            padding: 20px;
                         }
 
                         .visit-form h1 {
-                            text-align: center;
-                            margin-bottom: 20px;
-                        }
-
-                        .visit-form label {
-                            display: flex;
-                            flex-direction: column;
-                            margin: 10px 0;
-                            font-weight: bold;
+                            font-size: 22px;
                         }
 
                         .visit-form input,
                         .visit-form select {
-                            width: 80%;
-                            cursor: pointer;
-                            align-self: center;
-                            padding: 10px;
-                            margin-top: 5px;
-                            border: 1px solid #ccc;
-                            border-radius: 10px;
-                            font-size: 16px;
-                            background-color: white;
+                            font-size: 14px;
                         }
 
                         .visit-form button {
-                            width: 30%;
-                            padding: 15px;
-                            background-color: black;
-                            color: white;
-                            border: none;
-                            border-radius: 10px;
-                            cursor: pointer;
-                            margin-top: 15px;
-                            font-size: 16px;
+                            font-size: 14px;
+                            padding: 12px;
                         }
-
-                        .visit-form button:hover {
-                            background-color: #333;
-                        }
-
-                        .error-message,
-                        .success-message {
-                            text-align: center;
-                            font-size: 16px;
-                            font-weight: bold;
-                        }
-
-                        <form action="/home-employee/add-visit" method="post"><label for="date">Data: <input style="cursor: text;" type="date" name="date" required></label><label for="expectedStart">Ora di inizio: <select name="expectedStart" required><option value="" selected disabled>Seleziona</option><option value="09:00">9:00</option><option value="10:00">10:00</option><option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option></select></label><label for="expectedEnd">Ora di fine: <select name="expectedEnd" required><option value="" selected disabled>Seleziona</option><option value="10:00">10:00</option><option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option></select></label><label for="guest">Inserisci l'ospite:
- <select name="guest" required>. <option value="" selected disabled>Seleziona</option> {
-                            #for guest in guests
-                        }
-
-                        <option value="{guest.id}"> {
-                            guest.name
-                        }
-
-                            {
-                            guest.surname
-                        }
-
-                            {
-                            guest.email
-                        }
-
-                        </option> {
-                            /for
-                        }
-
-                        </select></label><button type="submit">Aggiungi</button></form> {
-                            /if
-                        }
-
-                        .success-message {
-                            color: green;
-                        }
-
-                        @media (max-width: 600px) {
-                            .visit-form {
-                                padding: 20px;
-                            }
-
-                            .visit-form h1 {
-                                font-size: 22px;
-                            }
-
-                            .visit-form input,
-                            .visit-form select {
-                                font-size: 14px;
-                            }
-
-                            .visit-form button {
-                                font-size: 14px;
-                                padding: 12px;
-                            }
-                        }
+                    }
                 </style>
                 <div class="visit-form">
-                    <h1>Aggiungi una nuova visita</h1>
-
-                    {#if errorMessage != null}
-                    <p class="error-message">{errorMessage}</p>
-                    {/if}
-
-                    {#if successMessage != null}
-                    <p class="success-message">{successMessage}</p>
-                    {/if}
-
-                    <form action="/home-employee/add-visit" method="post">
-                        <label for="date">
-                            Data:
-                            <input style="cursor: text;" type="date" name="date" required>
-                        </label>
-                        <label for="expectedStart">
-                            Ora di inizio:
-                            <select name="expectedStart" required>
+                    <h1>Aggiungi una nuova visita</h1> {#if errorMessage != null} <p class="error-message">
+                        {errorMessage}</p> {/if} {#if successMessage != null} <p class="success-message">
+                        {successMessage}</p> {/if} <form action="/home-employee/add-visit" method="post"> <label
+                            for="date"> Data: <input style="cursor: text;" type="date" name="date" required> </label>
+                        <label for="expectedStart"> Ora di inizio: <select name="expectedStart" required>
                                 <option value="" selected disabled>Seleziona</option>
                                 <option value="09:00">9:00</option>
                                 <option value="10:00">10:00</option>
@@ -645,11 +466,8 @@
                                 <option value="14:00">14:00</option>
                                 <option value="15:00">15:00</option>
                                 <option value="16:00">16:00</option>
-                            </select>
-                        </label>
-                        <label for="expectedEnd">
-                            Ora di fine:
-                            <select name="expectedEnd" required>
+                            </select> </label> <label for="expectedEnd"> Ora di fine: <select name="expectedEnd"
+                                required>
                                 <option value="" selected disabled>Seleziona</option>
                                 <option value="10:00">10:00</option>
                                 <option value="11:00">11:00</option>
@@ -659,64 +477,12 @@
                                 <option value="15:00">15:00</option>
                                 <option value="16:00">16:00</option>
                                 <option value="17:00">17:00</option>
-                            </select>
-                        </label>
-                        <label for="guest">
-                            Inserisci l'ospite:
-                            <select name="guest" required>
-                                <option value="" selected disabled>Seleziona</option>
-                                {#for guest in guests}
-                <form action="/home-employee/add-visit" method="post">
-                    <label for="date">
-                        Data:
-                        <input style="cursor: text;" type="date" name="date" required>
-                    </label>
-                    <label for="expectedStart">
-                        Ora di inizio:
-                        <select name="expectedStart" required>
-                            <option value="" selected disabled>Seleziona</option>
-                            <option value="09:00">9:00</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="13:00">13:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="15:00">15:00</option>
-                            <option value="16:00">16:00</option>
-                        </select>
-                    </label>
-                    <label for="expectedEnd">
-                        Ora di fine:
-                        <select name="expectedEnd" required>
-                            <option value="" selected disabled>Seleziona</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="13:00">13:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="15:00">15:00</option>
-                            <option value="16:00">16:00</option>
-                            <option value="17:00">17:00</option>
-                        </select>
-                    </label>
-                    <label for="guest">
-                        Inserisci l'ospite:
-                        <select name="guest" required>.
-                            <option value="" selected disabled>Seleziona</option>
-                            {#for guest in guests}
-                                <option value="{guest.id}">{guest.name} {guest.surname} {guest.email}</option>
-                                {/for}
-                            </select>
-                        </label>
-                        <button type="submit">Aggiungi</button>
-                    </form>
-                    {/if}
-
-                    {#if type == "deleteVisit"}
-                    {#if visits.isEmpty() || visits == null}
-                    <h3 style="color: white; margin-top: 5%">Non ci sono visite da annullare</h3>
-                    {#else}
-                    <thead style="background-color: #000000; color: white">
+                            </select> </label> <label for="guest"> Inserisci l'ospite: <select name="guest" required>
+                                <option value="" selected disabled>Seleziona</option> {#for guest in guests} <option
+                                    value="{guest.id}">{guest.name} {guest.surname} {guest.email}</option> {/for}
+                            </select> </label> <button type="submit">Aggiungi</button> </form> {/if} {#if type ==
+                    "deleteVisit"} {#if visits.isEmpty() || visits == null} <h3 style="color: white; margin-top: 5%">Non
+                        ci sono visite da annullare</h3> {#else} <thead style="background-color: #000000; color: white">
                         <tr>
                             <th>Data</th>
                             <th>Previsto Orario Inizio</th>
@@ -729,9 +495,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody style="background-color: white">
-                        {#for visit in visits}
-                        <tr>
+                    <tbody style="background-color: white"> {#for visit in visits} <tr>
                             <td>{visit.date.format("dd/MM/yyyy")}</td>
                             <td>{visit.expectedStartingHour}</td>
                             <td>{visit.actualStartingHour}</td>
@@ -742,155 +506,21 @@
                             <td>{visit.employeeId}</td>
                             <td>
                                 <form action="/home-employee/delete-visit" method="post"
-                                    onsubmit="return confirmDelete(event, this)">
-                                    <input type="hidden" name="visitId" value="{visit.id}">
-                                    <button style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
-                                        type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21"
+                                    onsubmit="return confirmDelete(event, this)"> <input type="hidden" name="visitId"
+                                        value="{visit.id}"> <button
+                                        style="padding: 5px 0px; cursor: pointer; border: none; border-radius: 5px"
+                                        type="submit"> <svg xmlns="http://www.w3.org/2000/svg" height="24" width="21"
                                             viewBox="0 0 448 512">
                                             <path fill="#000000"
                                                 d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0L284.2 0c12.1 0 23.2 6.8 28.6 17.7L320 32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64S14.3 32 32 32l96 0 7.2-14.3zM32 128l384 0 0 320c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64l0-320zm96 64c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16l0 224c0 8.8 7.2 16 16 16s16-7.2 16-16l0-224c0-8.8-7.2-16-16-16z" />
-                                        </svg>
-                                    </button>
-                                </form>
+                                        </svg> </button> </form>
                             </td>
-                        </tr>
-                        {/for}
-                    </tbody>
-                    {/if}
-                    {/if}
+                        </tr> {/for} </tbody> {/if} {/if}
                 </div>
             </table>
         </section>
     </section>
-
-    <script>
-        // Effetto navbar che scompare quando si scrolla in basso e riappare in su
-        let lastScrollY = window.pageYOffset;
-
-        window.addEventListener("scroll", () => {
-            const currentScrollY = window.pageYOffset;
-            const navbar = document.getElementById("navbar");
-
-            if (lastScrollY > currentScrollY) {
-                navbar.style.top = "0px";
-            } else {
-                navbar.style.top = "-200px";
-                // Chiudi il menu a tendina quando si scrolla verso il basso
-                const navLinks = document.querySelector('.nav-links');
-                navLinks.classList.remove('active');
-            }
-
-            lastScrollY = currentScrollY;
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const navLinks = document.querySelector('.nav-links');
-
-            hamburgerMenu.addEventListener('click', function () {
-                navLinks.classList.toggle('active');
-            });
-        });
-
-
-        window.addEventListener("scroll", () => {
-            const currentScrollY = window.pageYOffset;
-            const navbar = document.getElementById("navbar");
-
-            if (lastScrollY > currentScrollY) {
-                navbar.style.top = "0px";
-            } else {
-                navbar.style.top = "-200px";
-                // Chiudi il menu a tendina quando si scrolla verso il basso
-                const navLinks = document.querySelector('.nav-links');
-                navLinks.classList.remove('active');
-            }
-
-            lastScrollY = currentScrollY;
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const navLinks = document.querySelector('.nav-links');
-
-            hamburgerMenu.addEventListener('click', function () {
-                navLinks.classList.toggle('active');
-            });
-        });
-
-        function confirmDelete(event, form) {
-            event.preventDefault();
-            let overlay = document.createElement("div");
-            overlay.style.position = "fixed";
-            overlay.style.top = "0";
-            overlay.style.left = "0";
-            overlay.style.width = "100vw";
-            overlay.style.height = "100vh";
-            overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-            overlay.style.display = "flex";
-            overlay.style.justifyContent = "center";
-            overlay.style.alignItems = "center";
-            overlay.style.zIndex = "1000";
-
-            let modal = document.createElement("div");
-            modal.style.backgroundColor = "white";
-            modal.style.padding = "70px";
-            modal.style.borderRadius = "10px";
-            modal.style.fontSize = "30px";
-            modal.style.textAlign = "center";
-            modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";
-
-            let btnYes = document.createElement("button-confirm");
-            btnYes.style.cursor = "pointer";
-            btnYes.textContent = "Sì, elimina";
-            btnYes.style.backgroundColor = "#ff4d4d"; // Rosso chiaro
-            btnYes.style.padding = "12px 20px";
-            btnYes.style.fontSize = "16px";
-            btnYes.style.fontWeight = "bold";
-            btnYes.style.borderRadius = "8px";
-            btnYes.style.border = "2px solid #ff0000";
-            btnYes.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-            btnYes.style.marginRight = "20px";
-            btnYes.onmouseover = function () {
-                btnYes.style.backgroundColor = "#cc0000"; // Rosso più scuro al passaggio del mouse
-            };
-            btnYes.onmouseout = function () {
-                btnYes.style.backgroundColor = "#ff4d4d";
-            };
-            btnYes.onclick = function () {
-                form.submit();
-            };
-
-            let btnNo = document.createElement("button-confirm");
-            btnNo.style.cursor = "pointer";
-            btnNo.textContent = "Annulla";
-            btnNo.style.backgroundColor = "#555"; // Grigio scuro
-            btnNo.style.color = "white";
-            btnNo.style.padding = "12px 20px";
-            btnNo.style.fontSize = "16px";
-            btnNo.style.borderRadius = "8px";
-            btnNo.style.border = "2px solid #333";
-            btnNo.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-            btnNo.style.marginLeft = "20px";
-            btnNo.onmouseover = function () {
-                btnNo.style.backgroundColor = "#777"; // Grigio più chiaro al passaggio del mouse
-            };
-            btnNo.onmouseout = function () {
-                btnNo.style.backgroundColor = "#555";
-            };
-            btnNo.onclick = function () {
-                document.body.removeChild(overlay);
-            };
-
-            modal.appendChild(btnYes);
-            modal.appendChild(btnNo);
-            overlay.appendChild(modal);
-            document.body.appendChild(overlay);
-
-            return false;
-        }
-    </script>
+    <script>        // Effetto navbar che scompare quando si scrolla in basso e riappare in su        let lastScrollY = window.pageYOffset;        window.addEventListener("scroll", () => {            const currentScrollY = window.pageYOffset;            const navbar = document.getElementById("navbar");            if (lastScrollY > currentScrollY) {                navbar.style.top = "0px";            } else {                navbar.style.top = "-200px";                // Chiudi il menu a tendina quando si scrolla verso il basso                const navLinks = document.querySelector('.nav-links');                navLinks.classList.remove('active');            }            lastScrollY = currentScrollY;        });        document.addEventListener('DOMContentLoaded', function () {            const hamburgerMenu = document.getElementById('hamburger-menu');            const navLinks = document.querySelector('.nav-links');            hamburgerMenu.addEventListener('click', function () {                navLinks.classList.toggle('active');            });        });        function confirmDelete(event, form) {            event.preventDefault();            let overlay = document.createElement("div");            overlay.style.position = "fixed";            overlay.style.top = "0";            overlay.style.left = "0";            overlay.style.width = "100vw";            overlay.style.height = "100vh";            overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";            overlay.style.display = "flex";            overlay.style.justifyContent = "center";            overlay.style.alignItems = "center";            overlay.style.zIndex = "1000";            let modal = document.createElement("div");            modal.style.backgroundColor = "white";            modal.style.padding = "70px";            modal.style.borderRadius = "10px";            modal.style.fontSize = "30px";            modal.style.textAlign = "center";            modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";            let btnYes = document.createElement("button-confirm");            btnYes.style.cursor = "pointer";            btnYes.textContent = "Sì, elimina";            btnYes.style.backgroundColor = "#ff4d4d"; // Rosso chiaro            btnYes.style.padding = "12px 20px";            btnYes.style.fontSize = "16px";            btnYes.style.fontWeight = "bold";            btnYes.style.borderRadius = "8px";            btnYes.style.border = "2px solid #ff0000";            btnYes.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";            btnYes.style.marginRight = "20px";            btnYes.onmouseover = function () {                btnYes.style.backgroundColor = "#cc0000"; // Rosso più scuro al passaggio del mouse            };            btnYes.onmouseout = function () {                btnYes.style.backgroundColor = "#ff4d4d";            };            btnYes.onclick = function () {                form.submit();            };            let btnNo = document.createElement("button-confirm");            btnNo.style.cursor = "pointer";            btnNo.textContent = "Annulla";            btnNo.style.backgroundColor = "#555"; // Grigio scuro            btnNo.style.color = "white";            btnNo.style.padding = "12px 20px";            btnNo.style.fontSize = "16px";            btnNo.style.borderRadius = "8px";            btnNo.style.border = "2px solid #333";            btnNo.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";            btnNo.style.marginLeft = "20px";            btnNo.onmouseover = function () {                btnNo.style.backgroundColor = "#777"; // Grigio più chiaro al passaggio del mouse            };            btnNo.onmouseout = function () {                btnNo.style.backgroundColor = "#555";            };            btnNo.onclick = function () {                document.body.removeChild(overlay);            };            modal.appendChild(btnYes);            modal.appendChild(btnNo);            overlay.appendChild(modal);            document.body.appendChild(overlay);            return false;        }    </script>
 </body>
 
 </html>
