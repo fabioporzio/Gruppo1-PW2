@@ -307,7 +307,6 @@
     <nav>
         <div class="menu">
             <div class="nav-links" id="nav-links">
-                <a href="/home-reception">Home</a>
                 <a href="/home-reception/add-guest">Anagrafa un nuovo ospite</a>
                 <a href="/home-reception/add-visit">Inserisci nuova visita</a>
                 <a href="/home-reception/delete-visit">Annulla visita</a>
@@ -325,13 +324,13 @@
 <section class="main">
     <div class="buttons-container">
         <a href="/home-reception/show-visits" class="no-decoration">
-            <div class="button">Visualizza visite</div>
+            <div class="button view-visit">Visualizza visite</div>
         </a>
         <a href="/home-reception/assign-badge" class="no-decoration">
-            <div class="button">Assegna badge</div>
+            <div class="button assign-badge">Assegna badge</div>
         </a>
         <a href="/home-reception/close-visit" class="no-decoration">
-            <div class="button">Concludi visita</div>
+            <div class="button close-visit">Concludi visita</div>
         </a>
     </div>
     <section class="content" id="dynamic-content">
@@ -344,6 +343,13 @@
             {/if}
 
             {#if type == 'showVisits'}
+                <style>
+                    .view-visit {
+                        font-weight: bold;
+                        background-color: #909090;
+                        color: white;
+                    }
+                </style>
                 <div class="date-filter">
                     <h4 style="color: white; font-size: large">Inserisci una data per vedere le visite di quel giorno:
                     </h4>
@@ -387,6 +393,13 @@
             {/if}
 
             {#if type == "assignBadge"}
+                <style>
+                    .assign-badge {
+                        font-weight: bold;
+                        background-color: #909090;
+                        color: white;
+                    }
+                </style>
                 {#if visits.isEmpty() || visits == null}
                 <h3 style="color: white; margin-top: 15%">Non ci sono badge da assegnare per oggi</h3>
                 {#else}
@@ -438,6 +451,13 @@
             {/if}
 
             {#if type == "closeVisit"}
+                <style>
+                    .close-visit {
+                        font-weight: bold;
+                        background-color: #909090;
+                        color: white;
+                    }
+                </style>
                 {#if visits.isEmpty() || visits == null}
                     <h3 style="color: white; margin-top: 15%">Non ci sono visite iniziate</h3>
                 {#else}
@@ -484,6 +504,10 @@
 
             {#if type == "addGuest"}
                 <style>
+                    .nav-links a:nth-child(1) {
+                        color: #DCC132;
+                        text-decoration: underline;
+                    }
                     .guest-form {
                         background-color: white;
                         color: black;
@@ -617,6 +641,10 @@
 
             {#if type == "addVisit"}
             <style>
+                .nav-links a:nth-child(2) {
+                    color: #DCC132;
+                    text-decoration: underline;
+                }
                 .visit-form {
                     background-color: white;
                     color: black;
@@ -772,6 +800,12 @@
                 {/if}
 
                 {#if type == "deleteVisit"}
+                    <style>
+                        .nav-links a:nth-child(3) {
+                            color: #DCC132;
+                            text-decoration: underline;
+                        }
+                    </style>
                     {#if visits.isEmpty()}
                         <h3 style="color: white; margin-top: 15%">Non ci sono visite prenotate</h3>
                     {#else}
