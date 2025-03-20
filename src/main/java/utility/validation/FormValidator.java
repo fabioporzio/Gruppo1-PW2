@@ -1,22 +1,24 @@
 package utility.validation;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class FormValidator {
 
-    /***
+    /**
+     * *
      * Validates the provided string.
      *
-     * This method checks if the provided string is not null and not empty.
-     * It ensures that the string has a valid non-empty value.
-     * When called in an if construct the function should be preceded by "not" symbol (!).
+     * This method checks if the provided string is not null and not empty. It
+     * ensures that the string has a valid non-empty value. When called in an if
+     * construct the function should be preceded by "not" symbol (!).
      *
      * @param string The string to be validated.
-     * @return `true` if the string is not null and not empty, `false` otherwise.
+     * @return `true` if the string is not null and not empty, `false`
+     * otherwise.
      */
     public boolean checkStringNotNullOrEmpty(String string) {
         boolean valid;
@@ -26,17 +28,18 @@ public class FormValidator {
         return valid;
     }
 
-    /***
+    /**
+     * *
      * Validates if the provided date.
      *
-     * This method checks if the provided date is not null.
-     * It ensures that the date has a valid value.
-     * When called in an if construct the function should be preceded by "not" symbol (!).
+     * This method checks if the provided date is not null. It ensures that the
+     * date has a valid value. When called in an if construct the function
+     * should be preceded by "not" symbol (!).
      *
      * @param date The date to be validated.
      * @return `true` if the date is not null, `false` otherwise.
      */
-    public boolean checkDateNotNull (LocalDate date) {
+    public boolean checkDateNotNull(LocalDate date) {
         boolean valid;
 
         valid = date != null;
@@ -44,17 +47,19 @@ public class FormValidator {
         return valid;
     }
 
-    /***
+    /**
+     * *
      * Validates if the provided date is in the future.
      *
-     * This method checks if the provided date is after the current date.
-     * It ensures that the date is in the future, not today or in the past.
-     * When called in an if construct the function should be preceded by "not" symbol (!).
+     * This method checks if the provided date is after the current date. It
+     * ensures that the date is in the future, not today or in the past. When
+     * called in an if construct the function should be preceded by "not" symbol
+     * (!).
      *
      * @param date The date to be validated.
      * @return `true` if the date is in the future, `false` otherwise.
      */
-    public boolean checkDateIsAfterToday (LocalDate date) {
+    public boolean checkDateIsAfterToday(LocalDate date) {
         boolean valid;
         LocalDate today = LocalDate.now();
 
@@ -63,16 +68,17 @@ public class FormValidator {
         return valid;
     }
 
-    /***
+    /**
+     * *
      * Validates if the provided date is in the past.
      *
-     * This method checks if the provided date is before the current date.
-     * It ensures that the date is today or in the future, not in the past.
+     * This method checks if the provided date is before the current date. It
+     * ensures that the date is today or in the future, not in the past.
      *
      * @param date The date to be validated.
      * @return `true` if the date today or after, `false` otherwise.
      */
-    public boolean checkDateIsBeforeToday (LocalDate date) {
+    public boolean checkDateIsBeforeToday(LocalDate date) {
         boolean valid;
         LocalDate today = LocalDate.now();
 
@@ -81,17 +87,18 @@ public class FormValidator {
         return valid;
     }
 
-    /***
+    /**
+     * *
      * Validates the provided LocalTime.
      *
-     * This method checks if the provided time is not null.
-     * It ensures that the time has a valid value.
-     * When called in an if construct the function should be preceded by "not" symbol (!).
+     * This method checks if the provided time is not null. It ensures that the
+     * time has a valid value. When called in an if construct the function
+     * should be preceded by "not" symbol (!).
      *
      * @param time The date to be validated.
      * @return `true` if the time is not null, `false` otherwise.
      */
-    public boolean checkTimeNotNull (LocalTime time) {
+    public boolean checkTimeNotNull(LocalTime time) {
         boolean valid;
 
         valid = time != null;
@@ -99,15 +106,17 @@ public class FormValidator {
         return valid;
     }
 
-    /***
+    /**
+     * *
      * Validates if the endingTime is after the startingTime.
      *
-     * This method checks if the startingTime is after the endingTime.
-     * It ensures that the startingTime is in the past compared to the endingTime.
+     * This method checks if the startingTime is after the endingTime. It
+     * ensures that the startingTime is in the past compared to the endingTime.
      *
      * @param startingTime The time that must be before the endingTime.
      * @param endingTime The time that must be after the StartingTime.
-     * @return `true` if the endingTime is after the startingTime, `false` otherwise.
+     * @return `true` if the endingTime is after the startingTime, `false`
+     * otherwise.
      */
     public boolean checkStartingTimeIsAfterEndingTime(LocalTime startingTime, LocalTime endingTime) {
         boolean valid;
@@ -118,23 +127,24 @@ public class FormValidator {
     }
 
     /**
-     * Validates if the phone number contains a `+` at the start and then only numbers.
+     * Validates if the phone number contains a `+` at the start and then only
+     * numbers.
      *
      * @param phoneNumber The phone number that you want to check.
      * @return phoneNumber if the phone number is correct, `` otherwise.
      */
-    public String checkPhoneNumber(String phoneNumber){
-        if(phoneNumber.isEmpty()){
+    public String checkPhoneNumber(String phoneNumber) {
+        if (phoneNumber.isEmpty()) {
             return "";
         }
 
         phoneNumber = phoneNumber.trim();
-        if(!(phoneNumber.charAt(0) == '+')){
+        if (!(phoneNumber.charAt(0) == '+')) {
             phoneNumber = '+' + phoneNumber;
         }
 
-        for(int i = 1; i < phoneNumber.length(); i++){
-            if(phoneNumber.charAt(i) < 48 || phoneNumber.charAt(i) > 57){
+        for (int i = 1; i < phoneNumber.length(); i++) {
+            if (phoneNumber.charAt(i) < 48 || phoneNumber.charAt(i) > 57) {
                 return "";
             }
         }
@@ -142,12 +152,14 @@ public class FormValidator {
         return phoneNumber;
     }
 
-    /***
+    /**
+     * *
      * Validates if the input email contains a @.
      *
-     * This method checks if the email in the form contains a '@' character.
-     * It ensures that the email is valid even if the user changes the input type in html files.
-     * When called in an if construct the function should be preceded by "not" symbol (!).
+     * This method checks if the email in the form contains a '@' character. It
+     * ensures that the email is valid even if the user changes the input type
+     * in html files. When called in an if construct the function should be
+     * preceded by "not" symbol (!).
      *
      * @param email The email used in the corresponding form's field.
      * @return `true` if the email contains @, `false` otherwise

@@ -4,7 +4,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,7 +37,9 @@ public class HomeReceptionController {
     private final EmployeeManager employeeManager;
     private final BadgeManager badgeManager;
 
-    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager, FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager, BadgeManager badgeManager) {
+    public HomeReceptionController(Template homeReception, SessionManager sessionManager, VisitManager visitManager,
+            FormValidator formValidator, GuestManager guestManager, EmployeeManager employeeManager,
+            BadgeManager badgeManager) {
         this.homeReception = homeReception;
         this.sessionManager = sessionManager;
         this.visitManager = visitManager;
@@ -79,16 +80,15 @@ public class HomeReceptionController {
     public Response showVisits(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         if (sessionId != null) {
 
-        List<Visit> visits = visitManager.getVisitsFromFile();
-        visits.sort(Comparator.comparing(Visit::getDate));
+            List<Visit> visits = visitManager.getVisitsFromFile();
+            visits.sort(Comparator.comparing(Visit::getDate));
 
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeReception.data(
-                    "employee",employee,
+                    "employee", employee,
                     "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
-                    "type","showVisits",
-                    "date", null
-            )).build();
+                    "type", "showVisits",
+                    "date", null)).build();
         }
         return Response.seeOther(URI.create("/")).build();
 
@@ -102,17 +102,17 @@ public class HomeReceptionController {
      */
     @Path("/filtered-visits")
     @POST
-    public Response filterVisits(@FormParam("inputDate") LocalDate inputDate , @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
+    public Response filterVisits(@FormParam("inputDate") LocalDate inputDate,
+            @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
 
         List<Visit> visits = visitManager.getVisitsByDate(inputDate);
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeReception.data(
-                    "employee",employee,
+                    "employee", employee,
                     "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
-                    "type" , "showVisits",
-                    "date", inputDate
-            )).build();
+                    "type", "showVisits",
+                    "date", inputDate)).build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -134,10 +134,10 @@ public class HomeReceptionController {
                     "employee", employee,
                     "errorMessage", null,
                     "successMessage", null,
-                    "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager)
-            )).build();
+                    "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager)))
+                    .build();
         }
-       return null;
+        return null;
     }
 
     /***
@@ -152,8 +152,7 @@ public class HomeReceptionController {
     public Response assignBadge(
             @FormParam("badge") String badgeCode,
             @FormParam("visitId") String visitId,
-            @CookieParam(NAME_COOKIE_SESSION) String sessionId
-    ){
+            @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
 
         if (sessionId != null) {
             List<String> badges = badgeManager.getBadgesFromFile();
@@ -191,8 +190,9 @@ public class HomeReceptionController {
                         "type", "assignBadge",
                         "errorMessage", errorMessage,
                         "successMessage", null,
-                        "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
-                )).build();
+                        "visits", visitManager.changeIdsInSurnames(
+                                visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)))
+                        .build();
             }
 
             List<Visit> visits = visitManager.getVisitsFromFile();
@@ -200,7 +200,8 @@ public class HomeReceptionController {
             for (Visit visit : visits) {
                 if (visit.getId().equals(visitId)) {
                     visit.setBadgeCode(badgeCode);
-                    visit.setActualStartingHour(LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
+                    visit.setActualStartingHour(
+                            LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
                     visit.setStatus(VisitStatus.STARTED);
                 }
             }
@@ -213,8 +214,9 @@ public class HomeReceptionController {
                         "type", "assignBadge",
                         "errorMessage", errorMessage,
                         "successMessage", null,
-                        "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
-                )).build();
+                        "visits", visitManager.changeIdsInSurnames(
+                                visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)))
+                        .build();
             }
 
             String successMessage = "Badge assegnato";
@@ -224,8 +226,9 @@ public class HomeReceptionController {
                     "type", "assignBadge",
                     "errorMessage", null,
                     "successMessage", successMessage,
-                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()), guestManager, employeeManager)
-            )).build();
+                    "visits", visitManager.changeIdsInSurnames(visitManager.getUnstartedVisitsByDate(LocalDate.now()),
+                            guestManager, employeeManager)))
+                    .build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -246,8 +249,7 @@ public class HomeReceptionController {
             return Response.ok(homeReception.data(
                     "employee", employee,
                     "visits", visitManager.changeIdsInSurnames(unfinishedVisits, guestManager, employeeManager),
-                    "type", "closeVisit")
-            ).build();
+                    "type", "closeVisit")).build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -261,14 +263,15 @@ public class HomeReceptionController {
     @Path("/close-visit")
     @POST
     public Response closeVisit(@FormParam("visitId") String visitId,
-                               @CookieParam(NAME_COOKIE_SESSION) String sessionId){
+            @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
 
         if (sessionId != null) {
             List<Visit> visits = visitManager.getVisitsFromFile();
 
             for (Visit visit : visits) {
                 if (visit.getId().equals(visitId)) {
-                    visit.setActualEndingHour(LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
+                    visit.setActualEndingHour(
+                            LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
                     visit.setStatus(VisitStatus.ENDED);
                 }
             }
@@ -281,8 +284,9 @@ public class HomeReceptionController {
                         "type", "closeVisit",
                         "errorMessage", "Errore nel concludere la visita",
                         "successMessage", null,
-                        "visits", visitManager.changeIdsInSurnames(visitManager.getUnfinishedVisits(), guestManager, employeeManager)
-                )).build();
+                        "visits", visitManager.changeIdsInSurnames(visitManager.getUnfinishedVisits(), guestManager,
+                                employeeManager)))
+                        .build();
             }
             return Response.seeOther(URI.create("home-reception/close-visit")).build();
         }
@@ -301,12 +305,11 @@ public class HomeReceptionController {
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeReception.data(
-                    "employee",employee,
+                    "employee", employee,
                     "type", "addGuest",
                     "errorMessage", null,
                     "successMessage", null,
-                    "visits", null
-            )).build();
+                    "visits", null)).build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -314,12 +317,12 @@ public class HomeReceptionController {
     /***
      * Adds a new guest after validating the input.
      *
-     * @param sessionId the session cookie
-     * @param name      the guest's first name
-     * @param surname   the guest's last name
-     * @param phoneNumber   the guest's phone number
-     * @param role      the guest's role
-     * @param company   the guest's company
+     * @param sessionId   the session cookie
+     * @param name        the guest's first name
+     * @param surname     the guest's last name
+     * @param phoneNumber the guest's phone number
+     * @param role        the guest's role
+     * @param company     the guest's company
      * @return the HTML response with success or error messages
      */
     @POST
@@ -331,8 +334,7 @@ public class HomeReceptionController {
             @FormParam("email") String email,
             @FormParam("phoneNumber") String phoneNumber,
             @FormParam("role") String role,
-            @FormParam("company") String company
-    ){
+            @FormParam("company") String company) {
         if (sessionId != null) {
             String errorMessage = null;
 
@@ -353,7 +355,8 @@ public class HomeReceptionController {
             }
 
             phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
-            if (errorMessage == null && (!formValidator.checkStringNotNullOrEmpty(phoneNumber) || phoneNumber.isEmpty())) {
+            if (errorMessage == null
+                    && (!formValidator.checkStringNotNullOrEmpty(phoneNumber) || phoneNumber.isEmpty())) {
                 errorMessage = "Numero di telefono non valido";
             }
 
@@ -380,8 +383,7 @@ public class HomeReceptionController {
                         "type", "addGuest",
                         "errorMessage", errorMessage,
                         "successMessage", null,
-                        "visits", null
-                )).build();
+                        "visits", null)).build();
             }
 
             guestManager.saveGuest(guest);
@@ -392,8 +394,7 @@ public class HomeReceptionController {
                     "type", "addGuest",
                     "errorMessage", null,
                     "successMessage", successMessage,
-                    "visits", null
-            )).build();
+                    "visits", null)).build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -407,8 +408,7 @@ public class HomeReceptionController {
     @GET
     @Path("/add-visit")
     public Response showFormAddVisit(
-            @CookieParam(NAME_COOKIE_SESSION) String sessionId
-    ){
+            @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             List<Guest> guests = guestManager.getGuestsFromFile();
@@ -445,8 +445,7 @@ public class HomeReceptionController {
             @FormParam("expectedStart") LocalTime expectedStart,
             @FormParam("expectedEnd") LocalTime expectedEnd,
             @FormParam("guest") String guestId,
-            @FormParam("employee") String employeeId
-    ) {
+            @FormParam("employee") String employeeId) {
         if (sessionId != null) {
             List<Guest> guests = guestManager.getGuestsFromFile();
             List<Employee> employees = employeeManager.getEmployeesFromFile();
@@ -484,7 +483,8 @@ public class HomeReceptionController {
             int countOverlapVisits = 0;
 
             for (Visit visit : visitsOfDate) {
-                if (visit.getExpectedStartingHour().isBefore(expectedEnd) && visit.getExpectedEndingHour().isAfter(expectedStart)) {
+                if (visit.getExpectedStartingHour().isBefore(expectedEnd)
+                        && visit.getExpectedEndingHour().isAfter(expectedStart)) {
                     countOverlapVisits++;
                 }
             }
@@ -501,8 +501,7 @@ public class HomeReceptionController {
                         .data("successMessage", null)
                         .data("guests", guests)
                         .data("employees", employees)
-                        .data("employee", employee)
-                ).build();
+                        .data("employee", employee)).build();
             }
 
             String newId = "" + visitManager.getNewId();
@@ -512,7 +511,8 @@ public class HomeReceptionController {
 
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-            Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus, guestId, employeeId, null);
+            Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus,
+                    guestId, employeeId, null);
             boolean status = visitManager.saveVisit(visit);
 
             if (status) {
@@ -524,8 +524,7 @@ public class HomeReceptionController {
                         .data("successMessage", successMessage)
                         .data("guests", guests)
                         .data("employees", employees)
-                        .data("employee", employee)
-                ).build();
+                        .data("employee", employee)).build();
             } else {
                 return Response.ok(homeReception
                         .data("type", "addVisit")
@@ -533,8 +532,7 @@ public class HomeReceptionController {
                         .data("successMessage", null)
                         .data("guests", guests)
                         .data("employees", employees)
-                        .data("employee", employee)
-                ).build();
+                        .data("employee", employee)).build();
             }
         }
         return Response.seeOther(URI.create("/")).build();
@@ -560,8 +558,7 @@ public class HomeReceptionController {
                     "errorMessage", null,
                     "successMessage", null,
                     "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
-                    "employee", employee
-            )).build();
+                    "employee", employee)).build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -577,8 +574,7 @@ public class HomeReceptionController {
     @Path("/delete-visit")
     public Response deleteVisit(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
-            @FormParam("visitId") String visitId
-    ) {
+            @FormParam("visitId") String visitId) {
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
@@ -594,8 +590,7 @@ public class HomeReceptionController {
                     "type", "deleteVisit",
                     "errorMessage", null,
                     "successMessage", null,
-                    "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager)
-            )).build();
+                    "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager))).build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
