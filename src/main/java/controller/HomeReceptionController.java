@@ -155,7 +155,7 @@ public class HomeReceptionController {
         List<String> badges = badgeManager.getBadgesFromFile();
         String errorMessage = null;
 
-        if(!formValidator.checkStringForm(badgeCode)){
+        if(!formValidator.checkStringNotNullOrEmpty(badgeCode)){
             errorMessage = "L'input del codice è vuoto.";
         }
 
@@ -323,27 +323,31 @@ public class HomeReceptionController {
     ){
         String errorMessage = null;
 
-        if(!formValidator.checkStringForm(name)){
+        if(!formValidator.checkStringNotNullOrEmpty(name)){
             errorMessage = "Nome non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(surname)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(surname)){
             errorMessage = "Cognome non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(email)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(email)){
             errorMessage = "Email non valida";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(phoneNumber)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(phoneNumber)){
             errorMessage = "Numero di telefono non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(role)){
+        if (errorMessage == null && !formValidator.isEmailValid(email)) {
+            errorMessage = "Email deve contenere una @";
+        }
+
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(role)){
             errorMessage = "Ruolo non valido";
         }
 
-        if (errorMessage == null && !formValidator.checkStringForm(company)){
+        if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(company)){
             errorMessage = "Azienda non valida";
         }
 
@@ -432,7 +436,7 @@ public class HomeReceptionController {
             errorMessage = "Data non può essere vuota";
         }
 
-        if (errorMessage == null && !formValidator.checkDate(date)) {
+        if (errorMessage == null && !formValidator.checkDateIsAfterToday(date)) {
             errorMessage = "La visita deve essere inserita almeno un giorno prima";
         }
 
@@ -444,15 +448,15 @@ public class HomeReceptionController {
             errorMessage = "L'ora di inizio non può essere vuota";
         }
 
-        if(errorMessage == null && formValidator.checkTimeIsValid(expectedStart, expectedEnd)) {
+        if(errorMessage == null && formValidator.checkStartingTimeIsAfterEndingTime(expectedStart, expectedEnd)) {
             errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(guestId)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(guestId)){
             errorMessage = "Ospite non valido";
         }
 
-        if(errorMessage == null && !formValidator.checkStringForm(employeeId)){
+        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(employeeId)){
             errorMessage = "Dipendente non valido";
         }
 
