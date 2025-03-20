@@ -18,7 +18,7 @@ public class FormValidator {
      * @param string The string to be validated.
      * @return `true` if the string is not null and not empty, `false` otherwise.
      */
-    public boolean checkStringForm(String string) {
+    public boolean checkStringNotNullOrEmpty(String string) {
         boolean valid;
 
         valid = string != null && !string.isEmpty();
@@ -54,7 +54,7 @@ public class FormValidator {
      * @param date The date to be validated.
      * @return `true` if the date is in the future, `false` otherwise.
      */
-    public boolean checkDate (LocalDate date) {
+    public boolean checkDateIsAfterToday (LocalDate date) {
         boolean valid;
         LocalDate today = LocalDate.now();
 
@@ -91,7 +91,7 @@ public class FormValidator {
      * @param endingTime The time that must be after the StartingTime.
      * @return `true` if the endingTime is after the startingTime, `false` otherwise.
      */
-    public boolean checkTimeIsValid(LocalTime startingTime, LocalTime endingTime) {
+    public boolean checkStartingTimeIsAfterEndingTime(LocalTime startingTime, LocalTime endingTime) {
         boolean valid;
 
         valid = startingTime.isAfter(endingTime) || startingTime.equals(endingTime);
@@ -118,5 +118,23 @@ public class FormValidator {
         }
 
         return true;
+    }
+
+    /***
+     * Validates if the input email contains a @.
+     *
+     * This method checks if the email in the form contains a '@' character.
+     * It ensures that the email is valid even if the user changes the input type in html files.
+     * When called in an if construct the function should be preceded by "not" symbol (!).
+     *
+     * @param email The email used in the corresponding form's field.
+     * @return `true` if the email contains @, `false` otherwise
+     */
+    public boolean isEmailValid(String email) {
+        boolean valid;
+
+        valid = email.contains("@");
+
+        return valid;
     }
 }
