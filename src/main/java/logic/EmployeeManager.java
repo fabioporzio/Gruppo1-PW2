@@ -110,6 +110,13 @@ public class EmployeeManager {
         return null;
     }
 
+    /**
+     * Check if the plain password and the hashed password are equal
+     *
+     * @param plainPassword The password written in the login form
+     * @param hashedPassword The password written in the file
+     * @return `true` if are equal, `false` otherwise
+     */
     public static boolean checkPassword(String plainPassword, String hashedPassword) {
         return BCrypt.checkpw(plainPassword, hashedPassword);
     }
@@ -128,18 +135,11 @@ public class EmployeeManager {
     public Employee getEmployeeByCredentials(String email, String password) {
         List<Employee> employees = getEmployeesFromFile();
 
-
-
         for (Employee employee : employees) {
-            System.out.println("Plain Password: " + password);
-            System.out.println("Hashed Password from CSV: " + employee.getPassword());
             if (employee.getEmail().equals(email) && checkPassword(password ,employee.getPassword() )) {
                 return employee;
             }
         }
-
-
-
         return null;
     }
 

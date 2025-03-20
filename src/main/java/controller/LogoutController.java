@@ -30,10 +30,15 @@ public class LogoutController {
     public Response processLogout(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ) {
-        sessionManager.removeSession(sessionId);
+        if (sessionId != null) {
+            sessionManager.removeSession(sessionId);
 
-        return Response.seeOther(URI.create("/"))
-                .cookie(new NewCookie.Builder(NAME_COOKIE_SESSION).value(null).build())
-                .build();
+            return Response.seeOther(URI.create("/"))
+                    .cookie(new NewCookie.Builder(NAME_COOKIE_SESSION).value(null).build())
+                    .build();
+        }
+        return Response.seeOther(URI.create("/")).build();
+
+
     }
 }

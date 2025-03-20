@@ -88,8 +88,8 @@ public class HomeEmployeeController {
                 "employee", employee,
                 "type", "addGuest",
                 "errorMessage", null,
-                "successMessage", null
-        )).build();
+                "successMessage", null))
+                    .build();
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -116,67 +116,67 @@ public class HomeEmployeeController {
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
-        String errorMessage = null;
-
-        if(!formValidator.checkStringNotNullOrEmpty(name)){
-            errorMessage = "Nome non valido";
-        }
-
-        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(surname)){
-            errorMessage = "Cognome non valido";
-        }
-
-        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(email)){
-            errorMessage = "Email non valida";
-        }
-
-        if (errorMessage == null && !formValidator.isEmailValid(email)) {
-            errorMessage = "Email deve contenere una @";
-        }
-
-        phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
-        if(errorMessage == null && (!formValidator.checkStringNotNullOrEmpty(phoneNumber))){
-            errorMessage = "Numero di telefono non valido";
-        }
-
-        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(role)){
-            errorMessage = "Ruolo non valido";
-        }
-
-        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(company)){
-            errorMessage = "Azienda non valida";
-        }
-
-        String newId = ""+guestManager.getNewId();
-        Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
-
-        if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
-            errorMessage = "Esiste già un ospite con questa email";
-        }
-
         if (sessionId != null) {
+            String errorMessage = null;
+
+            if (!formValidator.checkStringNotNullOrEmpty(name)) {
+                errorMessage = "Nome non valido";
+            }
+
+            if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(surname)) {
+                errorMessage = "Cognome non valido";
+            }
+
+            if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(email)) {
+                errorMessage = "Email non valida";
+            }
+
+            if (errorMessage == null && !formValidator.isEmailValid(email)) {
+                errorMessage = "Email deve contenere una @";
+            }
+
+            phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
+            if (errorMessage == null && (!formValidator.checkStringNotNullOrEmpty(phoneNumber))) {
+                errorMessage = "Numero di telefono non valido";
+            }
+
+            if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(role)) {
+                errorMessage = "Ruolo non valido";
+            }
+
+            if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(company)) {
+                errorMessage = "Azienda non valida";
+            }
+
+            String newId = "" + guestManager.getNewId();
+            Guest guest = new Guest(newId, name, surname, email, phoneNumber, role, company);
+
+            if (errorMessage == null && !guestManager.isGuestAlreadyExisting(guest)) {
+                errorMessage = "Esiste già un ospite con questa email";
+            }
+
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
-            if(errorMessage != null){
+            if (errorMessage != null) {
                 return Response.ok(homeEmployee.data(
-                        "employee",employee,
+                        "employee", employee,
                         "errorMessage", errorMessage,
                         "successMessage", null,
                         "type", "addGuest"
                 )).build();
             }
-        }
 
-        guestManager.saveGuest(guest);
 
-        String successMessage = "Ospite aggiunto";
-        if (sessionId != null) {
-            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+            guestManager.saveGuest(guest);
+
+            String successMessage = "Ospite aggiunto";
+
             return Response.ok(homeEmployee.data(
                     "employee", employee,
                     "errorMessage", null,
                     "successMessage", successMessage,
                     "type", "addGuest"
             )).build();
+
         }
         return Response.seeOther(URI.create("/")).build();
     }
@@ -192,9 +192,9 @@ public class HomeEmployeeController {
     public Response showFormAddVisit(
             @CookieParam(NAME_COOKIE_SESSION) String sessionId
     ){
-
-        List<Guest> guests = guestManager.getGuestsFromFile();
         if (sessionId != null) {
+        List<Guest> guests = guestManager.getGuestsFromFile();
+
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeEmployee.data(
                     "employee",employee,
@@ -226,90 +226,90 @@ public class HomeEmployeeController {
             @FormParam("expectedEnd") LocalTime expectedEnd,
             @FormParam("guest") String guestId
     ) {
-        List<Guest> guests = guestManager.getGuestsFromFile();
-        String errorMessage = null;
-
-        if (!formValidator.checkDateNotNull(date)) {
-            errorMessage = "La data non può essere vuota";
-        }
-
-        if (errorMessage == null && !formValidator.checkDateIsAfterToday(date)) {
-            errorMessage = "La visita deve essere aggiunta almeno un giorno in anticipo";
-        }
-
-        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
-            errorMessage = "L'ora di inizio non può essere vuota";
-        }
-
-        if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
-            errorMessage = "L'ora di fine non può essere vuota";
-        }
-
-        if(errorMessage == null && formValidator.checkStartingTimeIsAfterEndingTime(expectedStart, expectedEnd)) {
-            errorMessage = "L'ora di inizio non deve essere successiva a quella di fine";
-        }
-
-        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(guestId)){
-            errorMessage = "Ospite non valido";
-        }
-
-        List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
-        int countOverlapVisits = 0;
-
-        for(Visit visit : visitsOfDate) {
-            if (visit.getExpectedStartingHour().isBefore(expectedEnd) && visit.getExpectedEndingHour().isAfter(expectedStart)) {
-                countOverlapVisits++;
-            }
-        }
-
-        if(countOverlapVisits == badgeManager.countBadges()) {
-            errorMessage = "Non ci sono più badge disponibili";
-        }
         if (sessionId != null) {
+            List<Guest> guests = guestManager.getGuestsFromFile();
+            String errorMessage = null;
+
+            if (!formValidator.checkDateNotNull(date)) {
+                errorMessage = "La data non può essere vuota";
+            }
+
+            if (errorMessage == null && !formValidator.checkDateIsAfterToday(date)) {
+                errorMessage = "La visita deve essere aggiunta almeno un giorno in anticipo";
+            }
+
+            if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
+                errorMessage = "L'ora di inizio non può essere vuota";
+            }
+
+            if (errorMessage == null && !formValidator.checkTimeNotNull(expectedEnd)) {
+                errorMessage = "L'ora di fine non può essere vuota";
+            }
+
+            if (errorMessage == null && formValidator.checkStartingTimeIsAfterEndingTime(expectedStart, expectedEnd)) {
+                errorMessage = "L'ora di inizio non deve essere successiva a quella di fine";
+            }
+
+            if (errorMessage == null && !formValidator.checkStringNotNullOrEmpty(guestId)) {
+                errorMessage = "Ospite non valido";
+            }
+
+            List<Visit> visitsOfDate = visitManager.getVisitsByDate(date);
+            int countOverlapVisits = 0;
+
+            for (Visit visit : visitsOfDate) {
+                if (visit.getExpectedStartingHour().isBefore(expectedEnd) && visit.getExpectedEndingHour().isAfter(expectedStart)) {
+                    countOverlapVisits++;
+                }
+            }
+
+            if (countOverlapVisits == badgeManager.countBadges()) {
+                errorMessage = "Non ci sono più badge disponibili";
+            }
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-            if(errorMessage != null){
+            if (errorMessage != null) {
                 return Response.ok(homeEmployee.data(
-                        "employee",employee,
+                        "employee", employee,
                         "errorMessage", errorMessage,
                         "successMessage", null,
                         "guests", guests,
                         "type", "addVisit"
                 )).build();
             }
+
+
+            String newId = "" + visitManager.getNewId();
+            LocalTime actualStart = LocalTime.ofSecondOfDay(0);
+            LocalTime actualEnd = LocalTime.ofSecondOfDay(0);
+            VisitStatus visitStatus = VisitStatus.YET_TO_START;
+
+            String employeeId = employee.getId();
+
+            Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus, guestId, employeeId, null);
+            boolean status = visitManager.saveVisit(visit);
+
+            if (status) {
+                String successMessage = "Visita aggiunta";
+
+                return Response.ok(homeEmployee.data(
+                        "employee", employee,
+                        "successMessage", successMessage,
+                        "errorMessage", null,
+                        "guests", guests,
+                        "type", "addVisit"
+                )).build();
+            } else {
+                return Response.ok(homeEmployee.data(
+                        "employee", employee,
+                        "successMessage", null,
+                        "errorMessage", "Esiste già un altra visita con questi dati",
+                        "guests", guests,
+                        "type", "addVisit"
+                )).build();
+            }
         }
-
-        String newId = "" + visitManager.getNewId();
-        LocalTime actualStart = LocalTime.ofSecondOfDay(0);
-        LocalTime actualEnd = LocalTime.ofSecondOfDay(0);
-        VisitStatus visitStatus = VisitStatus.YET_TO_START;
-
-        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
-        String employeeId = employee.getId();
-
-        Visit visit = new Visit(newId, date, expectedStart, actualStart, expectedEnd, actualEnd, visitStatus ,guestId, employeeId, null);
-        boolean status = visitManager.saveVisit(visit);
-
-        if (status) {
-            String successMessage = "Visita aggiunta";
-
-            return Response.ok(homeEmployee.data(
-                    "employee",employee,
-                    "successMessage", successMessage,
-                    "errorMessage", null,
-                    "guests", guests,
-                    "type", "addVisit"
-            )).build();
-        }
-        else {
-            return Response.ok(homeEmployee.data(
-                    "employee",employee,
-                    "successMessage", null,
-                    "errorMessage", "Esiste già un altra visita con questi dati",
-                    "guests", guests,
-                    "type", "addVisit"
-            )).build();
-        }
+        return Response.seeOther(URI.create("/")).build();
     }
 
     /***
@@ -321,19 +321,22 @@ public class HomeEmployeeController {
     @GET
     @Path("/delete-visit")
     public Response showDeleteVisit(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
-        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        List<Visit> visits = visitManager.getUnstartedVisits();
-        List<Visit> filteredVisits = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
-        filteredVisits.sort(Comparator.comparing(Visit::getDate));
+            List<Visit> visits = visitManager.getUnstartedVisits();
+            List<Visit> filteredVisits = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+            filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
-        return Response.ok(homeEmployee.data(
-                "employee",employee,
-                "visits", visitManager.changeIdsInSurnames(filteredVisits, guestManager, employeeManager),
-                "type", "deleteVisit",
-                "errorMessage", null,
-                "successMessage", null
-        )).build();
+            return Response.ok(homeEmployee.data(
+                    "employee", employee,
+                    "visits", visitManager.changeIdsInSurnames(filteredVisits, guestManager, employeeManager),
+                    "type", "deleteVisit",
+                    "errorMessage", null,
+                    "successMessage", null
+            )).build();
+        }
+        return Response.seeOther(URI.create("/")).build();
     }
 
     /***
@@ -349,22 +352,25 @@ public class HomeEmployeeController {
             @CookieParam(NAME_COOKIE_SESSION) String sessionId,
             @FormParam("visitId") String visitId
     ) {
-        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
+        if (sessionId != null) {
+            Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
-        Visit visit = visitManager.getVisitById(visitId);
-        List<Visit> filteredVisits = visitManager.getFilteredVisits(visit);
-        visitManager.overwriteVisits(filteredVisits);
+            Visit visit = visitManager.getVisitById(visitId);
+            List<Visit> filteredVisits = visitManager.getFilteredVisits(visit);
+            visitManager.overwriteVisits(filteredVisits);
 
-        List<Visit> visits = visitManager.getUnstartedVisits();
-        List<Visit> visitsByEmployeeId = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
-        filteredVisits.sort(Comparator.comparing(Visit::getDate));
+            List<Visit> visits = visitManager.getUnstartedVisits();
+            List<Visit> visitsByEmployeeId = visitManager.filterVisitsByEmployeeId(visits, employee.getId());
+            filteredVisits.sort(Comparator.comparing(Visit::getDate));
 
-        return Response.ok(homeEmployee.data(
-                "employee",employee,
-                "visits", visitManager.changeIdsInSurnames(visitsByEmployeeId, guestManager, employeeManager),
-                "type", "deleteVisit",
-                "errorMessage", null,
-                "successMessage", null
-        )).build();
+            return Response.ok(homeEmployee.data(
+                    "employee", employee,
+                    "visits", visitManager.changeIdsInSurnames(visitsByEmployeeId, guestManager, employeeManager),
+                    "type", "deleteVisit",
+                    "errorMessage", null,
+                    "successMessage", null
+            )).build();
+        }
+        return Response.seeOther(URI.create("/")).build();
     }
 }
