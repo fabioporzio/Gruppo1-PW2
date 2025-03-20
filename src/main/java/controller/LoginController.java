@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.Response;
 import logic.EmployeeManager;
 import logic.SessionManager;
 import model.Employee;
-import utilities.validation.CredentialsValidator;
+import utility.validation.CredentialsValidator;
 
 import java.net.URI;
 

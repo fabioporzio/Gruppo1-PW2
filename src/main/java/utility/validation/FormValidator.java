@@ -1,4 +1,4 @@
-package utilities.validation;
+package utility.validation;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
