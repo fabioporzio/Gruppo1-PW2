@@ -1,4 +1,4 @@
-package utilities.validation;
+package utility.validation;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -59,6 +59,24 @@ public class FormValidator {
         LocalDate today = LocalDate.now();
 
         valid = date.isAfter(today);
+
+        return valid;
+    }
+
+    /***
+     * Validates if the provided date is in the past.
+     *
+     * This method checks if the provided date is before the current date.
+     * It ensures that the date is today or in the future, not in the past.
+     *
+     * @param date The date to be validated.
+     * @return `true` if the date today or after, `false` otherwise.
+     */
+    public boolean checkDateIsBeforeToday (LocalDate date) {
+        boolean valid;
+        LocalDate today = LocalDate.now();
+
+        valid = date.isBefore(today);
 
         return valid;
     }

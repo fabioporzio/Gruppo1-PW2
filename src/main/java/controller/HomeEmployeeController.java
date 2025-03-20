@@ -9,7 +9,7 @@ import model.Employee;
 import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
-import utilities.validation.FormValidator;
+import utility.validation.FormValidator;
 
 import java.net.URI;
 import java.time.LocalDate;

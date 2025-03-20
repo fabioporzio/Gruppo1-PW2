@@ -24,7 +24,7 @@ import model.Employee;
 import model.Guest;
 import model.visit.Visit;
 import model.visit.VisitStatus;
-import utilities.validation.FormValidator;
+import utility.validation.FormValidator;
 
 @Path("/home-reception")
 public class HomeReceptionController {
@@ -437,8 +437,8 @@ public class HomeReceptionController {
             errorMessage = "Data non può essere vuota";
         }
 
-        if (errorMessage == null && !formValidator.checkDateIsAfterToday(date)) {
-            errorMessage = "La visita deve essere inserita almeno un giorno prima";
+        if (errorMessage == null && formValidator.checkDateIsBeforeToday(date)) {
+            errorMessage = "La data della visita non può essere precedente ad oggi";
         }
 
         if (errorMessage == null && !formValidator.checkTimeNotNull(expectedStart)) {
