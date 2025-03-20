@@ -2,31 +2,41 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <link rel="stylesheet" href="/css/styles-login.css" />
+    <!-- Dichiarazione del tipo di documento HTML -->
+    <meta charset="UTF-8" /> <!-- Specifica il set di caratteri (UTF-8) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Rende il sito responsivo sui dispositivi -->
+    <title>Login</title> <!-- Titolo della pagina -->
+    <link rel="stylesheet" href="/css/styles-login.css" /> <!-- Collegamento al file CSS per lo stile -->
 </head>
 
 <body>
+    <!-- Contenitore principale per il layout della pagina di login -->
     <div class="login-container">
+        <!-- Scatola centrale che contiene il modulo di login -->
         <div class="login-box">
             <div class="form">
+                <!-- Testo introduttivo del modulo di login -->
                 <div class="login-text">
-                    <h1>Benvenuto</h1>
-                    <h3 style="color: red;">{message}</h3>
-                    <p>"Inserisci le tue credenziali per accedere"</p>
+                    <h1>Benvenuto</h1> <!-- Titolo principale -->
+                    <h3 style="color: red;">{message}</h3> <!-- Messaggio dinamico in rosso (per esempio errori o avvisi) -->
+                    <p>"Inserisci le tue credenziali per accedere"</p> <!-- Istruzioni per l'utente -->
                 </div>
-                <form action="/" method="post">
+                <!-- Modulo HTML per inviare le credenziali -->
+                <form action="/" method="post"> <!-- Metodo POST per inviare dati in modo sicuro -->
                     <div class="input-box">
+                        <!-- Campo per l'email -->
                         <input type="email" name="email" placeholder="Inserisci la tua email" required />
+                        <!-- Campo per la password -->
                         <input type="password" name="password" placeholder="Inserisci la tua password" required />
+                        <!-- Messaggio di errore mostrato in caso di credenziali non valide -->
                         <span class="error-message">Credenziali non valide, riprova.</span>
+                        <!-- Bottone per inviare il modulo -->
                         <button type="submit">Entra</button>
                     </div>
                 </form>
             </div>
         </div>
+        <!-- Sezione per un'eventuale immagine decorativa o contenuto extra -->
         <div class="image-box"></div>
     </div>
 </body>
