@@ -226,13 +226,13 @@
 <section class="main">
     <div class="buttons-container">
         <a href="/home-employee/add-guest" class="no-decoration">
-            <div class="button">Anagrafa un nuovo ospite</div>
+            <div class="button new-guest">Anagrafa un nuovo ospite</div>
         </a>
         <a href="/home-employee/add-visit" class="no-decoration">
-            <div class="button">Inserisci nuova visita</div>
+            <div class="button new-visit">Inserisci nuova visita</div>
         </a>
         <a href="/home-employee/delete-visit" class="no-decoration">
-            <div class="button">Annulla visita</div>
+            <div class="button delete-visit">Annulla visita</div>
         </a>
     </div>
     <section class="content" id="dynamic-content">
@@ -274,6 +274,11 @@
 
             {#if type == "addGuest"}
                 <style>
+                    .new-guest {
+                        font-weight: bold;
+                        background-color: #909090;
+                        color: white;
+                    }
                     .guest-form {
                         background-color: white;
                         color: black;
@@ -402,6 +407,11 @@
             {/if}
             {#if type == "addVisit"}
             <style>
+                .new-visit {
+                    font-weight: bold;
+                    background-color: #909090;
+                    color: white;
+                }
                 .visit-form {
                     background-color: white;
                     color: black;
@@ -545,6 +555,13 @@
                 {/if}
 
                 {#if type == "deleteVisit"}
+                    <style>
+                        .delete-visit {
+                            font-weight: bold;
+                            background-color: #909090;
+                            color: white;
+                        }
+                    </style>
                     {#if visits.isEmpty() || visits == null}
                         <h3 style="color: white; margin-top: 5%">Non ci sono visite da annullare</h3>
                     {#else}
