@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             /*hiding scrollbar*/
-            scrollbar-width: none;
+            scrollbar-width: auto;
             -ms-overflow-style: none;
         }
 
@@ -39,7 +39,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 40px 40px;
-            z-index: 10003 transition: top 1s ease-in-out;
+            z-index: 1000;
+            transition: top 1s ease-in-out;
         }
 
         .nav-links {
@@ -97,8 +98,7 @@
             justify-content: center;
             gap: 150px;
             width: 90vw;
-            margin-top: 50px;
-            margin-bottom: 20px;
+            margin-top: 60px;
         }
 
         .button {
@@ -329,55 +329,59 @@
     <header class="header" id="navbar">
         <div class="title-box">
             <h1>Dashboard</h1>
-            <p>{employee.name} {employee.surname}</p>
+            <p style="color: #DCC132;">{employee.name} {employee.surname}</p>
         </div>
 
-    <nav>
-        <div class="menu">
-            <div class="nav-links" id="nav-links">
-                <a href="/home-reception/add-guest">Anagrafa un nuovo ospite</a>
-                <a href="/home-reception/add-visit">Inserisci nuova visita</a>
-                <a href="/home-reception/delete-visit">Annulla visita</a>
-                <a href="/logout">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512"><path fill="#ffffff" d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
-                </a>
+        <nav>
+            <div class="menu">
+                <div class="nav-links">
+                    <a href="/home-reception/add-guest">Anagrafa un nuovo ospite</a>
+                    <a href="/home-reception/add-visit">Inserisci nuova visita</a>
+                    <a href="/home-reception/delete-visit">Annulla visita</a>
+                    <a href="/logout">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 512 512">
+                            <path fill="#ffffff"
+                                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="hamburger-menu" id="hamburger-menu">
+                    <span></span><span></span><span></span>
+                </div>
             </div>
-            <div class="hamburger-menu" id="hamburger-menu">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 
-<section class="main">
-    <div class="buttons-container">
-        <a href="/home-reception/show-visits" class="no-decoration">
-            <div class="button view-visit">Visualizza visite</div>
-        </a>
-        <a href="/home-reception/assign-badge" class="no-decoration">
-            <div class="button assign-badge">Assegna badge</div>
-        </a>
-        <a href="/home-reception/close-visit" class="no-decoration">
-            <div class="button close-visit">Concludi visita</div>
-        </a>
-    </div>
-    <section class="content" id="dynamic-content">
-        <table class="content-table">
-            {#if type == null}
+    <section class="main">
+        <div class="buttons-container">
+            <a href="/home-reception/show-visits" class="no-decoration">
+                <div class="button view-visit">Visualizza visite</div>
+            </a>
+            <a href="/home-reception/assign-badge" class="no-decoration">
+                <div class="button assign-badge">Assegna badge</div>
+            </a>
+            <a href="/home-reception/close-visit" class="no-decoration">
+                <div class="button close-visit">Concludi visita</div>
+            </a>
+        </div>
+        <section class="content" id="dynamic-content">
+            <table class="content-table">
+                {#if type == null}
                 <h1 style="color: white; margin-top: 15%" id="placeholder">
                     Benvenuto {employee.name} {employee.surname}!<br>
                     Seleziona un'opzione per visualizzare i dettagli.
                 </h1>
                 {/if}
 
-            {#if type == 'showVisits'}
-                <style>
-                    .view-visit {
-                        font-weight: bold;
-                        background-color: #909090;
-                        color: white;
-                    }
-                </style>
+                {#if type == 'showVisits'}
+
+                    <style>
+                        .view-visit{
+                            background-color: #909090;
+                            color: white;
+                            font-weight: bold;
+                        }
+                    </style>
                 <div class="date-filter">
                     <h4 style="color: white; font-size: large">Inserisci una data per vedere le visite di quel giorno:
                     </h4>
@@ -420,14 +424,14 @@
                 {/if}
                 {/if}
 
-            {#if type == "assignBadge"}
-                <style>
-                    .assign-badge {
-                        font-weight: bold;
-                        background-color: #909090;
-                        color: white;
-                    }
-                </style>
+                {#if type == "assignBadge"}
+                    <style>
+                        .assign-badge {
+                            background-color: #909090;
+                            color: white;
+                            font-weight: bold;
+                        }
+                    </style>
                 {#if visits.isEmpty() || visits == null}
                 <h3 style="color: white; margin-top: 15%">Non ci sono badge da assegnare per oggi</h3>
                 {#else}
@@ -484,14 +488,14 @@
                 {/if}
                 {/if}
 
-            {#if type == "closeVisit"}
-                <style>
-                    .close-visit {
-                        font-weight: bold;
-                        background-color: #909090;
-                        color: white;
-                    }
-                </style>
+                {#if type == "closeVisit"}
+                    <style>
+                        .close-visit {
+                            background-color: #909090;
+                            color: white;
+                            font-weight: bold;
+                        }
+                    </style>
                 {#if visits.isEmpty() || visits == null}
                 <h3 style="color: white; margin-top: 15%">Non ci sono visite iniziate</h3>
                 {#else}
@@ -554,6 +558,7 @@
                         box-shadow: 0px 5px 30px 15px #0000006a;
                         width: 90%;
                         max-width: 500px;
+                        margin-top: 2%;
                     }
 
                     .guest-form h1 {
@@ -675,7 +680,6 @@
                     }
                 </style>
 
-
                 <div class="guest-form">
                     <h1>Inserisci un nuovo ospite</h1>
                     {#if errorMessage != null}
@@ -720,22 +724,23 @@
                 {/if}
 
 
-            {#if type == "addVisit"}
-            <style>
-                .nav-links a:nth-child(2) {
-                    color: #DCC132;
-                    text-decoration: underline;
-                }
-                .visit-form {
-                    background-color: white;
-                    color: black;
-                    padding: 40px;
-                    border-radius: 30px;
-                    box-shadow: 0px 5px 30px 15px #0000006a;
-                    width: 90%;
-                    max-width: 500px;
-                    margin: 5% auto;
-                }
+                {#if type == "addVisit"}
+                <style>
+                    .nav-links a:nth-child(2) {
+                        color: #DCC132;
+                        text-decoration: underline;
+                    }
+
+                    .visit-form {
+                        background-color: white;
+                        color: black;
+                        padding: 30px;
+                        border-radius: 30px;
+                        box-shadow: 0px 5px 30px 15px #0000006a;
+                        width: 90%;
+                        max-width: 500px;
+                        margin: 2%;
+                    }
 
                     .visit-form h1 {
                         text-align: center;
@@ -894,13 +899,13 @@
                     </form>
                     {/if}
 
-                {#if type == "deleteVisit"}
-                    <style>
-                        .nav-links a:nth-child(3) {
-                            color: #DCC132;
-                            text-decoration: underline;
-                        }
-                    </style>
+                    {#if type == "deleteVisit"}
+                        <style>
+                            .nav-links a:nth-child(3) {
+                                color: #DCC132;
+                                text-decoration: underline;
+                            }
+                        </style>
                     {#if visits.isEmpty()}
                     <h3 style="color: white; margin-top: 15%">Non ci sono visite prenotate</h3>
                     {#else}
