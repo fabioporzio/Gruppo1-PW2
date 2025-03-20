@@ -389,6 +389,7 @@
                         <input type="date" name="inputDate" value="{date}" id="date">
                         <button type="submit" class="filter-button">Filtra</button>
                     </form>
+                    <button onclick="emptyInputDate()" class="filter-button">Svuota</button>
                 </div>
                 {#if visits.isEmpty() || visits == null}
                 <h3 style="color: white; margin-top: 15%">Non ci sono visite da visualizzare</h3>
@@ -1057,6 +1058,10 @@
             document.body.appendChild(overlay);
 
             return false;
+        }
+
+        function emptyInputDate(){
+            document.getElementById("date").value = ""
         }
 
     </script>
