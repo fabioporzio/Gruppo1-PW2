@@ -132,7 +132,8 @@ public class HomeEmployeeController {
             errorMessage = "Email non valida";
         }
 
-        if(errorMessage == null && (!formValidator.checkStringForm(phoneNumber) || !formValidator.checkPhoneNumber(phoneNumber))){
+        phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
+        if(errorMessage == null && (!formValidator.checkStringForm(phoneNumber) || phoneNumber.isEmpty())){
             errorMessage = "Numero di telefono non valido";
         }
 
@@ -165,7 +166,7 @@ public class HomeEmployeeController {
 
         guestManager.saveGuest(guest);
 
-        String successMessage = "Guest successfully added";
+        String successMessage = "Ospite aggiunto";
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeEmployee.data(
@@ -288,7 +289,7 @@ public class HomeEmployeeController {
         boolean status = visitManager.saveVisit(visit);
 
         if (status) {
-            String successMessage = "Visita aggiunta correttamente";
+            String successMessage = "Visita aggiunta";
 
             return Response.ok(homeEmployee.data(
                     "employee",employee,
