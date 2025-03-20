@@ -105,19 +105,19 @@ public class FormValidator {
      * @param phoneNumber The phone number that you want to check.
      * @return `true` if the phone number is correct, `false` otherwise.
      */
-    public boolean checkPhoneNumber(String phoneNumber){
+    public String checkPhoneNumber(String phoneNumber){
         phoneNumber = phoneNumber.trim();
         if(!(phoneNumber.charAt(0) == '+')){
-            String correctPhoneNumber = '+' + phoneNumber;
+            phoneNumber = '+' + phoneNumber;
         }
 
         for(int i = 1; i < phoneNumber.length(); i++){
             if(phoneNumber.charAt(i) < 48 || phoneNumber.charAt(i) > 57){
-                return false;
+                return "";
             }
         }
 
-        return true;
+        return phoneNumber;
     }
 
     /***

@@ -175,7 +175,7 @@ public class HomeReceptionController {
 
         for(Visit visit : unfinishedVisits){
             if(errorMessage == null && visit.getBadgeCode().equals(badgeCode)){
-                errorMessage = "This badge code is not available";
+                errorMessage = "Questo badge non è disponibile";
                 break;
             }
         }
@@ -216,7 +216,7 @@ public class HomeReceptionController {
             )).build();
         }
 
-        String successMessage = "Badge code assigned correctly";
+        String successMessage = "Badge assegnato";
 
         return Response.ok(homeReception.data(
                 "type", "assignBadge",
@@ -272,7 +272,7 @@ public class HomeReceptionController {
             return Response.ok(homeReception.data(
                     "employee",employee,
                     "type", "closeVisit",
-                    "errorMessage", "Errore nel chiudere la visita",
+                    "errorMessage", "Errore nel concludere la visita",
                     "successMessage", null,
                     "visits", visitManager.changeIdsInSurnames(visitManager.getUnfinishedVisits(), guestManager, employeeManager)
             )).build();
@@ -335,12 +335,13 @@ public class HomeReceptionController {
             errorMessage = "Email non valida";
         }
 
-        if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(phoneNumber)){
-            errorMessage = "Numero di telefono non valido";
-        }
-
         if (errorMessage == null && !formValidator.isEmailValid(email)) {
             errorMessage = "Email deve contenere una @";
+        }
+
+        phoneNumber = formValidator.checkPhoneNumber(phoneNumber);
+        if(errorMessage == null && (!formValidator.checkStringNotNullOrEmpty(phoneNumber) || phoneNumber.isEmpty())){
+            errorMessage = "Numero di telefono non valido";
         }
 
         if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(role)){
@@ -449,7 +450,7 @@ public class HomeReceptionController {
         }
 
         if(errorMessage == null && formValidator.checkStartingTimeIsAfterEndingTime(expectedStart, expectedEnd)) {
-            errorMessage = "L'ora di inizio deve essere prima dell'ora di fine";
+            errorMessage = "L'ora di inizio non deve essere successiva a quella di fine";
         }
 
         if(errorMessage == null && !formValidator.checkStringNotNullOrEmpty(guestId)){
@@ -470,7 +471,7 @@ public class HomeReceptionController {
         }
 
         if(countOverlapVisits == badgeManager.countBadges()){
-            errorMessage = "I badge sono terminati";
+            errorMessage = "Non ci sono più badge disponibili";
         }
 
         if(errorMessage != null){
@@ -510,7 +511,7 @@ public class HomeReceptionController {
         else{
             return Response.ok(homeReception
                     .data("type","addVisit")
-                    .data("errorMessage", "Essiste gia un altra visita aggiunta")
+                    .data("errorMessage", "Esiste già un altra visita con questi dati")
                     .data("successMessage", null)
                     .data("guests", guests)
                     .data("employees", employees)
