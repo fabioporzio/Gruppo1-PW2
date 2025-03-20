@@ -168,7 +168,7 @@ public class HomeReceptionController {
         }
 
         if (errorMessage == null && !badgeStatus) {
-            errorMessage = "Questo codice è già in uso.";
+            errorMessage = "Questo codice non esiste.";
         }
 
         List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
@@ -217,8 +217,10 @@ public class HomeReceptionController {
         }
 
         String successMessage = "Badge assegnato";
+        Employee employee = sessionManager.getEmployeeFromSession(sessionId);
 
         return Response.ok(homeReception.data(
+                "employee",employee,
                 "type", "assignBadge",
                 "errorMessage", null,
                 "successMessage", successMessage,
