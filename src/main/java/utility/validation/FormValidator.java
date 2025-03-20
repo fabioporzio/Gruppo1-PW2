@@ -121,9 +121,13 @@ public class FormValidator {
      * Validates if the phone number contains a `+` at the start and then only numbers.
      *
      * @param phoneNumber The phone number that you want to check.
-     * @return `true` if the phone number is correct, `false` otherwise.
+     * @return phoneNumber if the phone number is correct, `` otherwise.
      */
     public String checkPhoneNumber(String phoneNumber){
+        if(phoneNumber.isEmpty()){
+            return "";
+        }
+
         phoneNumber = phoneNumber.trim();
         if(!(phoneNumber.charAt(0) == '+')){
             phoneNumber = '+' + phoneNumber;
