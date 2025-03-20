@@ -103,16 +103,9 @@ public class HomeReceptionController {
     @Path("/filtered-visits")
     @POST
     public Response filterVisits(@FormParam("inputDate") LocalDate inputDate , @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
+
+        List<Visit> visits = visitManager.getVisitsByDate(inputDate);
         if (sessionId != null) {
-            List<Visit> visits;
-
-            if (inputDate == null) {
-                visits = visitManager.getVisitsFromFile();
-            }
-            else{
-                visits = visitManager.getVisitsByDate(inputDate);
-            }
-
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeReception.data(
                     "employee",employee,
@@ -144,7 +137,7 @@ public class HomeReceptionController {
                     "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager)
             )).build();
         }
-        return Response.seeOther(URI.create("/")).build();
+       return null;
     }
 
     /***
@@ -179,7 +172,7 @@ public class HomeReceptionController {
             }
 
             if (errorMessage == null && !badgeStatus) {
-                errorMessage = "Questo codice è già in uso.";
+                errorMessage = "Questo codice non esiste.";
             }
 
             List<Visit> unfinishedVisits = visitManager.getUnfinishedVisits();
@@ -227,6 +220,7 @@ public class HomeReceptionController {
             String successMessage = "Badge assegnato";
 
             return Response.ok(homeReception.data(
+                    "employee", employee,
                     "type", "assignBadge",
                     "errorMessage", null,
                     "successMessage", successMessage,
