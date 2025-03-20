@@ -71,7 +71,6 @@ public class HomeEmployeeController {
             }
         }
         return Response.seeOther(URI.create("/")).build();
-
     }
 
     /***
@@ -117,7 +116,6 @@ public class HomeEmployeeController {
             @FormParam("role") String role,
             @FormParam("company") String company
     ){
-
         String errorMessage = null;
 
         if(!formValidator.checkStringForm(name)){

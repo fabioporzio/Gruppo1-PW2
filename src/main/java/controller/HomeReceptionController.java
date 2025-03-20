@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
@@ -136,11 +135,7 @@ public class HomeReceptionController {
                     "visits", visitManager.changeIdsInSurnames(unstartedVisits, guestManager, employeeManager)
             )).build();
         }
-
-
-
        return null;
-
     }
 
     /***
@@ -407,9 +402,6 @@ public class HomeReceptionController {
                 .data("employee", employee)
 
         ).build();
-
-
-
     }
 
     /***
@@ -541,7 +533,7 @@ public class HomeReceptionController {
                 "type", "deleteVisit",
                 "errorMessage", null,
                 "successMessage", null,
-                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager)
+                "visits", visitManager.changeIdsInSurnames(visits, guestManager, employeeManager),
                 "employee", employee
         )).build();
     }
