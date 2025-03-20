@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home Employee</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles-home.css">
+    <script src="/script/script.js"></script>
 </head>
 
 <body>
@@ -425,95 +426,6 @@
             </table>
         </section>
     </section>
-    <script>
-        // Effetto navbar che scompare quando si scrolla in basso e riappare in su
-        let lastScrollY = window.pageYOffset;
-        window.addEventListener("scroll", () => {
-            const currentScrollY = window.pageYOffset;
-            const navbar = document.getElementById("navbar");
-            if (lastScrollY > currentScrollY) {
-                navbar.style.top = "0px";
-            } else {
-                navbar.style.top = "-200px";
-                // Chiudi il menu a tendina quando si scrolla verso il basso        
-                const navLinks = document.querySelector('.nav-links');
-                navLinks.classList.remove('active');
-            } lastScrollY = currentScrollY;
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const navLinks = document.querySelector('.nav-links');
-            hamburgerMenu.addEventListener('click', function () {
-                navLinks.classList.toggle('active');
-            });
-        });
-        function confirmDelete(event, form) {
-            event.preventDefault();
-            let overlay = document.createElement("div");
-            overlay.style.position = "fixed";
-            overlay.style.top = "0";
-            overlay.style.left = "0";
-            overlay.style.width = "100vw";
-            overlay.style.height = "100vh";
-            overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-            overlay.style.display = "flex";
-            overlay.style.justifyContent = "center";
-            overlay.style.alignItems = "center";
-            overlay.style.zIndex = "1000";
-            let modal = document.createElement("div");
-            modal.style.backgroundColor = "white";
-            modal.style.padding = "70px";
-            modal.style.borderRadius = "10px";
-            modal.style.fontSize = "30px";
-            modal.style.textAlign = "center";
-            modal.innerHTML = "<p>Sei sicuro di voler eliminare questa visita?</p>";
-            let btnYes = document.createElement("button-confirm");
-            btnYes.style.cursor = "pointer";
-            btnYes.textContent = "Sì, elimina";
-            btnYes.style.backgroundColor = "#ff4d4d";// Rosso chiaro           
-            btnYes.style.padding = "12px 20px";
-            btnYes.style.fontSize = "16px";
-            btnYes.style.fontWeight = "bold";
-            btnYes.style.borderRadius = "8px";
-            btnYes.style.border = "2px solid #ff0000";
-            btnYes.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-            btnYes.style.marginRight = "20px";
-            btnYes.onmouseover = function () {
-                btnYes.style.backgroundColor = "#cc0000";// Rosso più scuro al passaggio del mouse 
-            };
-            btnYes.onmouseout = function () {
-                btnYes.style.backgroundColor = "#ff4d4d";
-            }; btnYes.onclick = function () {
-                form.submit();
-            }; let btnNo = document.createElement("button-confirm");
-            btnNo.style.cursor = "pointer";
-            btnNo.textContent = "Annulla";
-            btnNo.style.backgroundColor = "#555";
-            // Grigio scuro     
-            btnNo.style.color = "white";
-            btnNo.style.padding = "12px 20px";
-            btnNo.style.fontSize = "16px";
-            btnNo.style.borderRadius = "8px";
-            btnNo.style.border = "2px solid #333";
-            btnNo.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)";
-            btnNo.style.marginLeft = "20px";
-            btnNo.onmouseover = function () {
-                btnNo.style.backgroundColor = "#777";
-                // Grigio più chiaro al passaggio del mouse     
-            };
-            btnNo.onmouseout = function () {
-                btnNo.style.backgroundColor = "#555";
-            };
-            btnNo.onclick = function () {
-                document.body.removeChild(overlay);
-            };
-            modal.appendChild(btnYes);
-            modal.appendChild(btnNo);
-            overlay.appendChild(modal);
-            document.body.appendChild(overlay);
-            return false;
-        }  
-    </script>
 </body>
 
 </html>
