@@ -5,34 +5,36 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import jakarta.enterprise.context.ApplicationScoped;
-import model.Employee;
-import model.Guest;
-import model.visit.Visit;
-import model.visit.VisitStatus;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-
-import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import model.Employee;
+import model.Guest;
+import model.visit.Visit;
+import model.visit.VisitStatus;
+
 @ApplicationScoped
 public class VisitManager {
 
-    static final String filePath = "data/visits.csv";
+    static final String FILE_PATH = "data/visits.csv";
 
-    /***
+    /**
+     * *
      * Reads visits from the file and returns a list of all visits.
      *
-     * This method parses the `visits.csv` file, extracts each visit's details such as
-     * date, expected and actual start/end times, visit status, guest and employee IDs,
-     * and badge code. It then returns a list of `Visit` objects.
+     * This method parses the `visits.csv` file, extracts each visit's details
+     * such as date, expected and actual start/end times, visit status, guest
+     * and employee IDs, and badge code. It then returns a list of `Visit`
+     * objects.
      *
      * @return A list of `Visit` objects parsed from the file.
      */
@@ -43,9 +45,7 @@ public class VisitManager {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        try (Reader reader = new FileReader(filePath);
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());)
-        {
+        try (Reader reader = new FileReader(FILE_PATH); CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());) {
             for (CSVRecord record : csvParser) {
                 String id = record.get("id");
                 LocalDate date = LocalDate.parse(record.get("date").trim(), dateFormatter);
@@ -61,31 +61,29 @@ public class VisitManager {
                 Visit visit = new Visit(id, date, expectedStartingHour, actualStartingHour, expectedEndingHour, actualEndingHour, visitStatus, guestId, employeeId, badgeCode);
                 visits.add(visit);
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return visits;
     }
 
-    /***
+    /**
+     * *
      * Saves a new visit to the file.
      *
-     * This method adds a new visit to the `visits.csv` file. It checks for duplicates
-     * before saving the visit, and returns `true` if the visit is successfully saved,
-     * or `false` if a duplicate visit is found.
+     * This method adds a new visit to the `visits.csv` file. It checks for
+     * duplicates before saving the visit, and returns `true` if the visit is
+     * successfully saved, or `false` if a duplicate visit is found.
      *
      * @param visit The visit to be saved.
-     * @return `true` if the visit is saved successfully, `false` if it's a duplicate.
+     * @return `true` if the visit is saved successfully, `false` if it's a
+     * duplicate.
      */
     public boolean saveVisit(Visit visit) {
 
-        if (!checkDouble(visit)){
-            try (Writer writer = new FileWriter(filePath, true);
-                 CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL))
-            {
+        if (!checkDouble(visit)) {
+            try (Writer writer = new FileWriter(FILE_PATH, true); CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL)) {
                 csvPrinter.printRecord(
                         visit.getId(),
                         visit.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
@@ -99,9 +97,7 @@ public class VisitManager {
                         visit.getBadgeCode()
                 );
                 return true;
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -141,12 +137,13 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    /***
+    /**
+     * *
      * Filters and returns visits that have not yet ended.
      *
-     * This method checks for visits where the actual ending hour is still set to the
-     * default value ("00:00") and the visit has already started. It returns a list of
-     * such unfinished visits.
+     * This method checks for visits where the actual ending hour is still set
+     * to the default value ("00:00") and the visit has already started. It
+     * returns a list of such unfinished visits.
      *
      * @return A list of unfinished visits.
      */
@@ -166,11 +163,13 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    /***
+    /**
+     * *
      * Filters and returns visits that have not yet started.
      *
-     * This method checks for visits where both the actual starting and ending hours
-     * are still set to the default value ("00:00"). It returns a list of such unstarted visits.
+     * This method checks for visits where both the actual starting and ending
+     * hours are still set to the default value ("00:00"). It returns a list of
+     * such unstarted visits.
      *
      * @return A list of unstarted visits.
      */
@@ -179,10 +178,9 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if(!visit.getBadgeCode().isEmpty()) {
+            if (!visit.getBadgeCode().isEmpty()) {
                 continue;
-            }
-            else if (!(visit.getActualStartingHour() == LocalTime.parse("00:00")
+            } else if (!(visit.getActualStartingHour() == LocalTime.parse("00:00")
                     && visit.getActualEndingHour() == LocalTime.parse("00:00"))) {
                 continue;
             }
@@ -195,7 +193,8 @@ public class VisitManager {
     /**
      * Filters unstarted visits by a specific date.
      *
-     * This method filters and returns all unstarted visits that match the provided date.
+     * This method filters and returns all unstarted visits that match the
+     * provided date.
      *
      * @param date The date to filter visits by.
      * @return A list of unstarted visits that match the provided date.
@@ -205,11 +204,10 @@ public class VisitManager {
         List<Visit> filteredVisits = new ArrayList<>();
 
         for (Visit visit : visits) {
-            if(visit.getDate().equals(date)) {
-                if(!visit.getBadgeCode().isEmpty()) {
+            if (visit.getDate().equals(date)) {
+                if (!visit.getBadgeCode().isEmpty()) {
                     continue;
-                }
-                else if (!(visit.getActualStartingHour() == LocalTime.parse("00:00")
+                } else if (!(visit.getActualStartingHour() == LocalTime.parse("00:00")
                         && visit.getActualEndingHour() == LocalTime.parse("00:00"))) {
                     continue;
                 }
@@ -220,11 +218,13 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    /***
+    /**
+     * *
      * Retrieves a visit by its ID.
      *
-     * This method searches for a visit with the specified ID in the list of all visits.
-     * If the visit is found, it is returned; otherwise, `null` is returned.
+     * This method searches for a visit with the specified ID in the list of all
+     * visits. If the visit is found, it is returned; otherwise, `null` is
+     * returned.
      *
      * @param inputVisitId The ID of the visit to retrieve.
      * @return The `Visit` object if found, `null` if not found.
@@ -240,11 +240,12 @@ public class VisitManager {
         return null;
     }
 
-    /***
+    /**
+     * *
      * Filters out the specified visit from the list of all visits.
      *
-     * This method filters out the given visit from the list of all visits based on
-     * the visit's ID, and returns the remaining visits.
+     * This method filters out the given visit from the list of all visits based
+     * on the visit's ID, and returns the remaining visits.
      *
      * @param visit The visit to be excluded from the result list.
      * @return A list of all visits excluding the specified visit.
@@ -255,9 +256,7 @@ public class VisitManager {
 
         for (Visit visit1 : visits) {
             if (visit1.getId().equals(visit.getId())) {
-                continue;
-            }
-            else {
+            } else {
                 filteredVisits.add(visit1);
             }
         }
@@ -265,21 +264,21 @@ public class VisitManager {
         return filteredVisits;
     }
 
-    /***
+    /**
+     * *
      * Overwrites the entire list of visits in the file.
      *
-     * This method overwrites the `visits.csv` file with the provided list of visits.
-     * It saves all visits in the new list, including their details such as date, start/end
-     * times, status, and IDs.
+     * This method overwrites the `visits.csv` file with the provided list of
+     * visits. It saves all visits in the new list, including their details such
+     * as date, start/end times, status, and IDs.
      *
      * @param visits The list of visits to be saved to the file.
-     * @return `true` if the overwrite operation is successful, `false` if it fails.
+     * @return `true` if the overwrite operation is successful, `false` if it
+     * fails.
      */
     public boolean overwriteVisits(List<Visit> visits) {
 
-        try(FileWriter writer = new FileWriter(filePath);
-        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "visit_status", "guest_id", "employee_id", "badge_code")))
-        {
+        try (FileWriter writer = new FileWriter(FILE_PATH); CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader("id", "date", "expected_starting_hour", "actual_starting_hour", "expected_ending_hour", "actual_ending_time", "visit_status", "guest_id", "employee_id", "badge_code"))) {
             for (Visit newVisit : visits) {
                 csvPrinter.printRecord(
                         newVisit.getId(),
@@ -295,50 +294,52 @@ public class VisitManager {
                 );
             }
             return true;
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
 
     }
 
-    /***
+    /**
+     * *
      * Generates a new unique visit ID.
      *
-     * This method calculates the next available ID by checking the last visit in the
-     * list of visits and incrementing the ID by one. If there are no visits, it returns 1.
+     * This method calculates the next available ID by checking the last visit
+     * in the list of visits and incrementing the ID by one. If there are no
+     * visits, it returns 1.
      *
      * @return The next available visit ID.
      */
-    public int getNewId(){
+    public int getNewId() {
         List<Visit> visits = getVisitsFromFile();
 
         if (visits.isEmpty()) {
             return 1;
-        }
-        else {
+        } else {
             return Integer.parseInt(visits.getLast().getId()) + 1;
         }
     }
 
-    /***
+    /**
+     * *
      * Checks if a visit is a duplicate based on its details.
      *
-     * This method compares the provided visit with existing visits to check if a visit
-     * with the same date, starting and ending hours, guest, and employee IDs already exists.
-     * If a duplicate is found, it returns `true`; otherwise, it returns `false`.
+     * This method compares the provided visit with existing visits to check if
+     * a visit with the same date, starting and ending hours, guest, and
+     * employee IDs already exists. If a duplicate is found, it returns `true`;
+     * otherwise, it returns `false`.
      *
      * @param visit The visit to be checked for duplicates.
      * @return `true` if a duplicate visit is found, `false` otherwise.
      */
-    public boolean checkDouble(Visit visit){
+    public boolean checkDouble(Visit visit) {
         List<Visit> visits = getVisitsFromFile();
 
-        for(Visit v : visits){
-            if(v.getDate().equals(visit.getDate()) && v.getExpectedStartingHour().equals(visit.getExpectedStartingHour()) &&
-                v.getExpectedEndingHour().equals(visit.getExpectedEndingHour()) && v.getGuestId().equals(visit.getGuestId()) &&
-                v.getEmployeeId().equals(visit.getEmployeeId())){
+        for (Visit v : visits) {
+            if (v.getDate().equals(visit.getDate()) && v.getExpectedStartingHour().equals(visit.getExpectedStartingHour())
+                    && v.getExpectedEndingHour().equals(visit.getExpectedEndingHour()) && v.getGuestId().equals(visit.getGuestId())
+                    && v.getEmployeeId().equals(visit.getEmployeeId())) {
 
                 return true;
             }
@@ -346,11 +347,11 @@ public class VisitManager {
         return false;
     }
 
-    public List<Visit> changeIdsInSurnames(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager){
+    public List<Visit> changeIdsInSurnames(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager) {
 
         List<Visit> changedVisits = new ArrayList<>();
 
-        for(Visit visit : visits){
+        for (Visit visit : visits) {
             Guest guest = guestManager.getGuestById(visit.getGuestId());
             Employee employee = employeeManager.getEmployeeById(visit.getEmployeeId());
 
