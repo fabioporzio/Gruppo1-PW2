@@ -17,6 +17,10 @@ public class BadgeManager {
 
     static final String FILE_PATH = "data/badges.csv";
 
+    /**
+     * Get all badges from file.
+     * @return A list of String with all badges.
+     */
     public List<String> getBadgesFromFile() {
         List<String> badges = new ArrayList<>();
 

@@ -125,6 +125,13 @@ public class VisitManager {
         return filteredVisits;
     }
 
+    /**
+     * Filter a specific list of visits by a specific employee id.
+     *
+     * @param visits A list containing visits.
+     * @param employeeId The employee id to filter.
+     * @return A list of visits.
+     */
     public List<Visit> filterVisitsByEmployeeId(List<Visit> visits, String employeeId) {
         List<Visit> filteredVisits = new ArrayList<>();
 
@@ -347,6 +354,14 @@ public class VisitManager {
         return false;
     }
 
+    /**
+     * Change ids of a visit in employees and guests surname.
+     *
+     * @param visits A list containing visits.
+     * @param guestManager GuestManager object used to take all guests.
+     * @param employeeManager EmployeeManager object used to take all employees.
+     * @return
+     */
     public List<Visit> changeIdsInSurnames(List<Visit> visits, GuestManager guestManager, EmployeeManager employeeManager) {
 
         List<Visit> changedVisits = new ArrayList<>();

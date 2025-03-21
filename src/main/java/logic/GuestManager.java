@@ -166,11 +166,17 @@ public class GuestManager {
         }
     }
 
-    public boolean isGuestAlreadyExisting(Guest Inputguest) {
+    /**
+     * Check if a guest already exist.
+     *
+     * @param inputGuest The guest to check if exist.
+     * @return `true` if not exist, `false` otherwise.
+     */
+    public boolean isGuestAlreadyExisting(Guest inputGuest) {
         List<Guest> guests = getGuestsFromFile();
 
         for (Guest guest : guests) {
-            if (guest.getEmail().equals(Inputguest.getEmail())) {
+            if (guest.getEmail().equals(inputGuest.getEmail())) {
                 return false;
             }
         }
