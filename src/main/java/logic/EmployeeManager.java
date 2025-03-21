@@ -146,6 +146,29 @@ public class EmployeeManager {
         return null;
     }
 
+    /**
+     * Retrieves all employees excluding receptionists.
+     *
+     * This method searches the list of employees retrieved from the file and
+     * returns the Employee object whose department doesn't match "Portineria". If no employee
+     * is found, the method returns null.
+     *
+     * @return The Employee object corresponding to the given ID, or null if not
+     * found.
+     */
+    public List<Employee> getEmployeesExcludingReception() {
+        List<Employee> filteredEmployees = new ArrayList<>();
+
+        List<Employee> employees = getEmployeesFromFile();
+
+        for (Employee employee : employees) {
+            if (!employee.getDepartment().equals("Reception")) {
+                filteredEmployees.add(employee);
+            }
+        }
+        return filteredEmployees;
+    }
+
     /*
     Useful for registration employees.
 
