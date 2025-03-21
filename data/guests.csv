@@ -6,3 +6,5 @@ id,name,surname,email,phone_number,role,company,
 5,Marco,Corradini,marco.corradini@gmail.com,3918765432,Fornitore,Bitcoin
 6,Stefano,Gioia,stefano.gioia@gmail.com,3405603040,Consulente,ITSIncom
 7,Fabio,Porzio,fabio.porzio@gmail.com,3405603040,client,Qualcosa
+8,Giulia,Bianchi,giulia.bianchi@gmail.com,3456789012,client,Microsoft
+9,Antonio,Russo,antonio.russo@gmail.com,3567890123,supplier,Tesla

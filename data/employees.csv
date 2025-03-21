@@ -3,4 +3,5 @@ id,name,surname,date_of_birth,phone_number,department,email,password
 2,Marco,Corradini,01/01/2001,1111111111,Reception,marco.corradini@gmail.com,$2a$12$kKBPgIup9cNYATBdVvn9JO4OaYJwmy04wtOHdv7VIHjmDyv2yKbae
 3,Luca,Mimmo,23/03/2005,1111111111,Reception,luca@gmail.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
 4,Tommaso,Brivio,23/03/2005,1111111111,IT,tommaso@gmail.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
-6,Alberto,Costanzo,23/05/1996,1234567890,IT,alberto@infodrive.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
+5,Alberto,Costanzo,23/05/1996,1234567890,IT,alberto@infodrive.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O
+6,Jeremy,Franciosi,23/05/1996,1234567890,Reception,jeremy@infodrive.com,$2a$12$03WAq8yzZt9dkIwXZPpdje0KvkzWw00IW9GRwFgAU1G.cF.T/is/O

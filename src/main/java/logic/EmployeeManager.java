@@ -162,7 +162,7 @@ public class EmployeeManager {
         List<Employee> employees = getEmployeesFromFile();
 
         for (Employee employee : employees) {
-            if (!employee.getDepartment().equals("Reception")) {
+            if (!(employee.getDepartment()).equalsIgnoreCase("reception")) {
                 filteredEmployees.add(employee);
             }
         }
