@@ -412,7 +412,7 @@ public class HomeReceptionController {
         if (sessionId != null) {
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             List<Guest> guests = guestManager.getGuestsFromFile();
-            List<Employee> employees = employeeManager.getEmployeesFromFile();
+            List<Employee> employees = employeeManager.getEmployeesExcludingReception();
 
             return Response.ok(homeReception
                     .data("type", "addVisit")
@@ -448,7 +448,7 @@ public class HomeReceptionController {
             @FormParam("employee") String employeeId) {
         if (sessionId != null) {
             List<Guest> guests = guestManager.getGuestsFromFile();
-            List<Employee> employees = employeeManager.getEmployeesFromFile();
+            List<Employee> employees = employeeManager.getEmployeesExcludingReception();
             String errorMessage = null;
 
             if (!formValidator.checkDateNotNull(date)) {
