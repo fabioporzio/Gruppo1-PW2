@@ -79,8 +79,8 @@ public class HomeReceptionController {
     public Response showVisits(@CookieParam(NAME_COOKIE_SESSION) String sessionId) {
         if (sessionId != null) {
 
-        List<Visit> visits = visitManager.getVisitsFromFile();
-        visits.sort(Comparator.comparing(Visit::getDate));
+            List<Visit> visits = visitManager.getVisitsFromFile();
+            visits.sort(Comparator.comparing(Visit::getDate));
 
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeReception.data(
@@ -104,8 +104,15 @@ public class HomeReceptionController {
     @POST
     public Response filterVisits(@FormParam("inputDate") LocalDate inputDate , @CookieParam(NAME_COOKIE_SESSION) String sessionId) {
 
-        List<Visit> visits = visitManager.getVisitsByDate(inputDate);
         if (sessionId != null) {
+            List<Visit> visits;
+            if(inputDate == null){
+                visits = visitManager.getVisitsFromFile();
+            }
+            else{
+                visits = visitManager.getVisitsByDate(inputDate);
+            }
+
             Employee employee = sessionManager.getEmployeeFromSession(sessionId);
             return Response.ok(homeReception.data(
                     "employee",employee,
