@@ -153,7 +153,7 @@ public class EmployeeManager {
      * returns the Employee object whose department doesn't match "Portineria". If no employee
      * is found, the method returns null.
      *
-     * @return The Employee object corresponding to the given ID, or null if not
+     * @return A list of employees if any doesn't belong to "Portineria" department, or null if not
      * found.
      */
     public List<Employee> getEmployeesExcludingReception() {
